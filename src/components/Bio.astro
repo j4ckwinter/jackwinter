@@ -1,16 +1,32 @@
 ---
-type Props = { paragraphs: string[]; email: string };
+import type { Inline } from "../content/profile";
+
+type Props = { paragraphs: Inline[][]; email: string };
 const { paragraphs, email } = Astro.props;
 ---
 
 <div class="flex flex-col gap-3 leading-relaxed">
-  {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-  <p class="mt-3">
+  {
+    paragraphs.map((parts) => (
+      <p>
+        {parts.map((part) =>
+          typeof part === "string" ? part : (
+            <a class="underline decoration-line underline-offset-3 transition-colors hover:decoration-fg-muted" href={part.href}>
+              {part.text}
+            </a>
+          ),
+        )}
+      </p>
+    ))
+  }
+  <p class="mt-3 flex items-center gap-3">
     <a
       class="inline-flex h-8 items-center rounded-lg bg-fg px-3 text-sm font-medium text-surface transition-transform hover:bg-fg/85 active:scale-[0.97]"
       href={`mailto:${email}`}
+      data-copy-email={email}
     >
       say hello
     </a>
+    <span data-copy-status aria-live="polite" class="text-[13px] text-fg-muted opacity-0 transition-opacity duration-300 data-shown:opacity-100"></span>
   </p>
 </div>

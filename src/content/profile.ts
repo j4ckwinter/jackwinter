@@ -1,5 +1,7 @@
 import type { IconName } from "../icons";
 
+export type Inline = string | { text: string; href: string };
+
 export type Link = { label: string; href: string; icon: IconName };
 
 const email = "jackwinter.10@outlook.com";
@@ -11,9 +13,13 @@ export const profile = {
   description:
     "Jack Winter, senior software engineer in London. Real-time products with React and TypeScript, and tools for AI coding agents.",
   bio: [
-    "hey, i'm jack, a senior software engineer in london. i've spent 8+ years building fast, real-time products with react and typescript across sports betting, gaming and fintech.",
-    "lately i build tools that help ai coding agents write code i actually want to keep.",
-  ],
+    ["hey, i'm jack, a senior software engineer in london. i've spent 8+ years building fast, real-time products with react and typescript across sports betting, gaming and fintech."],
+    [
+      "lately i build ",
+      { text: "tools that help ai coding agents", href: "https://github.com/j4ckwinter/pancake-stack" },
+      " write code i actually want to keep.",
+    ],
+  ] satisfies Inline[][],
   email,
   githubLogin,
   githubUrl: `https://github.com/${githubLogin}`,

@@ -9,20 +9,18 @@ import Skills from "../components/Skills.astro";
 import Education from "../components/Education.astro";
 import Footer from "../components/Footer.astro";
 import { page } from "../content/page";
-import { loadGitHubData } from "../github/load";
+import { githubDataForBuild } from "../github/build-data";
+import { personSchema } from "../agents/structured-data";
 
 const { profile, experience, education, skills, projects } = page;
 
-const github = await loadGitHubData({
-  repos: projects.map((project) => project.repo),
-  login: profile.githubLogin,
-  token: import.meta.env.GITHUB_TOKEN,
-});
+const github = await githubDataForBuild();
 const today = new Date().toISOString().slice(0, 10);
-for (const problem of github.problems) console.warn(`Leaving out GitHub ${problem}`);
+const structuredData = JSON.stringify(personSchema(page, Astro.site!));
 ---
 
-<Page title={profile.name} description={profile.description}>
+<Page title={`${profile.name} · ${profile.title.toLowerCase()}`} description={profile.description} name={profile.name}>
+  <script slot="head" type="application/ld+json" is:inline set:html={structuredData} />
   <Header name={profile.name} title={profile.title} links={profile.links} />
   <Bio paragraphs={profile.bio} email={profile.email} />
   <Experience roles={experience} />
@@ -30,5 +28,5 @@ for (const problem of github.problems) console.warn(`Leaving out GitHub ${proble
   <Activity contributions={github.activity} commits={github.commits} projects={projects} profileUrl={profile.githubUrl} today={today} />
   <Skills groups={skills} />
   <Education qualifications={education} />
-  <Footer />
+  <Footer builtOn={today} />
 </Page>

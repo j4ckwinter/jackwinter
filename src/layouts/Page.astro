@@ -1,30 +1,52 @@
 ---
 import "../styles/global.css";
+import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
 import { PAGE_MARKDOWN_PATH } from "../agents/markdown";
+import { CARD_HEIGHT, CARD_PATH, CARD_WIDTH } from "../social/card";
 
-type Props = { title: string; description: string };
-const { title, description } = Astro.props;
+type Props = { title: string; description: string; name: string };
+const { title, description, name } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const card = new URL(CARD_PATH, Astro.site).href;
+const SURFACE = { light: "#ffffff", dark: "#0a0a0a" };
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <meta name="color-scheme" content="light dark" />
-    <link rel="alternate" type="text/markdown" href={PAGE_MARKDOWN_PATH} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content={SURFACE.light} />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content={SURFACE.dark} />
+    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="text/markdown" href={PAGE_MARKDOWN_PATH} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content={name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={card} />
+    <meta property="og:image:width" content={String(CARD_WIDTH)} />
+    <meta property="og:image:height" content={String(CARD_HEIGHT)} />
+    <meta property="og:image:alt" content={`${name}'s name and title above a year of GitHub contributions`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
     <script is:inline>document.documentElement.classList.add("js");</script>
   </head>
   <body class="bg-surface font-sans text-fg antialiased">
-    <main class="mx-auto flex min-h-svh w-full max-w-[700px] flex-col gap-10 px-5 pt-8 pb-24 sm:px-8 md:pt-14">
+    <main class="enter mx-auto flex min-h-svh w-full max-w-[700px] flex-col gap-10 px-5 pt-8 pb-24 sm:px-8 md:pt-14">
       <slot />
     </main>
     <script>
       import { enhanceDisclosures } from "../scripts/disclosure";
+      import { enhanceCopyEmail } from "../scripts/copy-email";
 
       enhanceDisclosures(document, () => matchMedia("(prefers-reduced-motion: reduce)").matches);
+      enhanceCopyEmail(document, navigator.clipboard);
     </script>
   </body>
 </html>

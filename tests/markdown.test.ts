@@ -8,7 +8,7 @@ const content: PageContent = {
     name: "Jack",
     title: "Engineer",
     description: "Builds things.",
-    bio: ["hey, i'm jack."],
+    bio: [["hey, i'm ", { text: "jack", href: "https://example.com/jack" }, "."]],
     email: "me@example.com",
     githubLogin: "me",
     githubUrl: "https://github.com/me",
@@ -28,6 +28,10 @@ describe("pageMarkdown", () => {
 
   it("carries every section of the page", () => {
     for (const heading of ["# Jack", "## Experience", "## Education", "## Skills", "## Projects"]) expect(markdown).toContain(`${heading}\n`);
+  });
+
+  it("keeps links written into the bio", () => {
+    expect(markdown).toContain("hey, i'm [jack](https://example.com/jack).");
   });
 
   it("includes the tools a person only sees after expanding", () => {

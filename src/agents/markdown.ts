@@ -2,7 +2,7 @@ import type { Role } from "../content/experience";
 import type { Qualification } from "../content/education";
 import type { SkillGroup } from "../content/skills";
 import type { Project } from "../content/projects";
-import type { Profile } from "../content/profile";
+import type { Inline, Profile } from "../content/profile";
 import { formatDateRange } from "../format";
 
 export const PAGE_MARKDOWN_PATH = "/index.md";
@@ -16,6 +16,7 @@ export type PageContent = {
   projects: Project[];
 };
 
+const inline = (parts: Inline[]) => parts.map((part) => (typeof part === "string" ? part : `[${part.text}](${part.href})`)).join("");
 const list = (items: string[]) => items.map((item) => `- ${item}`).join("\n");
 const blocks = (parts: string[]) => parts.join("\n\n");
 const absolute = (href: string, site: URL) => new URL(href, site).href;
@@ -33,7 +34,7 @@ export function pageMarkdown({ profile, experience, education, skills, projects 
   return `${blocks([
     `# ${profile.name}`,
     `> ${profile.description}`,
-    ...profile.bio,
+    ...profile.bio.map(inline),
     list(profile.links.map((link) => `[${link.label}](${absolute(link.href, site)})`)),
     "## Experience",
     ...experience.map(roleMarkdown),

@@ -28,6 +28,13 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Which content makes up the page, for both the HTML and the markdown | `src/content/page.ts` |
 | The site's address | `astro.config.mjs` (`site`) |
 | What agents read: `/index.md` and `/llms.txt` | `src/agents/markdown.ts`, served by `src/pages/index.md.ts` and `src/pages/llms.txt.ts` |
+| What search engines read: structured data, `robots.txt`, `sitemap.xml` | `src/agents/structured-data.ts`, `src/pages/robots.txt.ts`, `src/pages/sitemap.xml.ts` |
+| The share card shown when the link is posted | `src/social/card.ts`, rendered by `src/pages/og.png.ts` |
+| Page metadata: title, canonical, share tags, theme colour, font preload | `src/layouts/Page.astro` |
+| Fetching GitHub data once per build for the page and the card | `src/github/build-data.ts` |
+| Which commit counts as a project's latest (no merges, chores only as a fallback) | `src/github/client.ts` |
+| Copying the email from "say hello" | `src/scripts/copy-email.ts` |
+| Rebuilding the site every morning | `.github/workflows/rebuild.yml` |
 | Which icons exist and where each comes from (Tabler or Simple Icons) | `src/icons.ts` |
 | Talking to the GitHub API and translating its contribution levels | `src/github/client.ts` |
 | Laying out the contribution grid and its month labels | `src/github/activity.ts` |
@@ -44,6 +51,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 ## Standards
 
 - Keep the page fast and plain: static output, with client JavaScript only for the expand and collapse behaviour in `src/scripts/disclosure.ts` and for starting the activity strip at the latest week.
+- `theme-color` in `Page.astro` repeats `--palette-surface` from `global.css` as hex, because the meta tag can't read CSS variables. Change both together.
 - Everything must be readable without JavaScript. `Page.astro` adds a `js` class to the root; the `opened`, `in-opened` and `no-js` variants in `global.css` show collapsed content and hide toggles when that class is missing.
 - Animate layout changes with the browser's View Transitions: give an element the same `view-transition-name` in both layouts and let the browser morph it. Browsers without them, and people who prefer reduced motion, get the change instantly.
 - Keep content (bio, roles, projects, links) as data in one place, separate from the components that render it.

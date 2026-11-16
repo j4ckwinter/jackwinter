@@ -4,6 +4,8 @@ import Projects from "../src/components/Projects.astro";
 import Experience from "../src/components/Experience.astro";
 import Skills from "../src/components/Skills.astro";
 import Education from "../src/components/Education.astro";
+import Bio from "../src/components/Bio.astro";
+import Footer from "../src/components/Footer.astro";
 import Activity from "../src/components/Activity.astro";
 import { buildContributionGrid } from "../src/github/activity";
 import { day } from "./fixtures";
@@ -15,6 +17,21 @@ describe("header", () => {
     const link = page.querySelector('a[aria-label="GitHub"]');
     expect(link?.getAttribute("href")).toBe("https://github.com/me");
     expect(link?.querySelector("svg")).not.toBeNull();
+  });
+});
+
+describe("bio", () => {
+  it("links the words written as links and offers to copy the email", async () => {
+    const page = await render(Bio, { paragraphs: [["i build ", { text: "tools", href: "https://example.com/tools" }, "."]], email: "me@example.com" });
+    expect(page.querySelector('a[href="https://example.com/tools"]')?.textContent?.trim()).toBe("tools");
+    expect(page.querySelector('a[href="mailto:me@example.com"]')?.getAttribute("data-copy-email")).toBe("me@example.com");
+  });
+});
+
+describe("footer", () => {
+  it("says when the page was last built", async () => {
+    const page = await render(Footer, { builtOn: "2026-11-16" });
+    expect(page.querySelector("time")?.textContent).toBe("16 Nov");
   });
 });
 
