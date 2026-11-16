@@ -1,0 +1,60 @@
+import type { Role } from "../content/experience";
+import type { Qualification } from "../content/education";
+import type { SkillGroup } from "../content/skills";
+import type { Project } from "../content/projects";
+import type { Profile } from "../content/profile";
+import { formatDateRange } from "../format";
+
+export const PAGE_MARKDOWN_PATH = "/index.md";
+export const LLMS_PATH = "/llms.txt";
+
+export type PageContent = {
+  profile: Profile;
+  experience: Role[];
+  education: Qualification[];
+  skills: SkillGroup[];
+  projects: Project[];
+};
+
+const list = (items: string[]) => items.map((item) => `- ${item}`).join("\n");
+const blocks = (parts: string[]) => parts.join("\n\n");
+const absolute = (href: string, site: URL) => new URL(href, site).href;
+
+function roleMarkdown(role: Role): string {
+  return blocks([
+    `### ${role.company}`,
+    `**${role.title}** · ${formatDateRange(role)} · ${role.location}`,
+    role.context,
+    list(role.highlights),
+  ]);
+}
+
+export function pageMarkdown({ profile, experience, education, skills, projects }: PageContent, site: URL): string {
+  return `${blocks([
+    `# ${profile.name}`,
+    `> ${profile.description}`,
+    ...profile.bio,
+    list(profile.links.map((link) => `[${link.label}](${absolute(link.href, site)})`)),
+    "## Experience",
+    ...experience.map(roleMarkdown),
+    "## Education",
+    list(education.map((item) => `**${item.qualification}**, ${item.institution}, ${formatDateRange(item)}`)),
+    "## Skills",
+    list(skills.map((group) => `**${group.name}:** ${group.tools.map((tool) => tool.name).join(", ")}`)),
+    "## Projects",
+    list(projects.map((project) => `[${project.name}](${project.href}): ${project.description}`)),
+  ])}\n`;
+}
+
+export function llmsText({ profile }: Pick<PageContent, "profile">, site: URL): string {
+  return `${blocks([
+    `# ${profile.name}`,
+    `> ${profile.description}`,
+    "This site is one page. The same content is available as markdown, generated from the data that builds the HTML.",
+    "## Pages",
+    list([
+      `[${profile.name}, as markdown](${absolute(PAGE_MARKDOWN_PATH, site)}): bio, experience, education, skills and projects`,
+      `[${profile.name}](${absolute("/", site)}): the HTML page`,
+    ]),
+  ])}\n`;
+}

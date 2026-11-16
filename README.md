@@ -25,6 +25,10 @@ GITHUB_TOKEN=$(gh auth token) npm run build
 
 no token, no chart. the rest of the page doesn't care.
 
+## for agents
+
+agents get the same page as markdown at [/index.md](https://www.jackwinter.xyz/index.md), and [/llms.txt](https://www.jackwinter.xyz/llms.txt) points them there. both are built from the same content as the html, so they can't drift.
+
 ## change what it says
 
 everything the page says lives in `src/content`. edit those files, not the components.

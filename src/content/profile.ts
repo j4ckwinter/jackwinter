@@ -24,3 +24,5 @@ export const profile = {
     { label: "CV", href: "/Jack-Winter-CV.pdf", icon: "cv" },
   ] satisfies Link[],
 };
+
+export type Profile = typeof profile;

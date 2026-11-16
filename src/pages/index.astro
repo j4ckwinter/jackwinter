@@ -7,12 +7,11 @@ import Experience from "../components/Experience.astro";
 import Projects from "../components/Projects.astro";
 import Skills from "../components/Skills.astro";
 import Education from "../components/Education.astro";
-import { profile } from "../content/profile";
-import { experience } from "../content/experience";
-import { projects } from "../content/projects";
-import { skills } from "../content/skills";
-import { education } from "../content/education";
+import Footer from "../components/Footer.astro";
+import { page } from "../content/page";
 import { loadGitHubData } from "../github/load";
+
+const { profile, experience, education, skills, projects } = page;
 
 const github = await loadGitHubData({
   repos: projects.map((project) => project.repo),
@@ -30,4 +29,5 @@ for (const problem of github.problems) console.warn(`Leaving out GitHub ${proble
   <Education qualifications={education} />
   <Skills groups={skills} />
   <Projects projects={projects} stars={github.stars} />
+  <Footer />
 </Page>
