@@ -12,7 +12,7 @@ export type GitHubData = {
 };
 
 type Request = {
-  projects: Pick<Project, "repo" | "release">[];
+  projects: Pick<Project, "repo" | "release" | "inActivity">[];
   login: string;
   token: string | undefined;
   fetcher?: typeof fetch;
@@ -34,10 +34,11 @@ export async function loadGitHubData({ projects, login, token, fetcher = fetch }
   });
 
   const commits: Commit[] = [];
-  const commitResults = await Promise.allSettled(repos.map((repo) => fetchLatestCommit(repo, token, fetcher)));
+  const active = projects.filter((project) => project.inActivity !== false).map((project) => project.repo);
+  const commitResults = await Promise.allSettled(active.map((repo) => fetchLatestCommit(repo, token, fetcher)));
   commitResults.forEach((result, index) => {
     if (result.status === "fulfilled") commits.push(result.value);
-    else problems.push(`latest commit for ${repos[index]}: ${reason(result.reason)}`);
+    else problems.push(`latest commit for ${active[index]}: ${reason(result.reason)}`);
   });
 
   const versions = new Map<string, string>();

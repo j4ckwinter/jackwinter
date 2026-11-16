@@ -18,21 +18,25 @@ const mostStarredFirst = [...projects].sort((a, b) => starsFor(b) - starsFor(a))
       const version = versions.get(project.repo);
       return (
         <li>
-          <a href={project.href} class="-mx-3 flex items-center gap-3 rounded-xl px-3 py-2 transition-colors hover:bg-raised">
-            <IconTile icon={project.icon} />
-            <span class="flex min-w-0 flex-1 flex-col">
+          <a href={project.href} class="-mx-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1 rounded-xl px-3 py-2 transition-colors hover:bg-raised xp:grid-cols-[auto_minmax(0,1fr)_auto]">
+            <IconTile icon={project.icon} class="max-xp:row-span-2 max-xp:self-start" />
+            <span class="flex min-w-0 flex-col">
               <span class="text-sm">{project.name}</span>
               <span class="text-[13px] text-fg-secondary">{project.description}</span>
             </span>
-            {version && (
-              <span class="shrink-0 font-mono text-[12px] text-fg-muted">
-                <span class="sr-only">Latest release: </span>v{version}
-              </span>
-            )}
-            {starCount > 0 && (
-              <span class="flex shrink-0 items-center gap-1 text-[13px] text-fg-muted tabular-nums">
-                <Icon name="star" class="size-3.5" />
-                <span><span class="sr-only">GitHub stars: </span>{formatCount(starCount)}</span>
+            {(version || starCount > 0) && (
+              <span class="flex shrink-0 items-center gap-3">
+                {version && (
+                  <span class="font-mono text-[12px] text-fg-muted">
+                    <span class="sr-only">Latest release: </span>v{version}
+                  </span>
+                )}
+                {starCount > 0 && (
+                  <span class="flex items-center gap-1 text-[13px] text-fg-muted tabular-nums">
+                    <Icon name="star" class="size-3.5" />
+                    <span><span class="sr-only">GitHub stars: </span>{formatCount(starCount)}</span>
+                  </span>
+                )}
               </span>
             )}
           </a>

@@ -14,7 +14,7 @@ export const profile = {
     "Jack Winter, senior software engineer in London. Real-time products with React and TypeScript, and tools for AI coding agents.",
   bio: (yearsOfExperience: number): Inline[][] => [
     [
-      `hey, i'm jack, a senior software engineer in london. i've spent ${yearsOfExperience}+ years building fast, real-time products with react and typescript across sports betting, gaming and fintech.`,
+      `hey, i'm jack. i've spent ${yearsOfExperience}+ years building fast, real-time products with react and typescript across sports betting, gaming and fintech.`,
     ],
     [
       "lately i build ",

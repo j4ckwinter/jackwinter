@@ -65,19 +65,21 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
               aria-label={`Details for ${role.company}`}
               class="absolute -inset-x-3 -inset-y-2 rounded-xl hover:bg-raised xp:hidden no-js:hidden"
             ></button>
-            <IconTile icon={role.icon} transitionName={names.mark} class="pointer-events-none relative" />
+            <IconTile icon={role.icon} transitionName={names.mark} class="pointer-events-none relative max-xp:self-start" />
             <div class="pointer-events-none relative min-w-0">
               <p class="w-fit text-sm" style={`view-transition-name: ${names.company}`}>{role.company}</p>
               <p class="text-[13px] text-fg-secondary">{role.title}</p>
+              <p class="mt-0.5 text-[12px] text-fg-muted tabular-nums xp:hidden">
+                <span style={`view-transition-name: ${names.dates}`}>{dates}</span> · {tenure}
+              </p>
             </div>
-            <div class="pointer-events-none relative flex flex-col items-end self-start text-[13px] whitespace-nowrap text-fg-muted">
-              <p class="flex items-center gap-1">
-                <span style={`view-transition-name: ${names.dates}`}>{dates}</span>
-                <span class="max-[459px]:hidden">· {role.location}</span>
-                <Icon name="chevronDown" class="size-3.5 transition-transform duration-(--duration-flip) group-has-aria-expanded/role:rotate-180 xp:hidden no-js:hidden" />
+            <div class="pointer-events-none relative hidden flex-col items-end self-start text-[13px] whitespace-nowrap text-fg-muted xp:flex">
+              <p>
+                <span style={`view-transition-name: ${names.dates}`}>{dates}</span> · {role.location}
               </p>
               <p class="text-[12px] tabular-nums">{tenure}</p>
             </div>
+            <Icon name="chevronDown" class="pointer-events-none relative size-3.5 self-start text-fg-muted transition-transform duration-(--duration-flip) group-has-aria-expanded/role:rotate-180 xp:hidden no-js:hidden" />
           </div>
           <div id={`${key}-details`} class="reveal mt-3 hidden pl-[42px] opened:block xp:block">
             <p class="text-[13px] text-fg-secondary">{role.context}</p>

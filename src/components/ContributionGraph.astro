@@ -21,8 +21,8 @@ const total = formatCount(activity.total);
 <div data-tile-tooltips class="relative">
   <div data-scroll-end tabindex="0" aria-label="Contribution graph" class="no-scrollbar overflow-x-auto rounded-sm max-[699px]:mask-[linear-gradient(to_right,transparent,black_1.75rem)]">
     <div class="w-max">
-      <div aria-hidden="true" class="mb-1.5 grid h-3 gap-0.5 text-[12px] leading-none text-fg-muted" style={columns}>
-        {activity.monthLabels.map((label) => <span class="whitespace-nowrap">{label}</span>)}
+      <div aria-hidden="true" class="relative mb-1.5 grid h-3 gap-0.5 text-[12px] leading-none text-fg-muted" style={columns}>
+        {activity.monthLabels.map((label) => <span data-month-label class="whitespace-nowrap">{label}</span>)}
       </div>
       <div role="img" aria-label={`${total} GitHub contributions in the last year`} class="grid grid-rows-7 gap-0.5 *:size-2.5 *:rounded-[3px] *:hover:outline *:hover:outline-1 *:hover:outline-fg-muted" style={columns}>
         {activity.weeks.flatMap((week, column) =>
@@ -52,7 +52,8 @@ const total = formatCount(activity.total);
 
 <script>
   import { enhanceTileTooltips } from "../scripts/tile-tooltips";
+  import { enhanceContributionScroll } from "../scripts/contribution-scroll";
 
-  for (const element of document.querySelectorAll("[data-scroll-end]")) element.scrollLeft = element.scrollWidth;
+  for (const scroller of document.querySelectorAll<HTMLElement>("[data-scroll-end]")) enhanceContributionScroll(scroller);
   for (const graph of document.querySelectorAll<HTMLElement>("[data-tile-tooltips]")) enhanceTileTooltips(graph);
 </script>

@@ -59,7 +59,7 @@ type GitHubCommit = {
 };
 
 const COMMITS_SCANNED = 30;
-const CHORE = /^chore(\([^)]*\))?!?:/;
+const HOUSEKEEPING = /^(chore|docs|ci)(\([^)]*\))?!?:/;
 
 export async function fetchLatestCommit(repo: string, token: string | undefined, fetcher: Fetch = fetch): Promise<Commit> {
   const response = await fetcher(`${API}/repos/${repo}/commits?per_page=${COMMITS_SCANNED}`, {
@@ -69,7 +69,7 @@ export async function fetchLatestCommit(repo: string, token: string | undefined,
   if (!response.ok) throw new Error(`GitHub returned ${response.status} for ${repo}'s commits`);
   const commits = (await response.json()) as GitHubCommit[];
   const authored = commits.filter((commit) => commit.parents.length === 1);
-  const latest = authored.find((commit) => !CHORE.test(commit.commit.message)) ?? authored[0];
+  const latest = authored.find((commit) => !HOUSEKEEPING.test(commit.commit.message)) ?? authored[0];
   if (!latest) throw new Error(`no recent commit in ${repo} other than merges`);
   return {
     repo,

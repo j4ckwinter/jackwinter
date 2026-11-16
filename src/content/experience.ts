@@ -15,7 +15,7 @@ export const experience: Role[] = [
   {
     company: "KTO Group",
     icon: "kto",
-    title: "Senior front-end developer",
+    title: "Senior Front-End Developer",
     location: "Remote",
     start: "Jun 2025",
     context: "Sportsbook and online casino operator serving the Brazilian market.",
@@ -30,7 +30,7 @@ export const experience: Role[] = [
   {
     company: "GeoGaming Group",
     icon: "geoGaming",
-    title: "Senior front-end developer",
+    title: "Senior Front-End Developer",
     location: "London",
     start: "Jun 2023",
     end: "Jun 2025",
@@ -45,7 +45,7 @@ export const experience: Role[] = [
   {
     company: "SmartStream Technologies",
     icon: "smartStream",
-    title: "Senior software engineer",
+    title: "Senior Software Engineer",
     location: "Bristol",
     start: "Jul 2017",
     end: "Aug 2022",
