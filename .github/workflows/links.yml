@@ -21,6 +21,7 @@ jobs:
           args: >-
             --no-progress
             --accept 200..=299,999
+            --remap 'https://www.npmjs.com/package/(.+) https://registry.npmjs.org/$1'
             --exclude-path dist/_astro
             --base-url https://www.jackwinter.xyz
             dist/index.html dist/index.md dist/llms.txt
