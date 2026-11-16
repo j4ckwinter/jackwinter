@@ -46,4 +46,32 @@ describe("disclosures", () => {
     expect(startViewTransition).not.toHaveBeenCalled();
     expect(panel.hasAttribute("data-open")).toBe(true);
   });
+
+  it("keeps every button for the same panel in step", () => {
+    const root = document.createElement("div");
+    document.body.replaceChildren(root);
+    root.innerHTML = `
+      <button data-disclosure aria-controls="panel" aria-expanded="false">See more</button>
+      <button data-disclosure aria-controls="panel" aria-expanded="false">Acme</button>
+      <div id="panel"></div>`;
+    enhanceDisclosures(root, () => true);
+    root.querySelectorAll("button")[1].click();
+    expect([...root.querySelectorAll("button")].map((button) => button.getAttribute("aria-expanded"))).toEqual(["true", "true"]);
+  });
+
+  it("brings the role it was asked to reveal into view and focus", () => {
+    const root = document.createElement("div");
+    document.body.replaceChildren(root);
+    root.innerHTML = `
+      <button data-disclosure aria-controls="panel" aria-expanded="false" data-reveal="role">Acme</button>
+      <div id="panel"><li id="role" tabindex="-1">Acme</li></div>`;
+    const role = root.querySelector<HTMLElement>("#role")!;
+    const scrollIntoView = vi.fn();
+    role.scrollIntoView = scrollIntoView;
+    enhanceDisclosures(root, () => true);
+    root.querySelector("button")!.click();
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest", behavior: "auto" });
+    expect(document.activeElement).toBe(role);
+    expect(role.hasAttribute("data-highlight")).toBe(true);
+  });
 });

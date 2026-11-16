@@ -39,7 +39,7 @@ function gitHub(routes: { commits?: unknown[]; stars?: number; failRepo?: string
 
 describe("loadGitHubData", () => {
   it("returns star counts, latest commits and the contribution grid when GitHub answers", async () => {
-    const data = await loadGitHubData({ repos: ["me/a"], login: "me", token: "t", fetcher: gitHub({}) });
+    const data = await loadGitHubData({ projects: [{ repo: "me/a" }], login: "me", token: "t", fetcher: gitHub({}) });
     expect(data.stars.get("me/a")).toBe(7);
     expect(data.commits).toEqual([{ repo: "me/a", subject: "feat: something", date: "2026-11-14T15:11:16Z", url: "https://github.com/me/a/commit/15" }]);
     expect(data.activity?.total).toBe(4);
@@ -49,24 +49,24 @@ describe("loadGitHubData", () => {
 
   it("skips merge commits and keeps only a commit's first line", async () => {
     const fetcher = gitHub({ commits: [commit("Merge pull request #8", 2), commit("fix: keep embeddings\n\nLonger explanation.")] });
-    const data = await loadGitHubData({ repos: ["me/a"], login: "me", token: "t", fetcher });
+    const data = await loadGitHubData({ projects: [{ repo: "me/a" }], login: "me", token: "t", fetcher });
     expect(data.commits.map((latest) => latest.subject)).toEqual(["fix: keep embeddings"]);
   });
 
   it("passes over chores for the newest commit with real work in it", async () => {
     const fetcher = gitHub({ commits: [commit("chore(release): 0.4.0"), commit("chore: tidy"), commit("feat: menu choices")] });
-    const data = await loadGitHubData({ repos: ["me/a"], login: "me", token: "t", fetcher });
+    const data = await loadGitHubData({ projects: [{ repo: "me/a" }], login: "me", token: "t", fetcher });
     expect(data.commits.map((latest) => latest.subject)).toEqual(["feat: menu choices"]);
   });
 
   it("falls back to the newest chore when there is nothing else", async () => {
     const fetcher = gitHub({ commits: [commit("Merge pull request #1", 2), commit("chore: tidy"), commit("chore(release): 1.0.0")] });
-    const data = await loadGitHubData({ repos: ["me/a"], login: "me", token: "t", fetcher });
+    const data = await loadGitHubData({ projects: [{ repo: "me/a" }], login: "me", token: "t", fetcher });
     expect(data.commits.map((latest) => latest.subject)).toEqual(["chore: tidy"]);
   });
 
   it("leaves out what failed and reports why", async () => {
-    const data = await loadGitHubData({ repos: ["me/ok", "me/broken"], login: "me", token: "t", fetcher: gitHub({ stars: 2, failRepo: "/broken", failCalendar: true }) });
+    const data = await loadGitHubData({ projects: [{ repo: "me/ok" }, { repo: "me/broken" }], login: "me", token: "t", fetcher: gitHub({ stars: 2, failRepo: "/broken", failCalendar: true }) });
     expect([...data.stars]).toEqual([["me/ok", 2]]);
     expect(data.commits.map((latest) => latest.repo)).toEqual(["me/ok"]);
     expect(data.activity).toBeUndefined();
@@ -77,8 +77,29 @@ describe("loadGitHubData", () => {
     ]);
   });
 
+  it("reads versions from npm or GitHub releases, depending on the project", async () => {
+    const fetcher: typeof fetch = async (input) => {
+      const url = String(input);
+      if (url.startsWith("https://registry.npmjs.org/@me/ui/latest")) return json({ version: "0.4.0" });
+      if (url.endsWith("/repos/me/skills/releases/latest")) return json({ tag_name: "v0.21.24" });
+      if (url.includes("/commits")) return json([commit("feat: something")]);
+      return json({ stargazers_count: 0 });
+    };
+    const data = await loadGitHubData({
+      projects: [
+        { repo: "me/ui", release: { from: "npm", package: "@me/ui" } },
+        { repo: "me/skills", release: { from: "github" } },
+        { repo: "me/notes" },
+      ],
+      login: "me",
+      token: undefined,
+      fetcher,
+    });
+    expect([...data.versions]).toEqual([["me/ui", "0.4.0"], ["me/skills", "0.21.24"]]);
+  });
+
   it("skips activity without a token", async () => {
-    const data = await loadGitHubData({ repos: [], login: "me", token: undefined, fetcher: gitHub({}) });
+    const data = await loadGitHubData({ projects: [], login: "me", token: undefined, fetcher: gitHub({}) });
     expect(data.activity).toBeUndefined();
     expect(data.problems).toEqual(["activity: GITHUB_TOKEN is not set"]);
   });

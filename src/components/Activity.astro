@@ -18,7 +18,7 @@ const { contributions, commits, projects, profileUrl, today } = Astro.props;
 
 {
   (contributions || commits.length > 0) && (
-    <Section title="Activity">
+    <Section title="Activity" class="print:hidden">
       {contributions && <ContributionGraph activity={contributions} profileUrl={profileUrl} />}
       {commits.length > 0 && <RecentCommits commits={commits} projects={projects} today={today} />}
     </Section>

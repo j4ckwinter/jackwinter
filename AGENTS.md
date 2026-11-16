@@ -34,6 +34,10 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Fetching GitHub data once per build for the page and the card | `src/github/build-data.ts` |
 | Which commit counts as a project's latest (no merges, chores only as a fallback) | `src/github/client.ts` |
 | Copying the email from "say hello" | `src/scripts/copy-email.ts` |
+| Instant tooltips on contribution tiles | `src/scripts/tile-tooltips.ts` |
+| Jack's local time in the header | `src/scripts/local-time.ts`, with the zone in `src/content/profile.ts` |
+| Where each project's version comes from (npm or GitHub releases) | `release` in `src/content/projects.ts`, fetched by `src/github/npm.ts` and `src/github/client.ts` |
+| Opening the experience list at a role from the timeline | `data-reveal` in `src/scripts/disclosure.ts` |
 | Rebuilding the site every morning | `.github/workflows/rebuild.yml` |
 | Which icons exist and where each comes from (Tabler or Simple Icons) | `src/icons.ts` |
 | Talking to the GitHub API and translating its contribution levels | `src/github/client.ts` |
@@ -52,7 +56,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 
 - Keep the page fast and plain: static output, with client JavaScript only for the expand and collapse behaviour in `src/scripts/disclosure.ts` and for starting the activity strip at the latest week.
 - `theme-color` in `Page.astro` repeats `--palette-surface` from `global.css` as hex, because the meta tag can't read CSS variables. Change both together.
-- Everything must be readable without JavaScript. `Page.astro` adds a `js` class to the root; the `opened`, `in-opened` and `no-js` variants in `global.css` show collapsed content and hide toggles when that class is missing.
+- Everything must be readable without JavaScript, and print as a CV. `Page.astro` adds a `js` class to the root; the `opened`, `in-opened` and `no-js` variants in `global.css` show collapsed content and hide toggles when that class is missing, and always in print. Mark anything that makes no sense on paper with `print:hidden`.
 - Animate layout changes with the browser's View Transitions: give an element the same `view-transition-name` in both layouts and let the browser morph it. Browsers without them, and people who prefer reduced motion, get the change instantly.
 - Keep content (bio, roles, projects, links) as data in one place, separate from the components that render it.
 - Write no comments unless one stops a plausible wrong fix.

@@ -79,6 +79,13 @@ export async function fetchLatestCommit(repo: string, token: string | undefined,
   };
 }
 
+export async function fetchLatestReleaseVersion(repo: string, token: string | undefined, fetcher: Fetch = fetch): Promise<string> {
+  const response = await fetcher(`${API}/repos/${repo}/releases/latest`, { headers: headers(token), signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+  if (!response.ok) throw new Error(`GitHub returned ${response.status} for ${repo}'s latest release`);
+  const body = (await response.json()) as { tag_name: string };
+  return body.tag_name.replace(/^v/, "");
+}
+
 export async function fetchStarCount(repo: string, token: string | undefined, fetcher: Fetch = fetch): Promise<number> {
   const response = await fetcher(`${API}/repos/${repo}`, { headers: headers(token), signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
   if (!response.ok) throw new Error(`GitHub returned ${response.status} for ${repo}`);

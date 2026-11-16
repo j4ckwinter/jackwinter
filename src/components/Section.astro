@@ -1,14 +1,18 @@
 ---
 import { toSlug } from "../slug";
 
-type Props = { title: string };
-const { title } = Astro.props;
+type Props = { title: string; class?: string };
+const { title, class: className } = Astro.props;
 const id = toSlug(title);
 ---
 
-<section aria-labelledby={id} class="flex flex-col gap-5" style={`view-transition-name: section-${id}`}>
+<section aria-labelledby={id} class:list={["flex flex-col gap-5", className]} style={`view-transition-name: section-${id}`}>
   <div class="flex items-center justify-between">
-    <h2 id={id}>{title}</h2>
+    <h2 id={id} class="scroll-mt-8">
+      <a href={`#${id}`} class="group/anchor inline-flex items-baseline gap-1.5">
+        {title}<span aria-hidden="true" class="text-fg-muted opacity-0 transition-opacity group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100">#</span>
+      </a>
+    </h2>
     <slot name="action" />
   </div>
   <slot />

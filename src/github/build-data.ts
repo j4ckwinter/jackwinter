@@ -5,7 +5,7 @@ let pending: Promise<GitHubData> | undefined;
 
 export function githubDataForBuild(): Promise<GitHubData> {
   pending ??= loadGitHubData({
-    repos: page.projects.map((project) => project.repo),
+    projects: page.projects,
     login: page.profile.githubLogin,
     token: import.meta.env.GITHUB_TOKEN,
   }).then((data) => {

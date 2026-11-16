@@ -12,7 +12,7 @@
   --palette-surface: oklch(1 0 0);
 }
 
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   :root {
     --palette-fg: oklch(0.85 0 0);
     --palette-fg-secondary: oklch(0.7 0 0);
@@ -56,9 +56,30 @@
   }
 }
 
-@custom-variant opened (&:where([data-open], :root:not(.js) *));
-@custom-variant in-opened (&:where([data-open] *, :root:not(.js) *));
-@custom-variant no-js (&:where(:root:not(.js) *));
+@custom-variant opened {
+  &:where([data-open], :root:not(.js) *) {
+    @slot;
+  }
+  @media print {
+    @slot;
+  }
+}
+@custom-variant in-opened {
+  &:where([data-open] *, :root:not(.js) *) {
+    @slot;
+  }
+  @media print {
+    @slot;
+  }
+}
+@custom-variant no-js {
+  &:where(:root:not(.js) *) {
+    @slot;
+  }
+  @media print {
+    @slot;
+  }
+}
 
 @layer base {
   p,
@@ -69,6 +90,10 @@
   ::selection {
     background-color: color-mix(in oklch, var(--palette-fg) 16%, transparent);
     color: var(--palette-fg);
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
   }
 
   :focus-visible {
@@ -163,5 +188,28 @@
 
   .enter > * {
     animation: none;
+  }
+}
+
+@media print {
+  @page {
+    margin: 14mm 16mm;
+  }
+
+  .enter > * {
+    animation: none;
+  }
+
+  main {
+    padding: 0;
+    gap: 1.5rem;
+  }
+
+  li {
+    break-inside: avoid;
+  }
+
+  h2 {
+    break-after: avoid;
   }
 }

@@ -7,7 +7,7 @@ const { builtOn } = Astro.props;
 const link = "underline decoration-line underline-offset-3 hover:text-fg hover:decoration-fg-muted";
 ---
 
-<footer class="flex flex-col gap-1 text-[13px] text-fg-muted">
+<footer class="flex flex-col gap-1 text-[13px] text-fg-muted print:hidden">
   <p>
     agents welcome: this page is also <a class={link} href={PAGE_MARKDOWN_PATH}>plain markdown</a>, and <a class={link} href={LLMS_PATH}>llms.txt</a> says where everything is.
   </p>

@@ -15,7 +15,7 @@ function formatDate(isoDate: string): string {
   });
 }
 
-export function describeContributionDay({ date, count }: ContributionDay): string {
+export function describeContributionDay({ date, count }: Pick<ContributionDay, "date" | "count">): string {
   const amount = count === 0 ? "No contributions" : count === 1 ? "1 contribution" : `${formatCount(count)} contributions`;
   return `${amount} on ${formatDate(date)}`;
 }

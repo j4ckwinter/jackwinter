@@ -7,6 +7,8 @@ const content: PageContent = {
   profile: {
     name: "Jack",
     title: "Engineer",
+    location: "London",
+    timeZone: "Europe/London",
     description: "Builds things.",
     bio: [["hey, i'm ", { text: "jack", href: "https://example.com/jack" }, "."]],
     email: "me@example.com",

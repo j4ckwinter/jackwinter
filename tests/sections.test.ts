@@ -12,8 +12,32 @@ import { day } from "./fixtures";
 import { render } from "./render";
 
 describe("header", () => {
+  const props = {
+    name: "Jack",
+    title: "Engineer",
+    location: "London",
+    timeZone: "Europe/London",
+    links: [
+      { label: "GitHub", href: "https://github.com/me", icon: "github" },
+      { label: "Email", href: "mailto:me@example.com", icon: "mail" },
+      { label: "CV", href: "/cv.pdf", icon: "cv" },
+    ],
+  };
+
+  it("says where Jack is and leaves a slot for the local time", async () => {
+    const page = await render(Header, props);
+    expect(page.body.textContent).toContain("Engineer · London");
+    expect(page.querySelector("[data-local-time]")?.getAttribute("data-time-zone")).toBe("Europe/London");
+  });
+
+  it("spells out the contact links for print, leaving out on-site files", async () => {
+    const page = await render(Header, props);
+    const printed = [...page.querySelectorAll("p")].map((line) => line.textContent ?? "").find((text) => text.includes("github.com"));
+    expect(printed).toBe("github.com/me · me@example.com");
+  });
+
   it("shows each link as a labelled icon", async () => {
-    const page = await render(Header, { name: "Jack", title: "Engineer", links: [{ label: "GitHub", href: "https://github.com/me", icon: "github" }] });
+    const page = await render(Header, props);
     const link = page.querySelector('a[aria-label="GitHub"]');
     expect(link?.getAttribute("href")).toBe("https://github.com/me");
     expect(link?.querySelector("svg")).not.toBeNull();
@@ -42,8 +66,8 @@ describe("projects", () => {
   ];
 
   it("shows star counts only for projects that have some", async () => {
-    const page = await render(Projects, { projects, stars: new Map([["me/starred", 1076], ["me/quiet", 0]]) });
-    const [starred, quiet] = [...page.querySelectorAll("a")];
+    const page = await render(Projects, { projects, stars: new Map([["me/starred", 1076], ["me/quiet", 0]]), versions: new Map() });
+    const [starred, quiet] = [...page.querySelectorAll("li a")];
     expect(starred.textContent).toContain("GitHub stars: 1,076");
     expect(quiet.textContent).not.toContain("GitHub stars");
     expect(quiet.getAttribute("href")).toBe("https://example.com/quiet");
@@ -51,9 +75,24 @@ describe("projects", () => {
 
   it("lists the most starred projects first and keeps the given order otherwise", async () => {
     const more = [...projects, { name: "also quiet", icon: "dog", description: "none either", repo: "me/also-quiet", href: "https://example.com/also" }];
-    const page = await render(Projects, { projects: [more[1], more[0], more[2]], stars: new Map([["me/starred", 5]]) });
-    const names = [...page.querySelectorAll("a")].map((link) => link.querySelector("span span")?.textContent);
+    const page = await render(Projects, { projects: [more[1], more[0], more[2]], stars: new Map([["me/starred", 5]]), versions: new Map() });
+    const names = [...page.querySelectorAll("li a")].map((link) => link.querySelector("span span")?.textContent);
     expect(names).toEqual(["starred", "quiet", "also quiet"]);
+  });
+
+  it("shows the latest released version for projects that have one", async () => {
+    const page = await render(Projects, { projects, stars: new Map(), versions: new Map([["me/quiet", "0.4.0"]]) });
+    const [starred, quiet] = [...page.querySelectorAll("li a")];
+    expect(quiet.textContent).toContain("Latest release: v0.4.0");
+    expect(starred.textContent).not.toContain("Latest release");
+  });
+});
+
+describe("section headings", () => {
+  it("link to themselves so a section can be shared", async () => {
+    const page = await render(Education, { qualifications: [] });
+    expect(page.querySelector("h2")?.id).toBe("education");
+    expect(page.querySelector("h2 a")?.getAttribute("href")).toBe("#education");
   });
 });
 
@@ -62,7 +101,7 @@ describe("education", () => {
     const page = await render(Education, {
       qualifications: [{ qualification: "BSc Computer Science", institution: "Uni", icon: "school", start: "2013", end: "2017" }],
     });
-    expect(page.querySelector("h2")?.textContent).toBe("Education");
+    expect(page.querySelector("h2")?.textContent).toContain("Education");
     expect(page.body.textContent).toContain("BSc Computer Science");
     expect(page.body.textContent).toContain("Uni");
     expect(page.body.textContent).toContain("2013 – 2017");
@@ -98,6 +137,15 @@ describe("experience", () => {
     const page = await render(Experience, { roles: [role] });
     expect(page.body.textContent).toContain("Jan 2024 – now");
   });
+
+  it("lets each timeline entry open the list at that role", async () => {
+    const page = await render(Experience, { roles: [role] });
+    const stop = page.querySelector('button[aria-label="Open the details for Acme Inc"]');
+    expect(stop?.getAttribute("aria-controls")).toBe("experience-content");
+    const target = page.getElementById(stop?.getAttribute("data-reveal") ?? "");
+    expect(target?.textContent).toContain("Engineer");
+    expect(target?.getAttribute("tabindex")).toBe("-1");
+  });
 });
 
 describe("skills", () => {
@@ -121,7 +169,7 @@ describe("activity", () => {
   it("draws a tile per day, placed by week and weekday, with its count", async () => {
     const page = await render(Activity, base);
     const tiles = [...page.querySelectorAll('ol[aria-label$="contributions in the last year"] li')];
-    expect(tiles.map((tile) => tile.getAttribute("aria-label"))).toEqual(["3 contributions on 1 November 2026", "No contributions on 2 November 2026"]);
+    expect(tiles.map((tile) => [tile.getAttribute("data-day"), tile.getAttribute("data-count")])).toEqual([["2026-11-01", "3"], ["2026-11-02", "0"]]);
     expect(tiles.map((tile) => tile.getAttribute("style"))).toEqual(["grid-column: 1; grid-row: 1", "grid-column: 1; grid-row: 2"]);
   });
 

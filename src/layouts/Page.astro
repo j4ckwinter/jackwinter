@@ -44,9 +44,11 @@ const SURFACE = { light: "#ffffff", dark: "#0a0a0a" };
     <script>
       import { enhanceDisclosures } from "../scripts/disclosure";
       import { enhanceCopyEmail } from "../scripts/copy-email";
+      import { enhanceLocalTime } from "../scripts/local-time";
 
       enhanceDisclosures(document, () => matchMedia("(prefers-reduced-motion: reduce)").matches);
       enhanceCopyEmail(document, navigator.clipboard);
+      enhanceLocalTime(document, () => new Date());
     </script>
   </body>
 </html>

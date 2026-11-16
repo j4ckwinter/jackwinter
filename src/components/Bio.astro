@@ -19,7 +19,7 @@ const { paragraphs, email } = Astro.props;
       </p>
     ))
   }
-  <p class="mt-3 flex items-center gap-3">
+  <p class="mt-3 flex items-center gap-3 print:hidden">
     <a
       class="inline-flex h-8 items-center rounded-lg bg-fg px-3 text-sm font-medium text-surface transition-transform hover:bg-fg/85 active:scale-[0.97]"
       href={`mailto:${email}`}

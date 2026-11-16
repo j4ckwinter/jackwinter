@@ -31,7 +31,13 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
       <span aria-hidden="true" class="absolute top-1 right-2 left-3 h-px bg-line"></span>
       <ol class="grid gap-2" style={columns}>
         {entries.map(({ role, current, dates, names }) => (
-          <li class="relative min-w-0 pt-6 pr-2">
+          <li class="group/stop relative min-w-0 pt-6 pr-2">
+            <button
+              type="button"
+              {...disclosureButton("experience-content", names.row)}
+              aria-label={`Open the details for ${role.company}`}
+              class="absolute -inset-x-2 top-3 -bottom-2 z-20 rounded-xl"
+            ></button>
             {current && <span aria-hidden="true" class="absolute top-1 left-3 h-px w-[calc(100%+0.5rem)] bg-linear-to-r from-fg to-line to-70%" />}
             <span aria-hidden="true" class="absolute -top-1 left-1 z-10 flex size-4 items-center justify-center rounded-full bg-surface">
               <span class:list={["relative size-2 rounded-full", current ? "bg-fg" : "bg-faint"]}>
@@ -40,7 +46,7 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
             </span>
             <div class="flex min-w-0 items-center gap-2.5">
               <IconTile icon={role.icon} transitionName={names.mark} />
-              <span class="line-clamp-2 text-sm leading-snug" style={`view-transition-name: ${names.company}`}>{role.company}</span>
+              <span class="line-clamp-2 text-sm leading-snug underline-offset-3 decoration-line group-hover/stop:underline" style={`view-transition-name: ${names.company}`}>{role.company}</span>
             </div>
             <p class="mt-2 w-fit text-[13px] text-fg-muted" style={`view-transition-name: ${names.dates}`}>{dates}</p>
           </li>
@@ -49,7 +55,7 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
     </div>
     <ol class="flex flex-col gap-5.5 xp:hidden xp:in-opened:flex xp:no-js:flex">
       {entries.map(({ role, key, dates, names }) => (
-        <li class="min-w-0" style={`view-transition-name: ${names.row}`}>
+        <li id={names.row} tabindex="-1" class="-mx-3 min-w-0 rounded-xl px-3 outline-none transition-colors duration-700 data-highlight:bg-raised data-highlight:duration-150" style={`view-transition-name: ${names.row}`}>
           <div class="group/role relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2.5">
             <button
               type="button"

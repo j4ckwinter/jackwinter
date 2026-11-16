@@ -5,8 +5,8 @@ import Icon from "./Icon.astro";
 import type { Project } from "../content/projects";
 import { formatCount } from "../format";
 
-type Props = { projects: Project[]; stars: Map<string, number> };
-const { projects, stars } = Astro.props;
+type Props = { projects: Project[]; stars: Map<string, number>; versions: Map<string, string> };
+const { projects, stars, versions } = Astro.props;
 const starsFor = (project: Project) => stars.get(project.repo) ?? 0;
 const mostStarredFirst = [...projects].sort((a, b) => starsFor(b) - starsFor(a));
 ---
@@ -15,6 +15,7 @@ const mostStarredFirst = [...projects].sort((a, b) => starsFor(b) - starsFor(a))
   <ul class="flex flex-col gap-2">
     {mostStarredFirst.map((project) => {
       const starCount = starsFor(project);
+      const version = versions.get(project.repo);
       return (
         <li>
           <a href={project.href} class="-mx-3 flex items-center gap-3 rounded-xl px-3 py-2 transition-colors hover:bg-raised">
@@ -23,6 +24,11 @@ const mostStarredFirst = [...projects].sort((a, b) => starsFor(b) - starsFor(a))
               <span class="text-sm">{project.name}</span>
               <span class="text-[13px] text-fg-secondary">{project.description}</span>
             </span>
+            {version && (
+              <span class="shrink-0 font-mono text-[12px] text-fg-muted">
+                <span class="sr-only">Latest release: </span>v{version}
+              </span>
+            )}
             {starCount > 0 && (
               <span class="flex shrink-0 items-center gap-1 text-[13px] text-fg-muted tabular-nums">
                 <Icon name="star" class="size-3.5" />

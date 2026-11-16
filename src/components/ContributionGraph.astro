@@ -1,6 +1,6 @@
 ---
 import type { ContributionGrid, ContributionLevel } from "../github/activity";
-import { describeContributionDay, formatCount } from "../format";
+import { formatCount } from "../format";
 
 type Props = { activity: ContributionGrid; profileUrl: string };
 const { activity, profileUrl } = Astro.props;
@@ -17,34 +17,39 @@ const columns = `grid-template-columns: repeat(${activity.weeks.length}, 0.625re
 const total = formatCount(activity.total);
 ---
 
-<div>
+<div data-tile-tooltips class="relative">
   <div data-scroll-end tabindex="0" aria-label="Contribution graph" class="no-scrollbar overflow-x-auto rounded-sm max-[699px]:mask-[linear-gradient(to_right,transparent,black_1.75rem)]">
     <div class="w-max">
       <div aria-hidden="true" class="mb-1.5 grid h-3 gap-0.5 text-[12px] leading-none text-fg-muted" style={columns}>
         {activity.monthLabels.map((label) => <span class="whitespace-nowrap">{label}</span>)}
       </div>
-      <ol aria-label={`${total} GitHub contributions in the last year`} class="grid grid-rows-7 gap-0.5" style={columns}>
+      <ol role="img" aria-label={`${total} GitHub contributions in the last year`} class="grid grid-rows-7 gap-0.5 *:size-2.5 *:rounded-[3px] *:hover:outline *:hover:outline-1 *:hover:outline-fg-muted" style={columns}>
         {activity.weeks.flatMap((week, column) =>
-          week.map((day) => {
-            const description = describeContributionDay(day);
-            return (
-              <li
-                aria-label={description}
-                title={description}
-                class:list={["size-2.5 rounded-[3px]", LEVEL_SHADES[day.level]]}
-                style={`grid-column: ${column + 1}; grid-row: ${day.weekday + 1}`}
-              />
-            );
-          }),
+          week.map((day) => (
+            <li
+              data-day={day.date}
+              data-count={day.count}
+              class={LEVEL_SHADES[day.level]}
+              style={`grid-column: ${column + 1}; grid-row: ${day.weekday + 1}`}
+            />
+          )),
         )}
       </ol>
     </div>
   </div>
+  <div
+    data-tooltip
+    aria-hidden="true"
+    class="pointer-events-none absolute top-0 left-0 z-30 -translate-x-1/2 -translate-y-full rounded-md bg-fg px-2 py-1 text-[12px] whitespace-nowrap text-surface opacity-0 transition-opacity duration-100 data-shown:opacity-100"
+  ></div>
   <a href={profileUrl} class="mt-2 inline-block text-[12px] text-fg-muted hover:text-fg">
     {total} contributions in the last year
   </a>
 </div>
 
 <script>
-for (const element of document.querySelectorAll("[data-scroll-end]")) element.scrollLeft = element.scrollWidth;
+  import { enhanceTileTooltips } from "../scripts/tile-tooltips";
+
+  for (const element of document.querySelectorAll("[data-scroll-end]")) element.scrollLeft = element.scrollWidth;
+  for (const graph of document.querySelectorAll<HTMLElement>("[data-tile-tooltips]")) enhanceTileTooltips(graph);
 </script>

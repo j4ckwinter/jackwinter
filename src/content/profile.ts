@@ -10,6 +10,8 @@ const githubLogin = "j4ckwinter";
 export const profile = {
   name: "Jack Winter",
   title: "Senior software engineer",
+  location: "London",
+  timeZone: "Europe/London",
   description:
     "Jack Winter, senior software engineer in London. Real-time products with React and TypeScript, and tools for AI coding agents.",
   bio: [

@@ -21,10 +21,10 @@ const structuredData = JSON.stringify(personSchema(page, Astro.site!));
 
 <Page title={`${profile.name} · ${profile.title.toLowerCase()}`} description={profile.description} name={profile.name}>
   <script slot="head" type="application/ld+json" is:inline set:html={structuredData} />
-  <Header name={profile.name} title={profile.title} links={profile.links} />
+  <Header name={profile.name} title={profile.title} location={profile.location} timeZone={profile.timeZone} links={profile.links} />
   <Bio paragraphs={profile.bio} email={profile.email} />
   <Experience roles={experience} />
-  <Projects projects={projects} stars={github.stars} />
+  <Projects projects={projects} stars={github.stars} versions={github.versions} />
   <Activity contributions={github.activity} commits={github.commits} projects={projects} profileUrl={profile.githubUrl} today={today} />
   <Skills groups={skills} />
   <Education qualifications={education} />

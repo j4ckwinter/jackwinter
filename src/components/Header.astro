@@ -2,16 +2,21 @@
 import Icon from "./Icon.astro";
 import type { Link } from "../content/profile";
 
-type Props = { name: string; title: string; links: Link[] };
-const { name, title, links } = Astro.props;
+type Props = { name: string; title: string; location: string; timeZone: string; links: Link[] };
+const { name, title, location, timeZone, links } = Astro.props;
+const printable = links.filter((link) => !link.href.startsWith("/")).map((link) => link.href.replace(/^(mailto:|https?:\/\/)/, ""));
+const site = Astro.site?.host.replace(/^www\./, "");
 ---
 
 <header class="flex items-center justify-between gap-4">
   <div>
     <h1 class="font-medium">{name}</h1>
-    <p class="mt-1 text-fg-muted">{title}</p>
+    <p class="mt-1 text-fg-muted">
+      {title} · {location}<span class="no-js:hidden"> <time data-local-time data-time-zone={timeZone} class="tabular-nums opacity-0 transition-opacity duration-300 data-ready:opacity-100"></time></span>
+    </p>
+    <p class="mt-1 hidden text-[13px] text-fg-secondary print:block">{[...printable, site].filter(Boolean).join(" · ")}</p>
   </div>
-  <nav aria-label="Links">
+  <nav aria-label="Links" class="print:hidden">
     <ul class="flex gap-px">
       {links.map((link) => (
         <li>
