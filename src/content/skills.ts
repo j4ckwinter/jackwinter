@@ -57,6 +57,8 @@ export const skills: SkillGroup[] = [
     tools: [
       { name: "Node.js", icon: "nodejs" },
       { name: "Express", icon: "express" },
+      { name: "PostgreSQL", icon: "postgresql" },
+      { name: "Payload CMS", icon: "payload" },
       { name: "Supabase", icon: "supabase" },
       { name: "Zod", icon: "zod" },
       { name: "Docker", icon: "docker" },
