@@ -8,7 +8,8 @@ import stack from "@tabler/icons/outline/stack-2.svg?raw";
 import brain from "@tabler/icons/outline/brain.svg?raw";
 import components from "@tabler/icons/outline/components.svg?raw";
 import dog from "@tabler/icons/outline/dog.svg?raw";
-import snowflake from "@tabler/icons/outline/snowflake.svg?raw";
+import meat from "@tabler/icons/outline/meat.svg?raw";
+import browser from "@tabler/icons/outline/browser.svg?raw";
 import plugConnected from "@tabler/icons/outline/plug-connected.svg?raw";
 import cpu from "@tabler/icons/outline/cpu.svg?raw";
 import api from "@tabler/icons/outline/api.svg?raw";
@@ -100,7 +101,8 @@ export const icons = {
   brain: tabler(brain),
   components: tabler(components),
   dog: tabler(dog),
-  snowflake: tabler(snowflake),
+  meat: tabler(meat),
+  browser: tabler(browser),
   kto: logo("/logos/kto.png", "h-4 w-6"),
   geoGaming: geoGamingMark,
   smartStream: logo("/logos/smartstream.png", "size-4"),

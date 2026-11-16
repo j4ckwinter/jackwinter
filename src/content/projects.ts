@@ -31,6 +31,13 @@ export const projects: Project[] = [
     href: "https://www.npmjs.com/package/@jack.winter/pancake-ui",
   },
   {
+    name: "the-beef",
+    icon: "meat",
+    description: "home repo for my agents: how my projects fit together, and how i like to work",
+    repo: "j4ckwinter/the-beef",
+    href: "https://github.com/j4ckwinter/the-beef",
+  },
+  {
     name: "elvis",
     icon: "dog",
     description: "a small black sprocker who lives on your mac and reacts to claude",
@@ -38,10 +45,10 @@ export const projects: Project[] = [
     href: "https://github.com/j4ckwinter/elvis",
   },
   {
-    name: "winter town",
-    icon: "snowflake",
-    description: "my old portfolio, a small town you can walk around",
-    repo: "j4ckwinter/winterbot",
-    href: "https://winterbyte.vercel.app",
+    name: "jackwinter",
+    icon: "browser",
+    description: "this site: one page, built with astro, with a markdown copy for agents",
+    repo: "j4ckwinter/jackwinter",
+    href: "https://github.com/j4ckwinter/jackwinter",
   },
 ];
