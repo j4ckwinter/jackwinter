@@ -39,7 +39,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | How text becomes ids and view-transition names | `src/slug.ts` |
 | The 570px breakpoint where Experience switches to a timeline | `src/styles/global.css` (`--breakpoint-xp`) |
 | How each section looks, including when star counts show and that the most starred projects come first | `src/components/*.astro` |
-| Which sections appear and in what order | `src/pages/index.astro` |
+| Which sections appear and in what order: who you are, experience, projects, activity, skills, education | `src/pages/index.astro` |
 
 ## Standards
 

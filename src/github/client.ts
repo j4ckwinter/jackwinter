@@ -50,6 +50,33 @@ function headers(token: string | undefined): HeadersInit {
   };
 }
 
+export type Commit = { repo: string; subject: string; date: string; url: string };
+
+type GitHubCommit = {
+  html_url: string;
+  parents: unknown[];
+  commit: { message: string; author: { date: string } };
+};
+
+const COMMITS_SCANNED = 10;
+
+export async function fetchLatestCommit(repo: string, token: string | undefined, fetcher: Fetch = fetch): Promise<Commit> {
+  const response = await fetcher(`${API}/repos/${repo}/commits?per_page=${COMMITS_SCANNED}`, {
+    headers: headers(token),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+  if (!response.ok) throw new Error(`GitHub returned ${response.status} for ${repo}'s commits`);
+  const commits = (await response.json()) as GitHubCommit[];
+  const latest = commits.find((commit) => commit.parents.length === 1);
+  if (!latest) throw new Error(`no recent commit in ${repo} other than merges`);
+  return {
+    repo,
+    subject: latest.commit.message.split("\n")[0],
+    date: latest.commit.author.date,
+    url: latest.html_url,
+  };
+}
+
 export async function fetchStarCount(repo: string, token: string | undefined, fetcher: Fetch = fetch): Promise<number> {
   const response = await fetcher(`${API}/repos/${repo}`, { headers: headers(token), signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
   if (!response.ok) throw new Error(`GitHub returned ${response.status} for ${repo}`);

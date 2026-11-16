@@ -18,16 +18,17 @@ const github = await loadGitHubData({
   login: profile.githubLogin,
   token: import.meta.env.GITHUB_TOKEN,
 });
+const today = new Date().toISOString().slice(0, 10);
 for (const problem of github.problems) console.warn(`Leaving out GitHub ${problem}`);
 ---
 
 <Page title={profile.name} description={profile.description}>
   <Header name={profile.name} title={profile.title} links={profile.links} />
   <Bio paragraphs={profile.bio} email={profile.email} />
-  {github.activity && <Activity activity={github.activity} profileUrl={profile.githubUrl} />}
   <Experience roles={experience} />
-  <Education qualifications={education} />
-  <Skills groups={skills} />
   <Projects projects={projects} stars={github.stars} />
+  <Activity contributions={github.activity} commits={github.commits} projects={projects} profileUrl={profile.githubUrl} today={today} />
+  <Skills groups={skills} />
+  <Education qualifications={education} />
   <Footer />
 </Page>

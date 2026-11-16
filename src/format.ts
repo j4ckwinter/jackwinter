@@ -20,6 +20,17 @@ export function describeContributionDay({ date, count }: ContributionDay): strin
   return `${amount} on ${formatDate(date)}`;
 }
 
+export function formatCommitDate(isoDateTime: string, today: string): string {
+  const date = new Date(isoDateTime);
+  const sameYear = date.getUTCFullYear() === Number(today.slice(0, 4));
+  return date.toLocaleDateString(LOCALE, {
+    day: "numeric",
+    month: "short",
+    ...(sameYear ? {} : { year: "numeric" }),
+    timeZone: "UTC",
+  });
+}
+
 export function formatDateRange({ start, end }: { start: string; end?: string }): string {
   return `${start} – ${end ?? "now"}`;
 }

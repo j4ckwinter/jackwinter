@@ -1,0 +1,50 @@
+---
+import type { ContributionGrid, ContributionLevel } from "../github/activity";
+import { describeContributionDay, formatCount } from "../format";
+
+type Props = { activity: ContributionGrid; profileUrl: string };
+const { activity, profileUrl } = Astro.props;
+
+const LEVEL_SHADES: Record<ContributionLevel, string> = {
+  0: "bg-fg/10",
+  1: "bg-fg/25",
+  2: "bg-fg/45",
+  3: "bg-fg/60",
+  4: "bg-fg/75",
+};
+
+const columns = `grid-template-columns: repeat(${activity.weeks.length}, 0.625rem)`;
+const total = formatCount(activity.total);
+---
+
+<div>
+  <div data-scroll-end tabindex="0" aria-label="Contribution graph" class="no-scrollbar overflow-x-auto rounded-sm max-[699px]:mask-[linear-gradient(to_right,transparent,black_1.75rem)]">
+    <div class="w-max">
+      <div aria-hidden="true" class="mb-1.5 grid h-3 gap-0.5 text-[12px] leading-none text-fg-muted" style={columns}>
+        {activity.monthLabels.map((label) => <span class="whitespace-nowrap">{label}</span>)}
+      </div>
+      <ol aria-label={`${total} GitHub contributions in the last year`} class="grid grid-rows-7 gap-0.5" style={columns}>
+        {activity.weeks.flatMap((week, column) =>
+          week.map((day) => {
+            const description = describeContributionDay(day);
+            return (
+              <li
+                aria-label={description}
+                title={description}
+                class:list={["size-2.5 rounded-[3px]", LEVEL_SHADES[day.level]]}
+                style={`grid-column: ${column + 1}; grid-row: ${day.weekday + 1}`}
+              />
+            );
+          }),
+        )}
+      </ol>
+    </div>
+  </div>
+  <a href={profileUrl} class="mt-2 inline-block text-[12px] text-fg-muted hover:text-fg">
+    {total} contributions in the last year
+  </a>
+</div>
+
+<script>
+for (const element of document.querySelectorAll("[data-scroll-end]")) element.scrollLeft = element.scrollWidth;
+</script>

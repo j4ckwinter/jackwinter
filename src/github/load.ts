@@ -1,8 +1,9 @@
 import { buildContributionGrid, type ContributionGrid } from "./activity";
-import { fetchContributionCalendar, fetchStarCount } from "./client";
+import { fetchContributionCalendar, fetchLatestCommit, fetchStarCount, type Commit } from "./client";
 
 export type GitHubData = {
   stars: Map<string, number>;
+  commits: Commit[];
   activity: ContributionGrid | undefined;
   problems: string[];
 };
@@ -28,6 +29,13 @@ export async function loadGitHubData({ repos, login, token, fetcher = fetch }: R
     else problems.push(`stars for ${repos[index]}: ${reason(result.reason)}`);
   });
 
+  const commits: Commit[] = [];
+  const commitResults = await Promise.allSettled(repos.map((repo) => fetchLatestCommit(repo, token, fetcher)));
+  commitResults.forEach((result, index) => {
+    if (result.status === "fulfilled") commits.push(result.value);
+    else problems.push(`latest commit for ${repos[index]}: ${reason(result.reason)}`);
+  });
+
   let activity: ContributionGrid | undefined;
   if (!token) {
     problems.push("activity: GITHUB_TOKEN is not set");
@@ -39,5 +47,5 @@ export async function loadGitHubData({ repos, login, token, fetcher = fetch }: R
     }
   }
 
-  return { stars, activity, problems };
+  return { stars, commits, activity, problems };
 }

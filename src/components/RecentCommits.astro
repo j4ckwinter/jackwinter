@@ -1,0 +1,22 @@
+---
+import type { Commit } from "../github/client";
+import type { Project } from "../content/projects";
+import { formatCommitDate } from "../format";
+
+type Props = { commits: Commit[]; projects: Project[]; today: string };
+const { commits, projects, today } = Astro.props;
+const projectName = new Map(projects.map((project) => [project.repo, project.name]));
+const newestFirst = [...commits].sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<ul aria-label="Latest commits" class="-mx-3 flex flex-col">
+  {newestFirst.map((commit) => (
+    <li>
+      <a href={commit.url} class="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 rounded-lg px-3 py-1.5 transition-colors hover:bg-raised xp:grid-cols-[7.5rem_minmax(0,1fr)_auto]">
+        <span class="text-[13px] text-fg-muted max-xp:col-span-2">{projectName.get(commit.repo) ?? commit.repo}</span>
+        <span class="truncate font-mono text-[12.5px] text-fg-secondary">{commit.subject}</span>
+        <time datetime={commit.date} class="text-[13px] whitespace-nowrap text-fg-muted tabular-nums">{formatCommitDate(commit.date, today)}</time>
+      </a>
+    </li>
+  ))}
+</ul>

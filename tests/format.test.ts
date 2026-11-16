@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { describeContributionDay, formatDateRange } from "../src/format";
+import { describeContributionDay, formatCommitDate, formatDateRange } from "../src/format";
 import { day } from "./fixtures";
 
 describe("describeContributionDay", () => {
@@ -13,6 +13,16 @@ describe("describeContributionDay", () => {
 
   it("formats larger counts with separators", () => {
     expect(describeContributionDay(day("2026-02-28", 1076, 4))).toBe("1,076 contributions on 28 February 2026");
+  });
+});
+
+describe("formatCommitDate", () => {
+  it("leaves out the year for this year's commits", () => {
+    expect(formatCommitDate("2026-11-14T15:11:16Z", "2026-11-16")).toBe("14 Nov");
+  });
+
+  it("includes the year for older commits", () => {
+    expect(formatCommitDate("2025-12-31T23:59:00Z", "2026-01-02")).toBe("31 Dec 2025");
   });
 });
 

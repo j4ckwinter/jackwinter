@@ -99,19 +99,43 @@ describe("skills", () => {
 
 describe("activity", () => {
   const grid = buildContributionGrid({ total: 5447, weeks: [[day("2026-11-01", 3, 2), day("2026-11-02", 0, 0)]] });
+  const base = { contributions: grid, commits: [], projects: [], profileUrl: "https://github.com/me", today: "2026-11-16" };
 
   it("draws a tile per day, placed by week and weekday, with its count", async () => {
-    const page = await render(Activity, { activity: grid, profileUrl: "https://github.com/me" });
-    const tiles = [...page.querySelectorAll("ol li")];
+    const page = await render(Activity, base);
+    const tiles = [...page.querySelectorAll('ol[aria-label$="contributions in the last year"] li')];
     expect(tiles.map((tile) => tile.getAttribute("aria-label"))).toEqual(["3 contributions on 1 November 2026", "No contributions on 2 November 2026"]);
     expect(tiles.map((tile) => tile.getAttribute("style"))).toEqual(["grid-column: 1; grid-row: 1", "grid-column: 1; grid-row: 2"]);
   });
 
   it("labels months and links the yearly total to the GitHub profile", async () => {
-    const page = await render(Activity, { activity: grid, profileUrl: "https://github.com/me" });
+    const page = await render(Activity, base);
     expect(page.body.textContent).toContain("Nov");
     expect(page.querySelector("ol")?.getAttribute("aria-label")).toBe("5,447 GitHub contributions in the last year");
     const total = page.querySelector('a[href="https://github.com/me"]');
     expect(total?.textContent?.trim()).toBe("5,447 contributions in the last year");
+  });
+
+  it("lists the newest commit first under its project's name, linking to the commit", async () => {
+    const page = await render(Activity, {
+      ...base,
+      contributions: undefined,
+      commits: [
+        { repo: "me/old", subject: "chore: tidy", date: "2026-11-01T10:00:00Z", url: "https://github.com/me/old/commit/1" },
+        { repo: "me/new", subject: "feat: ship it", date: "2026-11-14T10:00:00Z", url: "https://github.com/me/new/commit/2" },
+      ],
+      projects: [{ name: "new thing", icon: "stack", description: "", repo: "me/new", href: "" }],
+    });
+    const links = [...page.querySelectorAll('ul[aria-label="Latest commits"] a')];
+    expect(links.map((link) => [...link.children].map((part) => part.textContent))).toEqual([
+      ["new thing", "feat: ship it", "14 Nov"],
+      ["me/old", "chore: tidy", "1 Nov"],
+    ]);
+    expect(links[0].getAttribute("href")).toBe("https://github.com/me/new/commit/2");
+  });
+
+  it("leaves the section out when GitHub gave nothing", async () => {
+    const page = await render(Activity, { ...base, contributions: undefined });
+    expect(page.querySelector("section")).toBeNull();
   });
 });
