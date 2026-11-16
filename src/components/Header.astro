@@ -1,0 +1,20 @@
+---
+import type { Link } from "../content/profile";
+
+type Props = { name: string; title: string; location: string; links: Link[] };
+const { name, title, location, links } = Astro.props;
+---
+
+<header class="flex flex-col gap-3">
+  <div>
+    <h1 class="text-xl font-medium">{name}</h1>
+    <p class="text-neutral-500 dark:text-neutral-400">{title} · {location}</p>
+  </div>
+  <nav aria-label="Links" class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+    {links.map((link) => (
+      <a class="text-neutral-600 underline-offset-4 hover:text-neutral-900 hover:underline dark:text-neutral-400 dark:hover:text-neutral-100" href={link.href}>
+        {link.label}
+      </a>
+    ))}
+  </nav>
+</header>

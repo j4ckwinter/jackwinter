@@ -1,0 +1,23 @@
+---
+import Section from "./Section.astro";
+import type { SkillGroup } from "../content/skills";
+
+type Props = {
+  groups: SkillGroup[];
+  education: { qualification: string; institution: string; dates: string };
+};
+const { groups, education } = Astro.props;
+---
+
+<Section title="Skills">
+  <dl class="grid grid-cols-[5.5rem_1fr] sm:grid-cols-[7rem_1fr] gap-x-4 gap-y-2 text-sm">
+    {groups.map((group) => (
+      <>
+        <dt class="text-neutral-500 dark:text-neutral-400">{group.name}</dt>
+        <dd>{group.tools.join(", ")}</dd>
+      </>
+    ))}
+    <dt class="text-neutral-500 dark:text-neutral-400">Education</dt>
+    <dd>{education.qualification}, {education.institution}, {education.dates}</dd>
+  </dl>
+</Section>

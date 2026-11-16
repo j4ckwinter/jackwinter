@@ -4,7 +4,7 @@ my portfolio, minus the town. one page: who i am, what i've built, where i've wo
 
 it will replace [winter town](https://github.com/j4ckwinter/winterbot) as the place people land when they look me up. winter town isn't going anywhere, it just won't be the front door.
 
-built with Astro and Tailwind. right now it's just a name and a link. more soon.
+there's a little bar chart of my github activity too. built with Astro and Tailwind, and it's all static html.
 
 ## run it locally
 
@@ -15,4 +15,16 @@ npm ci
 npm run dev
 ```
 
-`npm run check` and `npm run build` are the checks.
+`npm run check`, `npm test` and `npm run build` are the checks.
+
+star counts come from github at build time. the activity chart needs a token, so locally i run:
+
+```sh
+GITHUB_TOKEN=$(gh auth token) npm run build
+```
+
+no token, no chart. the rest of the page doesn't care.
+
+## change what it says
+
+everything the page says lives in `src/content`. edit those files, not the components.

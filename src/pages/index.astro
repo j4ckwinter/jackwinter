@@ -1,14 +1,31 @@
 ---
 import Page from "../layouts/Page.astro";
+import Header from "../components/Header.astro";
+import Bio from "../components/Bio.astro";
+import Activity from "../components/Activity.astro";
+import Experience from "../components/Experience.astro";
+import Projects from "../components/Projects.astro";
+import Skills from "../components/Skills.astro";
 import { profile } from "../content/profile";
+import { experience } from "../content/experience";
+import { projects } from "../content/projects";
+import { skills, education } from "../content/skills";
+import { loadGitHubData } from "../github/load";
+
+const github = await loadGitHubData({
+  repos: projects.map((project) => project.repo),
+  login: profile.githubLogin,
+  token: import.meta.env.GITHUB_TOKEN,
+  today: new Date().toISOString().slice(0, 10),
+});
+for (const problem of github.problems) console.warn(`Leaving out GitHub ${problem}`);
 ---
 
-<Page title={profile.name}>
-  <header>
-    <h1 class="text-xl font-medium">{profile.name}</h1>
-    <p class="text-neutral-500">{profile.title}</p>
-    <nav class="mt-4 flex gap-4 text-sm">
-      {profile.links.map((link) => <a class="underline-offset-4 hover:underline" href={link.href}>{link.label}</a>)}
-    </nav>
-  </header>
+<Page title={profile.name} description={profile.description}>
+  <Header name={profile.name} title={profile.title} location={profile.location} links={profile.links} />
+  <Bio paragraphs={profile.bio} email={profile.email} />
+  {github.activity && <Activity activity={github.activity} profileUrl={profile.githubUrl} />}
+  <Experience roles={experience} />
+  <Projects projects={projects} stars={github.stars} />
+  <Skills groups={skills} education={education} />
 </Page>

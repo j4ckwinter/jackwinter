@@ -1,0 +1,30 @@
+---
+import Section from "./Section.astro";
+import type { Activity } from "../github/activity";
+import { formatCount } from "../format";
+
+type Props = { activity: Activity; profileUrl: string };
+const { activity, profileUrl } = Astro.props;
+---
+
+<Section title="Activity">
+  <a href={profileUrl} class="group flex flex-col gap-2">
+    <div class="flex h-16 items-end gap-1.5" aria-hidden="true">
+      {activity.months.map((month) => (
+        <div class="flex h-full flex-1 items-end" title={`${month.label}: ${formatCount(month.total)}`}>
+          <div
+            class="w-full rounded-sm bg-neutral-400 group-hover:bg-neutral-500 dark:bg-neutral-500 dark:group-hover:bg-neutral-400"
+            style={`height: ${Math.max(month.share * 100, 4)}%`}
+          />
+        </div>
+      ))}
+    </div>
+    <div class="flex gap-1.5 text-[10px] text-neutral-500 dark:text-neutral-400" aria-hidden="true">
+      {activity.months.map((month) => <span class="flex-1 text-center">{month.label}</span>)}
+    </div>
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">{formatCount(activity.total)} contributions in the last year</p>
+  </a>
+  <ul class="sr-only">
+    {activity.months.map((month) => <li><time datetime={month.month}>{month.label}</time>: {formatCount(month.total)}</li>)}
+  </ul>
+</Section>

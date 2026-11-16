@@ -1,0 +1,31 @@
+---
+import Section from "./Section.astro";
+import type { Role } from "../content/experience";
+
+type Props = { roles: Role[] };
+const { roles } = Astro.props;
+---
+
+<Section title="Experience">
+  <ol class="flex flex-col gap-6">
+    {roles.map((role) => (
+      <li class="flex flex-col gap-1">
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="font-medium">{role.company}</h3>
+          <span class="shrink-0 text-sm text-neutral-500 tabular-nums dark:text-neutral-400">{role.dates}</span>
+        </div>
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">{role.title} · {role.location}</p>
+        <p class="text-sm">{role.context}</p>
+        <details class="group text-sm">
+          <summary class="cursor-pointer list-none text-neutral-500 [&::-webkit-details-marker]:hidden hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100">
+            <span class="group-open:hidden">see more<span class="sr-only"> about {role.company}</span></span>
+            <span class="hidden group-open:inline">see less<span class="sr-only"> about {role.company}</span></span>
+          </summary>
+          <ul class="mt-2 flex list-disc flex-col gap-1 pl-4 text-neutral-700 dark:text-neutral-300">
+            {role.highlights.map((highlight) => <li>{highlight}</li>)}
+          </ul>
+        </details>
+      </li>
+    ))}
+  </ol>
+</Section>

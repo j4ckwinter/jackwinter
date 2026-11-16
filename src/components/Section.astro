@@ -1,0 +1,10 @@
+---
+type Props = { title: string };
+const { title } = Astro.props;
+const id = title.toLowerCase();
+---
+
+<section aria-labelledby={id} class="flex flex-col gap-4">
+  <h2 id={id} class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{title}</h2>
+  <slot />
+</section>

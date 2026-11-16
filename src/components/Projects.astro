@@ -1,0 +1,29 @@
+---
+import Section from "./Section.astro";
+import type { Project } from "../content/projects";
+import { formatCount } from "../format";
+
+type Props = { projects: Project[]; stars: Map<string, number> };
+const { projects, stars } = Astro.props;
+---
+
+<Section title="Projects">
+  <ul class="flex flex-col gap-4">
+    {projects.map((project) => {
+      const starCount = stars.get(project.repo) ?? 0;
+      return (
+        <li>
+          <a href={project.href} class="group flex items-baseline justify-between gap-4">
+            <span class="flex flex-col">
+              <span class="font-medium underline-offset-4 group-hover:underline">{project.name}</span>
+              <span class="text-sm text-neutral-500 dark:text-neutral-400">{project.description}</span>
+            </span>
+            {starCount > 0 && (
+              <span class="shrink-0 text-sm text-neutral-500 tabular-nums dark:text-neutral-400">★ {formatCount(starCount)}</span>
+            )}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</Section>

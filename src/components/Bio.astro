@@ -1,0 +1,13 @@
+---
+type Props = { paragraphs: string[]; email: string };
+const { paragraphs, email } = Astro.props;
+---
+
+<div class="flex flex-col gap-4 leading-relaxed">
+  {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+  <p>
+    <a class="rounded-md bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-neutral-700 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300" href={`mailto:${email}`}>
+      say hello
+    </a>
+  </p>
+</div>

@@ -1,13 +1,25 @@
 export type Link = { label: string; href: string };
 
-export type Profile = {
-  name: string;
-  title: string;
-  links: Link[];
-};
+const email = "jackwinter.10@outlook.com";
+const githubLogin = "j4ckwinter";
 
-export const profile: Profile = {
+export const profile = {
   name: "Jack Winter",
-  title: "Software engineer",
-  links: [{ label: "GitHub", href: "https://github.com/j4ckwinter" }],
+  title: "Senior software engineer",
+  location: "London",
+  description:
+    "Jack Winter, senior software engineer in London. Real-time products with React and TypeScript, and tools for AI coding agents.",
+  bio: [
+    "hey, i'm jack, a senior software engineer in london. i've spent 8+ years building fast, real-time products with react and typescript across sports betting, gaming and fintech.",
+    "lately i build tools that help ai coding agents write code i actually want to keep.",
+  ],
+  email,
+  githubLogin,
+  githubUrl: `https://github.com/${githubLogin}`,
+  links: [
+    { label: "GitHub", href: `https://github.com/${githubLogin}` },
+    { label: "LinkedIn", href: "https://linkedin.com/in/jack-winter-409a09a4" },
+    { label: "Email", href: `mailto:${email}` },
+    { label: "CV", href: "/Jack-Winter-CV.pdf" },
+  ] satisfies Link[],
 };
