@@ -1,5 +1,7 @@
 ---
 import Section from "./Section.astro";
+import IconTile from "./IconTile.astro";
+import Icon from "./Icon.astro";
 import type { Project } from "../content/projects";
 import { formatCount } from "../format";
 
@@ -8,18 +10,22 @@ const { projects, stars } = Astro.props;
 ---
 
 <Section title="Projects">
-  <ul class="flex flex-col gap-4">
+  <ul class="flex flex-col gap-2">
     {projects.map((project) => {
       const starCount = stars.get(project.repo) ?? 0;
       return (
         <li>
-          <a href={project.href} class="group flex items-baseline justify-between gap-4">
-            <span class="flex flex-col">
-              <span class="font-medium underline-offset-4 group-hover:underline">{project.name}</span>
-              <span class="text-sm text-neutral-500 dark:text-neutral-400">{project.description}</span>
+          <a href={project.href} class="-mx-3 flex items-center gap-3 rounded-xl px-3 py-2 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-900">
+            <IconTile icon={project.icon} />
+            <span class="flex min-w-0 flex-1 flex-col">
+              <span class="text-sm">{project.name}</span>
+              <span class="text-[13px] text-neutral-600 dark:text-neutral-400">{project.description}</span>
             </span>
             {starCount > 0 && (
-              <span class="shrink-0 text-sm text-neutral-500 tabular-nums dark:text-neutral-400">★ {formatCount(starCount)}</span>
+              <span class="flex shrink-0 items-center gap-1 text-[13px] text-neutral-500 tabular-nums dark:text-neutral-400">
+                <Icon name="star" class="size-3.5" />
+                <span><span class="sr-only">GitHub stars: </span>{formatCount(starCount)}</span>
+              </span>
             )}
           </a>
         </li>

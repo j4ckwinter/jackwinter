@@ -1,20 +1,30 @@
 ---
+import Icon from "./Icon.astro";
 import type { Link } from "../content/profile";
 
-type Props = { name: string; title: string; location: string; links: Link[] };
-const { name, title, location, links } = Astro.props;
+type Props = { name: string; title: string; links: Link[] };
+const { name, title, links } = Astro.props;
 ---
 
-<header class="flex flex-col gap-3">
+<header class="flex items-center justify-between gap-4">
   <div>
-    <h1 class="text-xl font-medium">{name}</h1>
-    <p class="text-neutral-500 dark:text-neutral-400">{title} · {location}</p>
+    <h1 class="font-medium">{name}</h1>
+    <p class="mt-1 text-neutral-500 dark:text-neutral-400">{title}</p>
   </div>
-  <nav aria-label="Links" class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-    {links.map((link) => (
-      <a class="text-neutral-600 underline-offset-4 hover:text-neutral-900 hover:underline dark:text-neutral-400 dark:hover:text-neutral-100" href={link.href}>
-        {link.label}
-      </a>
-    ))}
+  <nav aria-label="Links">
+    <ul class="flex gap-px">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            aria-label={link.label}
+            title={link.label}
+            class="inline-flex size-7 items-center justify-center rounded-md text-neutral-600 transition-transform hover:bg-neutral-100 hover:text-neutral-950 active:scale-[0.97] dark:text-neutral-400 dark:hover:bg-neutral-800/60 dark:hover:text-neutral-50"
+          >
+            <Icon name={link.icon} />
+          </a>
+        </li>
+      ))}
+    </ul>
   </nav>
 </header>

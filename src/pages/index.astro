@@ -16,16 +16,15 @@ const github = await loadGitHubData({
   repos: projects.map((project) => project.repo),
   login: profile.githubLogin,
   token: import.meta.env.GITHUB_TOKEN,
-  today: new Date().toISOString().slice(0, 10),
 });
 for (const problem of github.problems) console.warn(`Leaving out GitHub ${problem}`);
 ---
 
 <Page title={profile.name} description={profile.description}>
-  <Header name={profile.name} title={profile.title} location={profile.location} links={profile.links} />
+  <Header name={profile.name} title={profile.title} links={profile.links} />
   <Bio paragraphs={profile.bio} email={profile.email} />
   {github.activity && <Activity activity={github.activity} profileUrl={profile.githubUrl} />}
   <Experience roles={experience} />
-  <Projects projects={projects} stars={github.stars} />
   <Skills groups={skills} education={education} />
+  <Projects projects={projects} stars={github.stars} />
 </Page>

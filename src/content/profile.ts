@@ -1,4 +1,6 @@
-export type Link = { label: string; href: string };
+import type { IconName } from "../icons";
+
+export type Link = { label: string; href: string; icon: IconName };
 
 const email = "jackwinter.10@outlook.com";
 const githubLogin = "j4ckwinter";
@@ -6,7 +8,6 @@ const githubLogin = "j4ckwinter";
 export const profile = {
   name: "Jack Winter",
   title: "Senior software engineer",
-  location: "London",
   description:
     "Jack Winter, senior software engineer in London. Real-time products with React and TypeScript, and tools for AI coding agents.",
   bio: [
@@ -17,9 +18,9 @@ export const profile = {
   githubLogin,
   githubUrl: `https://github.com/${githubLogin}`,
   links: [
-    { label: "GitHub", href: `https://github.com/${githubLogin}` },
-    { label: "LinkedIn", href: "https://linkedin.com/in/jack-winter-409a09a4" },
-    { label: "Email", href: `mailto:${email}` },
-    { label: "CV", href: "/Jack-Winter-CV.pdf" },
+    { label: "GitHub", href: `https://github.com/${githubLogin}`, icon: "github" },
+    { label: "LinkedIn", href: "https://linkedin.com/in/jack-winter-409a09a4", icon: "linkedin" },
+    { label: "Email", href: `mailto:${email}`, icon: "mail" },
+    { label: "CV", href: "/Jack-Winter-CV.pdf", icon: "cv" },
   ] satisfies Link[],
 };

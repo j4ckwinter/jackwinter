@@ -1,38 +1,28 @@
 import { describe, expect, it } from "vitest";
-import { summariseActivity } from "../src/github/activity";
+import { buildContributionGrid } from "../src/github/activity";
+import { week } from "./fixtures";
 
-describe("summariseActivity", () => {
-  it("covers the twelve months ending in the current month", () => {
-    const { months } = summariseActivity({ total: 0, days: [] }, "2026-11-16");
-    expect(months.map((month) => month.label)).toEqual(["Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"]);
-    expect(months[0].month).toBe("2025-12");
+describe("buildContributionGrid", () => {
+  it("labels the week in which each month begins", () => {
+    const grid = buildContributionGrid({
+      total: 0,
+      weeks: [week("2025-11-16"), week("2025-11-23"), week("2025-11-30"), week("2025-12-07")],
+    });
+    expect(grid.monthLabels).toEqual(["", "", "Dec", ""]);
   });
 
-  it("adds up contributions per month and leaves days before the window out of the bars", () => {
-    const activity = summariseActivity(
-      {
-        total: 60,
-        days: [
-          { date: "2025-11-30", count: 50 },
-          { date: "2025-12-01", count: 2 },
-          { date: "2026-11-01", count: 3 },
-          { date: "2026-11-15", count: 5 },
-        ],
-      },
-      "2026-11-16",
-    );
-    expect(activity.months.at(-1)).toMatchObject({ total: 8, share: 1 });
-    expect(activity.months[0]).toMatchObject({ total: 2, share: 0.25 });
+  it("leaves a week unlabelled when its month began the week before", () => {
+    const grid = buildContributionGrid({ total: 0, weeks: [week("2025-12-02", 6)] });
+    expect(grid.monthLabels).toEqual([""]);
   });
 
-  it("keeps GitHub's yearly total as the headline", () => {
-    const activity = summariseActivity({ total: 60, days: [{ date: "2025-11-30", count: 50 }] }, "2026-11-16");
-    expect(activity.total).toBe(60);
+  it("labels a new year's January", () => {
+    const grid = buildContributionGrid({ total: 0, weeks: [week("2025-12-28")] });
+    expect(grid.monthLabels).toEqual(["Jan"]);
   });
 
-  it("gives every month a share of zero when there is no activity", () => {
-    const activity = summariseActivity({ total: 0, days: [] }, "2026-01-05");
-    expect(activity.months.every((month) => month.share === 0)).toBe(true);
-    expect(activity.months[0].month).toBe("2025-02");
+  it("keeps GitHub's total and weeks as they are", () => {
+    const weeks = [week("2026-11-15", 2)];
+    expect(buildContributionGrid({ total: 2115, weeks })).toMatchObject({ total: 2115, weeks });
   });
 });

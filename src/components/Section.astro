@@ -1,10 +1,15 @@
 ---
+import { toSlug } from "../slug";
+
 type Props = { title: string };
 const { title } = Astro.props;
-const id = title.toLowerCase();
+const id = toSlug(title);
 ---
 
-<section aria-labelledby={id} class="flex flex-col gap-4">
-  <h2 id={id} class="text-sm font-medium text-neutral-500 dark:text-neutral-400">{title}</h2>
+<section aria-labelledby={id} class="flex flex-col gap-5" style={`view-transition-name: section-${id}`}>
+  <div class="flex items-center justify-between">
+    <h2 id={id}>{title}</h2>
+    <slot name="action" />
+  </div>
   <slot />
 </section>

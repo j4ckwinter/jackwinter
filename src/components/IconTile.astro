@@ -1,0 +1,15 @@
+---
+import Icon from "./Icon.astro";
+import type { IconName } from "../icons";
+
+type Props = { icon: IconName; transitionName?: string; class?: string };
+const { icon, transitionName, class: className } = Astro.props;
+---
+
+<span
+  aria-hidden="true"
+  class:list={["flex size-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-700 shadow-xs dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300", className]}
+  style={transitionName ? `view-transition-name: ${transitionName}` : undefined}
+>
+  <Icon name={icon} />
+</span>

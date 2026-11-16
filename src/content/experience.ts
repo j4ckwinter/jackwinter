@@ -1,8 +1,12 @@
+import type { IconName } from "../icons";
+
 export type Role = {
   company: string;
+  icon: IconName;
   title: string;
   location: string;
-  dates: string;
+  start: string;
+  end?: string;
   context: string;
   highlights: string[];
 };
@@ -10,9 +14,10 @@ export type Role = {
 export const experience: Role[] = [
   {
     company: "KTO Group",
+    icon: "football",
     title: "Senior front-end developer",
     location: "Remote",
-    dates: "Jun 2025 – now",
+    start: "Jun 2025",
     context: "Sportsbook and online casino operator serving the Brazilian market.",
     highlights: [
       "Led the move from a third-party hosted sportsbook to a custom React and TypeScript platform, owning architecture and core customer journeys for 1.4M active users.",
@@ -23,9 +28,11 @@ export const experience: Role[] = [
   },
   {
     company: "GeoGaming Group",
+    icon: "gamepad",
     title: "Senior front-end developer",
     location: "London",
-    dates: "Jun 2023 – Jun 2025",
+    start: "Jun 2023",
+    end: "Jun 2025",
     context: "Sportsbook and casino games provider building a white-label platform.",
     highlights: [
       "Led performance work that cut application load times by 30%.",
@@ -36,9 +43,11 @@ export const experience: Role[] = [
   },
   {
     company: "SmartStream Technologies",
+    icon: "bank",
     title: "Senior software engineer",
     location: "Bristol",
-    dates: "Jul 2017 – Aug 2022",
+    start: "Jul 2017",
+    end: "Aug 2022",
     context: "Cash and liquidity management software for major banks.",
     highlights: [
       "Led a greenfield Angular frontend that replaced a legacy system and enabled two high-profile deals.",

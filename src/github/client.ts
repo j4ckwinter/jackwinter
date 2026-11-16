@@ -1,4 +1,4 @@
-import type { ContributionCalendar } from "./activity";
+import type { ContributionCalendar, ContributionLevel } from "./activity";
 
 type Fetch = typeof fetch;
 
@@ -10,11 +10,23 @@ const CONTRIBUTIONS_QUERY = `query($login: String!) {
     contributionsCollection {
       contributionCalendar {
         totalContributions
-        weeks { contributionDays { date contributionCount } }
+        weeks { contributionDays { date contributionCount contributionLevel weekday } }
       }
     }
   }
 }`;
+
+type GitHubLevel = "NONE" | "FIRST_QUARTILE" | "SECOND_QUARTILE" | "THIRD_QUARTILE" | "FOURTH_QUARTILE";
+
+type GitHubDay = { date: string; contributionCount: number; contributionLevel: GitHubLevel; weekday: number };
+
+const LEVELS: Record<GitHubLevel, ContributionLevel> = {
+  NONE: 0,
+  FIRST_QUARTILE: 1,
+  SECOND_QUARTILE: 2,
+  THIRD_QUARTILE: 3,
+  FOURTH_QUARTILE: 4,
+};
 
 type ContributionsResponse = {
   data?: {
@@ -22,7 +34,7 @@ type ContributionsResponse = {
       contributionsCollection: {
         contributionCalendar: {
           totalContributions: number;
-          weeks: { contributionDays: { date: string; contributionCount: number }[] }[];
+          weeks: { contributionDays: GitHubDay[] }[];
         };
       };
     } | null;
@@ -59,8 +71,13 @@ export async function fetchContributionCalendar(login: string, token: string, fe
   const calendar = user.contributionsCollection.contributionCalendar;
   return {
     total: calendar.totalContributions,
-    days: calendar.weeks.flatMap((week) =>
-      week.contributionDays.map((day) => ({ date: day.date, count: day.contributionCount })),
+    weeks: calendar.weeks.map((week) =>
+      week.contributionDays.map((day) => ({
+        date: day.date,
+        count: day.contributionCount,
+        level: LEVELS[day.contributionLevel],
+        weekday: day.weekday,
+      })),
     ),
   };
 }

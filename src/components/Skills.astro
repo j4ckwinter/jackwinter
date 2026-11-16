@@ -1,23 +1,40 @@
 ---
 import Section from "./Section.astro";
+import SeeMore from "./SeeMore.astro";
+import Icon from "./Icon.astro";
 import type { SkillGroup } from "../content/skills";
+import { toSlug } from "../slug";
 
 type Props = {
   groups: SkillGroup[];
   education: { qualification: string; institution: string; dates: string };
 };
 const { groups, education } = Astro.props;
+const row = "grid grid-cols-[clamp(6.4rem,20vw,8rem)_minmax(0,1fr)] gap-2";
+const label = "text-[13px] leading-6 text-neutral-500 dark:text-neutral-400";
 ---
 
 <Section title="Skills">
-  <dl class="grid grid-cols-[5.5rem_1fr] sm:grid-cols-[7rem_1fr] gap-x-4 gap-y-2 text-sm">
+  <SeeMore slot="action" controls="skills-content" subject="skills" />
+  <div id="skills-content" class="flex flex-col gap-4">
     {groups.map((group) => (
-      <>
-        <dt class="text-neutral-500 dark:text-neutral-400">{group.name}</dt>
-        <dd>{group.tools.join(", ")}</dd>
-      </>
+      <div class={row} style={`view-transition-name: skills-${toSlug(group.name)}`}>
+        <h3 class={label}>{group.name}</h3>
+        <ul class="flex flex-wrap gap-x-4 gap-y-1.5">
+          {group.tools.map((tool, index) => (
+            <li class:list={["text-sm leading-6", index >= group.shownBeforeExpanding && "reveal hidden in-opened:block"]}>
+              <span class="inline-flex items-center gap-1.5">
+                <Icon name={tool.icon} class="size-3.5 text-neutral-500 dark:text-neutral-400" />
+                {tool.name}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
     ))}
-    <dt class="text-neutral-500 dark:text-neutral-400">Education</dt>
-    <dd>{education.qualification}, {education.institution}, {education.dates}</dd>
-  </dl>
+    <div class={row} style="view-transition-name: skills-education">
+      <h3 class={label}>Education</h3>
+      <p class="text-sm leading-6">{education.qualification}, {education.institution}, {education.dates}</p>
+    </div>
+  </div>
 </Section>

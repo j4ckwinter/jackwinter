@@ -1,48 +1,18 @@
-export type ContributionDay = { date: string; count: number };
+export type ContributionLevel = 0 | 1 | 2 | 3 | 4;
 
-export type ContributionCalendar = { total: number; days: ContributionDay[] };
+export type ContributionDay = { date: string; count: number; level: ContributionLevel; weekday: number };
 
-export type MonthActivity = {
-  month: string;
-  label: string;
-  total: number;
-  share: number;
-};
+export type ContributionCalendar = { total: number; weeks: ContributionDay[][] };
 
-export type Activity = { total: number; months: MonthActivity[] };
+export type ContributionGrid = ContributionCalendar & { monthLabels: string[] };
 
-const MONTHS_SHOWN = 12;
 const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function monthKey(year: number, monthIndex: number): string {
-  return `${year}-${String(monthIndex + 1).padStart(2, "0")}`;
+function monthStartingIn(week: ContributionDay[]): string {
+  const firstOfMonth = week.find((day) => day.date.endsWith("-01"));
+  return firstOfMonth ? MONTH_LABELS[Number(firstOfMonth.date.slice(5, 7)) - 1] : "";
 }
 
-function recentMonthKeys(today: string): string[] {
-  const [year, month] = today.split("-").map(Number);
-  return Array.from({ length: MONTHS_SHOWN }, (_, offset) => {
-    const date = new Date(Date.UTC(year, month - 1 - (MONTHS_SHOWN - 1 - offset), 1));
-    return monthKey(date.getUTCFullYear(), date.getUTCMonth());
-  });
-}
-
-export function summariseActivity({ total, days }: ContributionCalendar, today: string): Activity {
-  const keys = recentMonthKeys(today);
-  const totals = new Map(keys.map((key) => [key, 0]));
-  for (const day of days) {
-    const key = day.date.slice(0, 7);
-    const current = totals.get(key);
-    if (current !== undefined) totals.set(key, current + day.count);
-  }
-  const busiest = Math.max(0, ...totals.values());
-  const months = keys.map((key) => {
-    const total = totals.get(key) ?? 0;
-    return {
-      month: key,
-      label: MONTH_LABELS[Number(key.slice(5)) - 1],
-      total,
-      share: busiest === 0 ? 0 : total / busiest,
-    };
-  });
-  return { total, months };
+export function buildContributionGrid(calendar: ContributionCalendar): ContributionGrid {
+  return { ...calendar, monthLabels: calendar.weeks.map(monthStartingIn) };
 }

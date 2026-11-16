@@ -1,0 +1,44 @@
+---
+import { disclosureButton } from "../scripts/disclosure";
+
+type Props = { controls: string; subject: string; class?: string };
+const { controls, subject, class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  {...disclosureButton(controls)}
+  class:list={[
+    "group/see no-js:hidden -mr-2.5 inline-flex h-7 items-center gap-1 rounded-md pr-1.5 pl-2.5 text-[0.8rem] font-medium text-neutral-600 transition-transform hover:bg-neutral-100 hover:text-neutral-950 active:scale-[0.97] aria-expanded:bg-neutral-100 aria-expanded:text-neutral-950 dark:text-neutral-400 dark:hover:bg-neutral-800/60 dark:hover:text-neutral-50 dark:aria-expanded:bg-neutral-800/60 dark:aria-expanded:text-neutral-50",
+    className,
+  ]}
+>
+  <span class="group-aria-expanded/see:hidden">See more</span>
+  <span class="hidden group-aria-expanded/see:inline">See less</span>
+  <span class="sr-only">{subject}</span>
+  <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path class="top" d="M8 9L12 5L16 9"></path>
+    <path class="bottom" d="M8 15L12 19L16 15"></path>
+  </svg>
+</button>
+
+<style>
+  path {
+    transform-box: view-box;
+    transition: scale var(--duration-flip) var(--ease-settle);
+  }
+  .top {
+    transform-origin: 12px 7px;
+  }
+  .bottom {
+    transform-origin: 12px 17px;
+  }
+  [aria-expanded="true"] path {
+    scale: 1 -1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    path {
+      transition: none;
+    }
+  }
+</style>

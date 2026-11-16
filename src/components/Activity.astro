@@ -1,30 +1,53 @@
 ---
 import Section from "./Section.astro";
-import type { Activity } from "../github/activity";
-import { formatCount } from "../format";
+import type { ContributionGrid, ContributionLevel } from "../github/activity";
+import { describeContributionDay, formatCount } from "../format";
 
-type Props = { activity: Activity; profileUrl: string };
+type Props = { activity: ContributionGrid; profileUrl: string };
 const { activity, profileUrl } = Astro.props;
+
+const LEVEL_SHADES: Record<ContributionLevel, string> = {
+  0: "bg-neutral-950/10 dark:bg-neutral-50/10",
+  1: "bg-neutral-950/25 dark:bg-neutral-50/25",
+  2: "bg-neutral-950/45 dark:bg-neutral-50/45",
+  3: "bg-neutral-950/60 dark:bg-neutral-50/60",
+  4: "bg-neutral-950/75 dark:bg-neutral-50/75",
+};
+
+const columns = `grid-template-columns: repeat(${activity.weeks.length}, 0.625rem)`;
+const total = formatCount(activity.total);
 ---
 
 <Section title="Activity">
-  <a href={profileUrl} class="group flex flex-col gap-2">
-    <div class="flex h-16 items-end gap-1.5" aria-hidden="true">
-      {activity.months.map((month) => (
-        <div class="flex h-full flex-1 items-end" title={`${month.label}: ${formatCount(month.total)}`}>
-          <div
-            class="w-full rounded-sm bg-neutral-400 group-hover:bg-neutral-500 dark:bg-neutral-500 dark:group-hover:bg-neutral-400"
-            style={`height: ${Math.max(month.share * 100, 4)}%`}
-          />
+  <div>
+    <div data-scroll-end tabindex="0" aria-label="Contribution graph" class="no-scrollbar overflow-x-auto rounded-sm max-[699px]:mask-[linear-gradient(to_right,transparent,black_1.75rem)]">
+      <div class="w-max">
+        <div aria-hidden="true" class="mb-1.5 grid h-3 gap-0.5 text-[12px] leading-none text-neutral-500 dark:text-neutral-400" style={columns}>
+          {activity.monthLabels.map((label) => <span class="whitespace-nowrap">{label}</span>)}
         </div>
-      ))}
+        <ol aria-label={`${total} GitHub contributions in the last year`} class="grid grid-rows-7 gap-0.5" style={columns}>
+          {activity.weeks.flatMap((week, column) =>
+            week.map((day) => {
+              const description = describeContributionDay(day);
+              return (
+                <li
+                  aria-label={description}
+                  title={description}
+                  class:list={["size-2.5 rounded-[3px]", LEVEL_SHADES[day.level]]}
+                  style={`grid-column: ${column + 1}; grid-row: ${day.weekday + 1}`}
+                />
+              );
+            }),
+          )}
+        </ol>
+      </div>
     </div>
-    <div class="flex gap-1.5 text-[10px] text-neutral-500 dark:text-neutral-400" aria-hidden="true">
-      {activity.months.map((month) => <span class="flex-1 text-center">{month.label}</span>)}
-    </div>
-    <p class="text-sm text-neutral-500 dark:text-neutral-400">{formatCount(activity.total)} contributions in the last year</p>
-  </a>
-  <ul class="sr-only">
-    {activity.months.map((month) => <li><time datetime={month.month}>{month.label}</time>: {formatCount(month.total)}</li>)}
-  </ul>
+    <a href={profileUrl} class="mt-2 inline-block text-[12px] text-neutral-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-neutral-50">
+      {total} contributions in the last year
+    </a>
+  </div>
 </Section>
+
+<script>
+  for (const element of document.querySelectorAll("[data-scroll-end]")) element.scrollLeft = element.scrollWidth;
+</script>

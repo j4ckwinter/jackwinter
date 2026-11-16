@@ -20,21 +20,28 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 
 | Decision | Owner |
 | --- | --- |
-| Name, title, bio, contact links | `src/content/profile.ts` |
-| Roles and their highlights | `src/content/experience.ts` |
-| Which projects appear and where they link | `src/content/projects.ts` |
-| Skill groups and education | `src/content/skills.ts` |
-| Talking to the GitHub API | `src/github/client.ts` |
-| Turning contribution days into the twelve-month strip | `src/github/activity.ts` |
+| Name, title, bio, contact links and their icons | `src/content/profile.ts` |
+| Roles, their icons and highlights | `src/content/experience.ts` |
+| Which projects appear, their icons and links | `src/content/projects.ts` |
+| Skill groups, their tools, and how many show before "See more" | `src/content/skills.ts` |
+| Which icons exist and where each comes from (Tabler or Simple Icons) | `src/icons.ts` |
+| Talking to the GitHub API and translating its contribution levels | `src/github/client.ts` |
+| Laying out the contribution grid and its month labels | `src/github/activity.ts` |
 | What happens when GitHub data is missing or fails | `src/github/load.ts` |
-| How counts are written (locale, separators) | `src/format.ts` |
-| Page shell, column width, font, colours, dark mode | `src/layouts/Page.astro`, `src/styles/global.css` |
+| How counts, dates and contribution tooltips are written | `src/format.ts` |
+| How "See more" and per-role toggles open, close and animate | `src/scripts/disclosure.ts`, `src/components/SeeMore.astro` |
+| Motion timing, reveal fades, the view-transition easing and the no-JS variants | `src/styles/global.css` |
+| Page shell, column width and font | `src/layouts/Page.astro`, `src/styles/global.css` |
+| How text becomes ids and view-transition names | `src/slug.ts` |
+| The 570px breakpoint where Experience switches to a timeline | `src/styles/global.css` (`--breakpoint-xp`) |
 | How each section looks, including when star counts show | `src/components/*.astro` |
 | Which sections appear and in what order | `src/pages/index.astro` |
 
 ## Standards
 
-- Keep the page fast and plain: static output, no client JavaScript a section does not need.
+- Keep the page fast and plain: static output, with client JavaScript only for the expand and collapse behaviour in `src/scripts/disclosure.ts` and for starting the activity strip at the latest week.
+- Everything must be readable without JavaScript. `Page.astro` adds a `js` class to the root; the `opened`, `in-opened` and `no-js` variants in `global.css` show collapsed content and hide toggles when that class is missing.
+- Animate layout changes with the browser's View Transitions: give an element the same `view-transition-name` in both layouts and let the browser morph it. Browsers without them, and people who prefer reduced motion, get the change instantly.
 - Keep content (bio, roles, projects, links) as data in one place, separate from the components that render it.
 - Write no comments unless one stops a plausible wrong fix.
 - Test behaviour through what a visitor sees: render components with the Astro container in `tests`, and pass fake `fetch` functions to the GitHub code. Tests never call the network.

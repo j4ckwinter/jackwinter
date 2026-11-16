@@ -21,6 +21,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@tabler/icons": "^3.52.0",
+    "happy-dom": "^21.0.4",
+    "simple-icons": "^16.38.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.12"
   }

@@ -1,0 +1,21 @@
+---
+import { icons, type IconName } from "../icons";
+
+type Props = { name: IconName; class?: string };
+const { name, class: className = "size-4" } = Astro.props;
+const icon = icons[name];
+const outlined = icon.kind === "stroke";
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  aria-hidden="true"
+  class={className}
+  fill={outlined ? "none" : "currentColor"}
+  stroke={outlined ? "currentColor" : undefined}
+  stroke-width={outlined ? 2 : undefined}
+  stroke-linecap={outlined ? "round" : undefined}
+  stroke-linejoin={outlined ? "round" : undefined}
+  set:html={icon.body}
+/>
