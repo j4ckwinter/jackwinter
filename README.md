@@ -25,6 +25,8 @@ GITHUB_TOKEN=$(gh auth token) npm run build
 
 no token, no chart. the rest of the page doesn't care.
 
+the github bits only change when the site rebuilds, so a github action asks vercel to rebuild every morning. it needs a vercel deploy hook for `main` saved as the `VERCEL_DEPLOY_HOOK` repository secret.
+
 ## for agents
 
 agents get the same page as markdown at [/index.md](https://www.jackwinter.xyz/index.md), and [/llms.txt](https://www.jackwinter.xyz/llms.txt) points them there. both are built from the same content as the html, so they can't drift.
