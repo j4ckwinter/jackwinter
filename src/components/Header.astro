@@ -6,6 +6,7 @@ type Props = { name: string; title: string; location: string; timeZone: string; 
 const { name, title, location, timeZone, links } = Astro.props;
 const printable = links.filter((link) => !link.href.startsWith("/")).map((link) => link.href.replace(/^(mailto:|https?:\/\/)/, ""));
 const site = Astro.site?.host.replace(/^www\./, "");
+const iconButton = "inline-flex size-7 items-center justify-center rounded-md text-fg-secondary transition-transform hover:bg-hover hover:text-fg active:scale-[0.97]";
 ---
 
 <header class="flex items-center justify-between gap-4">
@@ -24,12 +25,18 @@ const site = Astro.site?.host.replace(/^www\./, "");
             href={link.href}
             aria-label={link.label}
             title={link.label}
-            class="inline-flex size-7 items-center justify-center rounded-md text-fg-secondary transition-transform hover:bg-hover hover:text-fg active:scale-[0.97]"
+            class={iconButton}
           >
             <Icon name={link.icon} />
           </a>
         </li>
       ))}
+      <li class="no-js:hidden">
+        <button type="button" data-theme-toggle aria-label="Switch between light and dark" title="Switch between light and dark" class={iconButton}>
+          <Icon name="moon" class="size-4 shows-dark:hidden" />
+          <Icon name="sun" class="hidden size-4 shows-dark:block" />
+        </button>
+      </li>
     </ul>
   </nav>
 </header>

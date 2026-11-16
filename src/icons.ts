@@ -9,6 +9,8 @@ import brain from "@tabler/icons/outline/brain.svg?raw";
 import components from "@tabler/icons/outline/components.svg?raw";
 import dog from "@tabler/icons/outline/dog.svg?raw";
 import meat from "@tabler/icons/outline/meat.svg?raw";
+import sun from "@tabler/icons/outline/sun.svg?raw";
+import moon from "@tabler/icons/outline/moon.svg?raw";
 import browser from "@tabler/icons/outline/browser.svg?raw";
 import plugConnected from "@tabler/icons/outline/plug-connected.svg?raw";
 import cpu from "@tabler/icons/outline/cpu.svg?raw";
@@ -104,6 +106,8 @@ export const icons = {
   components: tabler(components),
   dog: tabler(dog),
   meat: tabler(meat),
+  sun: tabler(sun),
+  moon: tabler(moon),
   browser: tabler(browser),
   kto: logo("/logos/kto.png", "h-4 w-6"),
   geoGaming: geoGamingMark,

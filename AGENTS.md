@@ -39,6 +39,13 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Where each project's version comes from (npm or GitHub releases) | `release` in `src/content/projects.ts`, fetched by `src/github/npm.ts` and `src/github/client.ts` |
 | Opening the experience list at a role from the timeline | `data-reveal` in `src/scripts/disclosure.ts` |
 | Rebuilding the site every morning | `.github/workflows/rebuild.yml` |
+| Checking every outbound link each Monday | `.github/workflows/links.yml` |
+| Redirects from Winter Town's old paths | `vercel.json` |
+| How long each role lasted and the bio's years of experience | `src/tenure.ts`, written by `formatTenure` in `src/format.ts` |
+| The streak and busiest day under the grid | `contributionHighlights` in `src/github/activity.ts` |
+| Commit dates as "2 days ago" | `src/scripts/relative-time.ts` |
+| Light and dark: the saved choice, the toggle and its circular reveal | `src/scripts/theme.ts`, colours in `src/styles/global.css` |
+| Vercel Web Analytics, loaded only on Vercel builds | `src/layouts/Page.astro` |
 | Which icons exist and where each comes from (Tabler or Simple Icons) | `src/icons.ts` |
 | Talking to the GitHub API and translating its contribution levels | `src/github/client.ts` |
 | Laying out the contribution grid and its month labels | `src/github/activity.ts` |
@@ -55,6 +62,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 ## Standards
 
 - Keep the page fast and plain: static output, with client JavaScript only for the expand and collapse behaviour in `src/scripts/disclosure.ts` and for starting the activity strip at the latest week.
+- Every colour is a `light-dark()` pair in `global.css`, so `color-scheme` picks the theme: the system by default, `data-theme` when a visitor chooses, and always light in print.
 - `theme-color` in `Page.astro` repeats `--palette-surface` from `global.css` as hex, because the meta tag can't read CSS variables. Change both together.
 - Everything must be readable without JavaScript, and print as a CV. `Page.astro` adds a `js` class to the root; the `opened`, `in-opened` and `no-js` variants in `global.css` show collapsed content and hide toggles when that class is missing, and always in print. Mark anything that makes no sense on paper with `print:hidden`.
 - Animate layout changes with the browser's View Transitions: give an element the same `view-transition-name` in both layouts and let the browser morph it. Browsers without them, and people who prefer reduced motion, get the change instantly.

@@ -2,27 +2,33 @@
 @import "@fontsource-variable/geist";
 
 :root {
-  --palette-fg: oklch(0.145 0 0);
-  --palette-fg-secondary: oklch(0.439 0 0);
-  --palette-fg-muted: oklch(0.556 0 0);
-  --palette-faint: oklch(0.87 0 0);
-  --palette-line: oklch(0.922 0 0);
-  --palette-hover: oklch(0.97 0 0);
-  --palette-raised: oklch(0.985 0 0);
-  --palette-surface: oklch(1 0 0);
+  color-scheme: light dark;
+  --palette-fg: light-dark(oklch(0.145 0 0), oklch(0.85 0 0));
+  --palette-fg-secondary: light-dark(oklch(0.439 0 0), oklch(0.7 0 0));
+  --palette-fg-muted: light-dark(oklch(0.556 0 0), oklch(0.6 0 0));
+  --palette-faint: light-dark(oklch(0.87 0 0), oklch(0.37 0 0));
+  --palette-line: light-dark(oklch(0.922 0 0), oklch(0.27 0 0));
+  --palette-hover: light-dark(oklch(0.97 0 0), oklch(0.24 0 0));
+  --palette-raised: light-dark(oklch(0.985 0 0), oklch(0.19 0 0));
+  --palette-surface: light-dark(oklch(1 0 0), oklch(0.145 0 0));
 }
 
-@media screen and (prefers-color-scheme: dark) {
-  :root {
-    --palette-fg: oklch(0.85 0 0);
-    --palette-fg-secondary: oklch(0.7 0 0);
-    --palette-fg-muted: oklch(0.6 0 0);
-    --palette-faint: oklch(0.37 0 0);
-    --palette-line: oklch(0.27 0 0);
-    --palette-hover: oklch(0.24 0 0);
-    --palette-raised: oklch(0.19 0 0);
-    --palette-surface: oklch(0.145 0 0);
-  }
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root.theme-switching * {
+  view-transition-name: none !important;
+}
+
+:root.theme-switching::view-transition-old(root),
+:root.theme-switching::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 @theme inline {
@@ -72,6 +78,8 @@
     @slot;
   }
 }
+@custom-variant shows-dark (&:where([data-resolved-theme="dark"] *));
+
 @custom-variant no-js {
   &:where(:root:not(.js) *) {
     @slot;
@@ -192,6 +200,11 @@
 }
 
 @media print {
+  :root,
+  :root[data-theme] {
+    color-scheme: light;
+  }
+
   @page {
     margin: 14mm 16mm;
   }

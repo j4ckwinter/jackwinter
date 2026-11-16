@@ -3,7 +3,8 @@ import type { Qualification } from "../content/education";
 import type { SkillGroup } from "../content/skills";
 import type { Project } from "../content/projects";
 import type { Inline, Profile } from "../content/profile";
-import { formatDateRange } from "../format";
+import { formatDateRange, formatTenure } from "../format";
+import { monthsSpanned, wholeYearsAcross } from "../tenure";
 
 export const PAGE_MARKDOWN_PATH = "/index.md";
 export const LLMS_PATH = "/llms.txt";
@@ -21,23 +22,23 @@ const list = (items: string[]) => items.map((item) => `- ${item}`).join("\n");
 const blocks = (parts: string[]) => parts.join("\n\n");
 const absolute = (href: string, site: URL) => new URL(href, site).href;
 
-function roleMarkdown(role: Role): string {
+function roleMarkdown(role: Role, today: string): string {
   return blocks([
     `### ${role.company}`,
-    `**${role.title}** · ${formatDateRange(role)} · ${role.location}`,
+    `**${role.title}** · ${formatDateRange(role)} (${formatTenure(monthsSpanned(role, today))}) · ${role.location}`,
     role.context,
     list(role.highlights),
   ]);
 }
 
-export function pageMarkdown({ profile, experience, education, skills, projects }: PageContent, site: URL): string {
+export function pageMarkdown({ profile, experience, education, skills, projects }: PageContent, site: URL, today: string): string {
   return `${blocks([
     `# ${profile.name}`,
     `> ${profile.description}`,
-    ...profile.bio.map(inline),
+    ...profile.bio(wholeYearsAcross(experience, today)).map(inline),
     list(profile.links.map((link) => `[${link.label}](${absolute(link.href, site)})`)),
     "## Experience",
-    ...experience.map(roleMarkdown),
+    ...experience.map((role) => roleMarkdown(role, today)),
     "## Education",
     list(education.map((item) => `**${item.qualification}**, ${item.institution}, ${formatDateRange(item)}`)),
     "## Skills",

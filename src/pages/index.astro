@@ -11,6 +11,7 @@ import Footer from "../components/Footer.astro";
 import { page } from "../content/page";
 import { githubDataForBuild } from "../github/build-data";
 import { personSchema } from "../agents/structured-data";
+import { wholeYearsAcross } from "../tenure";
 
 const { profile, experience, education, skills, projects } = page;
 
@@ -22,8 +23,8 @@ const structuredData = JSON.stringify(personSchema(page, Astro.site!));
 <Page title={`${profile.name} · ${profile.title.toLowerCase()}`} description={profile.description} name={profile.name}>
   <script slot="head" type="application/ld+json" is:inline set:html={structuredData} />
   <Header name={profile.name} title={profile.title} location={profile.location} timeZone={profile.timeZone} links={profile.links} />
-  <Bio paragraphs={profile.bio} email={profile.email} />
-  <Experience roles={experience} />
+  <Bio paragraphs={profile.bio(wholeYearsAcross(experience, today))} email={profile.email} />
+  <Experience roles={experience} today={today} />
   <Projects projects={projects} stars={github.stars} versions={github.versions} />
   <Activity contributions={github.activity} commits={github.commits} projects={projects} profileUrl={profile.githubUrl} today={today} />
   <Skills groups={skills} />

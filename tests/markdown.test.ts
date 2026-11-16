@@ -10,7 +10,7 @@ const content: PageContent = {
     location: "London",
     timeZone: "Europe/London",
     description: "Builds things.",
-    bio: [["hey, i'm ", { text: "jack", href: "https://example.com/jack" }, "."]],
+    bio: (years) => [["hey, i'm ", { text: "jack", href: "https://example.com/jack" }, `, ${years}+ years in.`]],
     email: "me@example.com",
     githubLogin: "me",
     githubUrl: "https://github.com/me",
@@ -26,14 +26,14 @@ const content: PageContent = {
 };
 
 describe("pageMarkdown", () => {
-  const markdown = pageMarkdown(content, site);
+  const markdown = pageMarkdown(content, site, "2026-11-16");
 
   it("carries every section of the page", () => {
     for (const heading of ["# Jack", "## Experience", "## Education", "## Skills", "## Projects"]) expect(markdown).toContain(`${heading}\n`);
   });
 
   it("keeps links written into the bio", () => {
-    expect(markdown).toContain("hey, i'm [jack](https://example.com/jack).");
+    expect(markdown).toContain("hey, i'm [jack](https://example.com/jack), 2+ years in.");
   });
 
   it("includes the tools a person only sees after expanding", () => {
@@ -41,7 +41,7 @@ describe("pageMarkdown", () => {
   });
 
   it("writes each role with its dates and highlights", () => {
-    expect(markdown).toContain("**Engineer** · Jan 2024 – now · Remote");
+    expect(markdown).toContain("**Engineer** · Jan 2024 – now (2 yrs 11 mos) · Remote");
     expect(markdown).toContain("- Shipped it.");
   });
 

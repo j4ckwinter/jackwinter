@@ -3,4 +3,4 @@ import { pageMarkdown } from "../agents/markdown";
 import { page } from "../content/page";
 
 export const GET: APIRoute = ({ site }) =>
-  new Response(pageMarkdown(page, site!), { headers: { "Content-Type": "text/markdown; charset=utf-8" } });
+  new Response(pageMarkdown(page, site!, new Date().toISOString().slice(0, 10)), { headers: { "Content-Type": "text/markdown; charset=utf-8" } });

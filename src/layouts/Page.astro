@@ -3,12 +3,14 @@ import "../styles/global.css";
 import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
 import { PAGE_MARKDOWN_PATH } from "../agents/markdown";
 import { CARD_HEIGHT, CARD_PATH, CARD_WIDTH } from "../social/card";
+import { themeBootScript } from "../scripts/theme";
 
 type Props = { title: string; description: string; name: string };
 const { title, description, name } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const card = new URL(CARD_PATH, Astro.site).href;
 const SURFACE = { light: "#ffffff", dark: "#0a0a0a" };
+const onVercel = process.env.VERCEL === "1";
 ---
 
 <html lang="en">
@@ -19,8 +21,8 @@ const SURFACE = { light: "#ffffff", dark: "#0a0a0a" };
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content={SURFACE.light} />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content={SURFACE.dark} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content={SURFACE.light} data-theme-for="light" data-surface={SURFACE.light} />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content={SURFACE.dark} data-theme-for="dark" data-surface={SURFACE.dark} />
     <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="text/markdown" href={PAGE_MARKDOWN_PATH} />
@@ -34,8 +36,10 @@ const SURFACE = { light: "#ffffff", dark: "#0a0a0a" };
     <meta property="og:image:height" content={String(CARD_HEIGHT)} />
     <meta property="og:image:alt" content={`${name}'s name and title above a year of GitHub contributions`} />
     <meta name="twitter:card" content="summary_large_image" />
+    {onVercel && <script is:inline defer src="/_vercel/insights/script.js"></script>}
     <slot name="head" />
     <script is:inline>document.documentElement.classList.add("js");</script>
+    <script is:inline set:html={themeBootScript} />
   </head>
   <body class="bg-surface font-sans text-fg antialiased">
     <main class="enter mx-auto flex min-h-svh w-full max-w-[700px] flex-col gap-10 px-5 pt-8 pb-24 sm:px-8 md:pt-14">
@@ -45,10 +49,16 @@ const SURFACE = { light: "#ffffff", dark: "#0a0a0a" };
       import { enhanceDisclosures } from "../scripts/disclosure";
       import { enhanceCopyEmail } from "../scripts/copy-email";
       import { enhanceLocalTime } from "../scripts/local-time";
+      import { enhanceRelativeTimes } from "../scripts/relative-time";
+      import { enhanceThemeToggle, followSystemTheme } from "../scripts/theme";
 
       enhanceDisclosures(document, () => matchMedia("(prefers-reduced-motion: reduce)").matches);
       enhanceCopyEmail(document, navigator.clipboard);
       enhanceLocalTime(document, () => new Date());
+      enhanceRelativeTimes(document, () => new Date());
+      const prefersDark = matchMedia("(prefers-color-scheme: dark)");
+      enhanceThemeToggle(document, globalThis.localStorage, () => matchMedia("(prefers-reduced-motion: reduce)").matches);
+      followSystemTheme(document, prefersDark);
     </script>
   </body>
 </html>

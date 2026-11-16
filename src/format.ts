@@ -31,6 +31,13 @@ export function formatShortDate(isoDate: string, today: string): string {
   });
 }
 
+export function formatTenure(months: number): string {
+  const years = Math.floor(months / 12);
+  const rest = months % 12;
+  const parts = [years > 0 && `${years} ${years === 1 ? "yr" : "yrs"}`, rest > 0 && `${rest} ${rest === 1 ? "mo" : "mos"}`];
+  return parts.filter(Boolean).join(" ");
+}
+
 export function formatDateRange({ start, end }: { start: string; end?: string }): string {
   return `${start} – ${end ?? "now"}`;
 }

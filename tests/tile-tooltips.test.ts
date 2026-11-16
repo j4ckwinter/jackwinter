@@ -5,12 +5,12 @@ import { enhanceTileTooltips } from "../src/scripts/tile-tooltips";
 function render() {
   document.body.innerHTML = `
     <div data-tile-tooltips>
-      <div data-scroll-end><ol><li data-day="2026-11-01" data-count="3"></li><li data-day="2026-11-02" data-count="0"></li></ol></div>
+      <div data-scroll-end><div role="img"><div data-day="2026-11-01" data-count="3"></div><div data-day="2026-11-02" data-count="0"></div></div></div>
       <div data-tooltip></div>
     </div>`;
   const graph = document.querySelector<HTMLElement>("[data-tile-tooltips]")!;
   enhanceTileTooltips(graph);
-  return { graph, tiles: [...graph.querySelectorAll("li")], tooltip: graph.querySelector<HTMLElement>("[data-tooltip]")! };
+  return { graph, tiles: [...graph.querySelectorAll("[data-day]")], tooltip: graph.querySelector<HTMLElement>("[data-tooltip]")! };
 }
 
 const hover = (element: Element) => element.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));

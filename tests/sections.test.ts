@@ -112,7 +112,7 @@ describe("experience", () => {
   const role = { company: "Acme Inc", icon: "kto", title: "Engineer", location: "Remote", start: "Jan 2024", context: "Widgets.", highlights: ["Shipped it."] };
 
   it("starts collapsed behind a see more button for the section", async () => {
-    const page = await render(Experience, { roles: [role] });
+    const page = await render(Experience, { roles: [role], today: "2026-11-16" });
     const button = page.querySelector('button[aria-controls="experience-content"]');
     expect(button?.getAttribute("aria-expanded")).toBe("false");
     expect(button?.textContent).toContain("experience");
@@ -120,7 +120,7 @@ describe("experience", () => {
   });
 
   it("gives each role a toggle that controls that role's details", async () => {
-    const page = await render(Experience, { roles: [role] });
+    const page = await render(Experience, { roles: [role], today: "2026-11-16" });
     const button = page.querySelector('button[aria-label="Details for Acme Inc"]');
     expect(button?.getAttribute("aria-expanded")).toBe("false");
     const details = page.getElementById(button?.getAttribute("aria-controls") ?? "");
@@ -128,18 +128,19 @@ describe("experience", () => {
   });
 
   it("keeps roles at the same company apart", async () => {
-    const page = await render(Experience, { roles: [role, { ...role, start: "Jan 2022", end: "Jan 2024", highlights: ["Joined."] }] });
+    const page = await render(Experience, { roles: [role, { ...role, start: "Jan 2022", end: "Jan 2024", highlights: ["Joined."] }], today: "2026-11-16" });
     const targets = [...page.querySelectorAll('button[aria-label="Details for Acme Inc"]')].map((button) => button.getAttribute("aria-controls"));
     expect(new Set(targets).size).toBe(2);
   });
 
-  it("shows a current role as running until now", async () => {
-    const page = await render(Experience, { roles: [role] });
+  it("shows a current role as running until now, with how long that has been", async () => {
+    const page = await render(Experience, { roles: [role], today: "2026-11-16" });
     expect(page.body.textContent).toContain("Jan 2024 – now");
+    expect(page.body.textContent).toContain("2 yrs 11 mos");
   });
 
   it("lets each timeline entry open the list at that role", async () => {
-    const page = await render(Experience, { roles: [role] });
+    const page = await render(Experience, { roles: [role], today: "2026-11-16" });
     const stop = page.querySelector('button[aria-label="Open the details for Acme Inc"]');
     expect(stop?.getAttribute("aria-controls")).toBe("experience-content");
     const target = page.getElementById(stop?.getAttribute("data-reveal") ?? "");
@@ -168,7 +169,7 @@ describe("activity", () => {
 
   it("draws a tile per day, placed by week and weekday, with its count", async () => {
     const page = await render(Activity, base);
-    const tiles = [...page.querySelectorAll('ol[aria-label$="contributions in the last year"] li')];
+    const tiles = [...page.querySelectorAll('[role="img"][aria-label$="contributions in the last year"] [data-day]')];
     expect(tiles.map((tile) => [tile.getAttribute("data-day"), tile.getAttribute("data-count")])).toEqual([["2026-11-01", "3"], ["2026-11-02", "0"]]);
     expect(tiles.map((tile) => tile.getAttribute("style"))).toEqual(["grid-column: 1; grid-row: 1", "grid-column: 1; grid-row: 2"]);
   });
@@ -176,7 +177,7 @@ describe("activity", () => {
   it("labels months and links the yearly total to the GitHub profile", async () => {
     const page = await render(Activity, base);
     expect(page.body.textContent).toContain("Nov");
-    expect(page.querySelector("ol")?.getAttribute("aria-label")).toBe("5,447 GitHub contributions in the last year");
+    expect(page.querySelector('[role="img"]')?.getAttribute("aria-label")).toBe("5,447 GitHub contributions in the last year");
     const total = page.querySelector('a[href="https://github.com/me"]');
     expect(total?.textContent?.trim()).toBe("5,447 contributions in the last year");
   });
@@ -197,6 +198,13 @@ describe("activity", () => {
       ["me/old", "chore: tidy", "1 Nov"],
     ]);
     expect(links[0].getAttribute("href")).toBe("https://github.com/me/new/commit/2");
+  });
+
+  it("sums up the year with the longest streak and the busiest day", async () => {
+    const busy = buildContributionGrid({ total: 120, weeks: [[day("2026-04-13", 4, 1), day("2026-04-14", 106, 4), day("2026-04-15", 10, 2)]] });
+    const page = await render(Activity, { ...base, contributions: busy });
+    expect(page.body.textContent).toContain("longest streak 3 days");
+    expect(page.body.textContent).toContain("busiest day 14 Apr, with 106");
   });
 
   it("leaves the section out when GitHub gave nothing", async () => {

@@ -1,9 +1,10 @@
 ---
-import type { ContributionGrid, ContributionLevel } from "../github/activity";
-import { formatCount } from "../format";
+import { contributionHighlights, type ContributionGrid, type ContributionLevel } from "../github/activity";
+import { formatCount, formatShortDate } from "../format";
 
-type Props = { activity: ContributionGrid; profileUrl: string };
-const { activity, profileUrl } = Astro.props;
+type Props = { activity: ContributionGrid; profileUrl: string; today: string };
+const { activity, profileUrl, today } = Astro.props;
+const { longestStreak, busiestDay } = contributionHighlights(activity);
 
 const LEVEL_SHADES: Record<ContributionLevel, string> = {
   0: "bg-fg/10",
@@ -23,10 +24,10 @@ const total = formatCount(activity.total);
       <div aria-hidden="true" class="mb-1.5 grid h-3 gap-0.5 text-[12px] leading-none text-fg-muted" style={columns}>
         {activity.monthLabels.map((label) => <span class="whitespace-nowrap">{label}</span>)}
       </div>
-      <ol role="img" aria-label={`${total} GitHub contributions in the last year`} class="grid grid-rows-7 gap-0.5 *:size-2.5 *:rounded-[3px] *:hover:outline *:hover:outline-1 *:hover:outline-fg-muted" style={columns}>
+      <div role="img" aria-label={`${total} GitHub contributions in the last year`} class="grid grid-rows-7 gap-0.5 *:size-2.5 *:rounded-[3px] *:hover:outline *:hover:outline-1 *:hover:outline-fg-muted" style={columns}>
         {activity.weeks.flatMap((week, column) =>
           week.map((day) => (
-            <li
+            <div
               data-day={day.date}
               data-count={day.count}
               class={LEVEL_SHADES[day.level]}
@@ -34,7 +35,7 @@ const total = formatCount(activity.total);
             />
           )),
         )}
-      </ol>
+      </div>
     </div>
   </div>
   <div
@@ -42,9 +43,11 @@ const total = formatCount(activity.total);
     aria-hidden="true"
     class="pointer-events-none absolute top-0 left-0 z-30 -translate-x-1/2 -translate-y-full rounded-md bg-fg px-2 py-1 text-[12px] whitespace-nowrap text-surface opacity-0 transition-opacity duration-100 data-shown:opacity-100"
   ></div>
-  <a href={profileUrl} class="mt-2 inline-block text-[12px] text-fg-muted hover:text-fg">
-    {total} contributions in the last year
-  </a>
+  <p class="mt-1 flex flex-wrap items-baseline gap-x-1.5 text-[12px] text-fg-muted">
+    <a href={profileUrl} class="inline-block py-1 hover:text-fg">{total} contributions in the last year</a>
+    {longestStreak > 1 && <span>· longest streak {longestStreak} days</span>}
+    {busiestDay && <span>· busiest day {formatShortDate(busiestDay.date, today)}, with {formatCount(busiestDay.count)}</span>}
+  </p>
 </div>
 
 <script>
