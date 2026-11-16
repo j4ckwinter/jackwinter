@@ -9,9 +9,6 @@ import brain from "@tabler/icons/outline/brain.svg?raw";
 import components from "@tabler/icons/outline/components.svg?raw";
 import dog from "@tabler/icons/outline/dog.svg?raw";
 import snowflake from "@tabler/icons/outline/snowflake.svg?raw";
-import football from "@tabler/icons/outline/ball-football.svg?raw";
-import gamepad from "@tabler/icons/outline/device-gamepad-2.svg?raw";
-import bank from "@tabler/icons/outline/building-bank.svg?raw";
 import plugConnected from "@tabler/icons/outline/plug-connected.svg?raw";
 import cpu from "@tabler/icons/outline/cpu.svg?raw";
 import api from "@tabler/icons/outline/api.svg?raw";
@@ -69,14 +66,26 @@ import {
   siVitest,
 } from "simple-icons";
 
-type IconSvg = { kind: "stroke"; body: string } | { kind: "fill"; body: string };
+type IconArt =
+  | { kind: "stroke"; body: string }
+  | { kind: "fill"; body: string }
+  | { kind: "mask"; src: string; box: string };
 
-function tabler(svg: string): IconSvg {
+function tabler(svg: string): IconArt {
   const body = svg.slice(svg.indexOf(">") + 1, svg.lastIndexOf("</svg>")).replace(/<path stroke="none"[^>]*\/>/, "");
   return { kind: "stroke", body };
 }
 
-function brand(icon: { path: string }): IconSvg {
+function logo(src: string, box: string): IconArt {
+  return { kind: "mask", src, box };
+}
+
+const geoGamingMark: IconArt = {
+  kind: "stroke",
+  body: '<path d="M7.8 4.1 16 2.4l4.7 5.5.4 8.2-5.7 5.5-6.5-1.1-5.8-5 .3-6.8z"/><path d="m7.8 4.1 3.7 13.8M7.8 4.1l12.9 3.8M11.5 17.9l9.2-10M11.5 17.9l-8.4-2.4M11.5 17.9l3.9 3.7"/><circle cx="7.8" cy="4.1" r=".8" fill="currentColor"/><circle cx="11.5" cy="17.9" r=".8" fill="currentColor"/>',
+};
+
+function brand(icon: { path: string }): IconArt {
   return { kind: "fill", body: `<path d="${icon.path}"/>` };
 }
 
@@ -92,9 +101,9 @@ export const icons = {
   components: tabler(components),
   dog: tabler(dog),
   snowflake: tabler(snowflake),
-  football: tabler(football),
-  gamepad: tabler(gamepad),
-  bank: tabler(bank),
+  kto: logo("/logos/kto.png", "h-4 w-6"),
+  geoGaming: geoGamingMark,
+  smartStream: logo("/logos/smartstream.png", "size-4"),
   websockets: tabler(plugConnected),
   webWorkers: tabler(cpu),
   restApis: tabler(api),
@@ -149,6 +158,6 @@ export const icons = {
   turborepo: brand(siTurborepo),
   storybook: brand(siStorybook),
   githubActions: brand(siGithubactions),
-} satisfies Record<string, IconSvg>;
+} satisfies Record<string, IconArt>;
 
 export type IconName = keyof typeof icons;

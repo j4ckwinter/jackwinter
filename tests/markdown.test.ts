@@ -17,7 +17,7 @@ const content: PageContent = {
       { label: "Email", href: "mailto:me@example.com", icon: "mail" },
     ],
   },
-  experience: [{ company: "Acme", icon: "bank", title: "Engineer", location: "Remote", start: "Jan 2024", context: "Widgets.", highlights: ["Shipped it."] }],
+  experience: [{ company: "Acme", icon: "kto", title: "Engineer", location: "Remote", start: "Jan 2024", context: "Widgets.", highlights: ["Shipped it."] }],
   education: [{ qualification: "BSc", institution: "Uni", icon: "school", start: "2013", end: "2017" }],
   skills: [{ name: "Languages", shownBeforeExpanding: 1, tools: [{ name: "TypeScript", icon: "typescript" }, { name: "Python", icon: "python" }] }],
   projects: [{ name: "thing", icon: "stack", description: "a thing", repo: "me/thing", href: "https://example.com/thing" }],

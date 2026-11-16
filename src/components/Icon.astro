@@ -7,15 +7,21 @@ const icon = icons[name];
 const outlined = icon.kind === "stroke";
 ---
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 24 24"
-  aria-hidden="true"
-  class={className}
-  fill={outlined ? "none" : "currentColor"}
-  stroke={outlined ? "currentColor" : undefined}
-  stroke-width={outlined ? 2 : undefined}
-  stroke-linecap={outlined ? "round" : undefined}
-  stroke-linejoin={outlined ? "round" : undefined}
-  set:html={icon.body}
-/>
+{
+  icon.kind === "mask" ? (
+    <span aria-hidden="true" class:list={["block shrink-0 bg-current", icon.box]} style={`mask: url(${icon.src}) center / contain no-repeat`} />
+  ) : (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      class={className}
+      fill={outlined ? "none" : "currentColor"}
+      stroke={outlined ? "currentColor" : undefined}
+      stroke-width={outlined ? 2 : undefined}
+      stroke-linecap={outlined ? "round" : undefined}
+      stroke-linejoin={outlined ? "round" : undefined}
+      set:html={icon.body}
+    />
+  )
+}

@@ -53,7 +53,7 @@ describe("education", () => {
 });
 
 describe("experience", () => {
-  const role = { company: "Acme Inc", icon: "bank", title: "Engineer", location: "Remote", start: "Jan 2024", context: "Widgets.", highlights: ["Shipped it."] };
+  const role = { company: "Acme Inc", icon: "kto", title: "Engineer", location: "Remote", start: "Jan 2024", context: "Widgets.", highlights: ["Shipped it."] };
 
   it("starts collapsed behind a see more button for the section", async () => {
     const page = await render(Experience, { roles: [role] });
