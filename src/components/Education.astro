@@ -1,0 +1,24 @@
+---
+import Section from "./Section.astro";
+import IconTile from "./IconTile.astro";
+import type { Qualification } from "../content/education";
+import { formatDateRange } from "../format";
+
+type Props = { qualifications: Qualification[] };
+const { qualifications } = Astro.props;
+---
+
+<Section title="Education">
+  <ul class="flex flex-col gap-5.5">
+    {qualifications.map((item) => (
+      <li class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2.5">
+        <IconTile icon={item.icon} />
+        <div class="min-w-0">
+          <p class="text-sm">{item.qualification}</p>
+          <p class="text-[13px] text-fg-secondary">{item.institution}</p>
+        </div>
+        <p class="self-start text-[13px] whitespace-nowrap text-fg-muted">{formatDateRange(item)}</p>
+      </li>
+    ))}
+  </ul>
+</Section>

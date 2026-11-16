@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { describeContributionDay, formatRoleDates } from "../src/format";
+import { describeContributionDay, formatDateRange } from "../src/format";
 import { day } from "./fixtures";
 
 describe("describeContributionDay", () => {
@@ -16,12 +16,12 @@ describe("describeContributionDay", () => {
   });
 });
 
-describe("formatRoleDates", () => {
-  it("ends a current role with now", () => {
-    expect(formatRoleDates({ start: "Jun 2025" })).toBe("Jun 2025 – now");
+describe("formatDateRange", () => {
+  it("ends an open range with now", () => {
+    expect(formatDateRange({ start: "Jun 2025" })).toBe("Jun 2025 – now");
   });
 
-  it("shows both ends of a past role", () => {
-    expect(formatRoleDates({ start: "Jun 2023", end: "Jun 2025" })).toBe("Jun 2023 – Jun 2025");
+  it("shows both ends of a closed range", () => {
+    expect(formatDateRange({ start: "Jun 2023", end: "Jun 2025" })).toBe("Jun 2023 – Jun 2025");
   });
 });

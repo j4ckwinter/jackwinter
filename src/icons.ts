@@ -22,8 +22,31 @@ import sql from "@tabler/icons/outline/sql.svg?raw";
 import box from "@tabler/icons/outline/box.svg?raw";
 import brandAws from "@tabler/icons/outline/brand-aws.svg?raw";
 import brandOpenai from "@tabler/icons/outline/brand-openai.svg?raw";
+import school from "@tabler/icons/outline/school.svg?raw";
+import binaryTree from "@tabler/icons/outline/binary-tree.svg?raw";
+import accessible from "@tabler/icons/outline/accessible.svg?raw";
+import browserCheck from "@tabler/icons/outline/browser-check.svg?raw";
+import brandApple from "@tabler/icons/outline/brand-apple.svg?raw";
+import brandReactNative from "@tabler/icons/outline/brand-react-native.svg?raw";
 import {
   siAngular,
+  siAnthropic,
+  siBiome,
+  siEslint,
+  siExpo,
+  siExpress,
+  siHuggingface,
+  siNextdotjs,
+  siOnnx,
+  siPreact,
+  siPrettier,
+  siSupabase,
+  siSwift,
+  siTailwindcss,
+  siTestinglibrary,
+  siVercel,
+  siVite,
+  siZod,
   siAstro,
   siClaude,
   siCypress,
@@ -82,6 +105,29 @@ export const icons = {
   zustand: tabler(box),
   aws: tabler(brandAws),
   codex: tabler(brandOpenai),
+  school: tabler(school),
+  treeSitter: tabler(binaryTree),
+  axe: tabler(accessible),
+  playwright: tabler(browserCheck),
+  appkit: tabler(brandApple),
+  reactNative: tabler(brandReactNative),
+  anthropic: brand(siAnthropic),
+  biome: brand(siBiome),
+  eslint: brand(siEslint),
+  expo: brand(siExpo),
+  express: brand(siExpress),
+  huggingface: brand(siHuggingface),
+  nextjs: brand(siNextdotjs),
+  onnx: brand(siOnnx),
+  preact: brand(siPreact),
+  prettier: brand(siPrettier),
+  supabase: brand(siSupabase),
+  swift: brand(siSwift),
+  tailwind: brand(siTailwindcss),
+  testingLibrary: brand(siTestinglibrary),
+  vercel: brand(siVercel),
+  vite: brand(siVite),
+  zod: brand(siZod),
   typescript: brand(siTypescript),
   javascript: brand(siJavascript),
   python: brand(siPython),

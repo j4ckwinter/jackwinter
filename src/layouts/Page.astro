@@ -14,7 +14,7 @@ const { title, description } = Astro.props;
     <title>{title}</title>
     <script is:inline>document.documentElement.classList.add("js");</script>
   </head>
-  <body class="bg-white font-sans text-neutral-950 antialiased dark:bg-neutral-950 dark:text-neutral-50">
+  <body class="bg-surface font-sans text-fg antialiased">
     <main class="mx-auto flex min-h-svh w-full max-w-[700px] flex-col gap-10 px-5 pt-8 pb-24 sm:px-8 md:pt-14">
       <slot />
     </main>

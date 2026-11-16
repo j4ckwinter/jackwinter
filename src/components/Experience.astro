@@ -4,7 +4,7 @@ import SeeMore from "./SeeMore.astro";
 import IconTile from "./IconTile.astro";
 import Icon from "./Icon.astro";
 import type { Role } from "../content/experience";
-import { formatRoleDates } from "../format";
+import { formatDateRange } from "../format";
 import { toSlug } from "../slug";
 import { disclosureButton } from "../scripts/disclosure";
 
@@ -17,7 +17,7 @@ const entries = roles.map((role) => {
     role,
     key,
     current: role.end === undefined,
-    dates: formatRoleDates(role),
+    dates: formatDateRange(role),
     names: { row: `${key}-row`, mark: `${key}-mark`, company: `${key}-company`, dates: `${key}-dates` },
   };
 });
@@ -28,21 +28,21 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
   <SeeMore slot="action" controls="experience-content" subject="experience" class="max-xp:hidden" />
   <div id="experience-content">
     <div class="relative hidden pb-2 xp:block xp:in-opened:hidden xp:no-js:hidden">
-      <span aria-hidden="true" class="absolute top-1 right-2 left-3 h-px bg-neutral-200 dark:bg-neutral-800"></span>
+      <span aria-hidden="true" class="absolute top-1 right-2 left-3 h-px bg-line"></span>
       <ol class="grid gap-2" style={columns}>
         {entries.map(({ role, current, dates, names }) => (
           <li class="relative min-w-0 pt-6 pr-2">
-            {current && <span aria-hidden="true" class="absolute top-1 left-3 h-px w-[calc(100%+0.5rem)] bg-linear-to-r from-neutral-950 to-neutral-200 to-70% dark:from-neutral-50 dark:to-neutral-800" />}
-            <span aria-hidden="true" class="absolute -top-1 left-1 z-10 flex size-4 items-center justify-center rounded-full bg-white dark:bg-neutral-950">
-              <span class:list={["relative size-2 rounded-full", current ? "bg-neutral-950 dark:bg-neutral-50" : "bg-neutral-300 dark:bg-neutral-700"]}>
-                {current && <span class="absolute inset-0 animate-halo rounded-full bg-neutral-950 motion-reduce:animate-none dark:bg-neutral-50" />}
+            {current && <span aria-hidden="true" class="absolute top-1 left-3 h-px w-[calc(100%+0.5rem)] bg-linear-to-r from-fg to-line to-70%" />}
+            <span aria-hidden="true" class="absolute -top-1 left-1 z-10 flex size-4 items-center justify-center rounded-full bg-surface">
+              <span class:list={["relative size-2 rounded-full", current ? "bg-fg" : "bg-faint"]}>
+                {current && <span class="absolute inset-0 animate-halo rounded-full bg-fg motion-reduce:animate-none" />}
               </span>
             </span>
             <div class="flex min-w-0 items-center gap-2.5">
               <IconTile icon={role.icon} transitionName={names.mark} />
-              <span class="line-clamp-2 leading-snug" style={`view-transition-name: ${names.company}`}>{role.company}</span>
+              <span class="line-clamp-2 text-sm leading-snug" style={`view-transition-name: ${names.company}`}>{role.company}</span>
             </div>
-            <p class="mt-2 w-fit text-[13px] text-neutral-500 dark:text-neutral-400" style={`view-transition-name: ${names.dates}`}>{dates}</p>
+            <p class="mt-2 w-fit text-[13px] text-fg-muted" style={`view-transition-name: ${names.dates}`}>{dates}</p>
           </li>
         ))}
       </ol>
@@ -55,22 +55,22 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
               type="button"
               {...disclosureButton(`${key}-details`)}
               aria-label={`Details for ${role.company}`}
-              class="absolute -inset-x-3 -inset-y-2 rounded-xl hover:bg-neutral-50 xp:hidden no-js:hidden dark:hover:bg-neutral-900"
+              class="absolute -inset-x-3 -inset-y-2 rounded-xl hover:bg-raised xp:hidden no-js:hidden"
             ></button>
             <IconTile icon={role.icon} transitionName={names.mark} class="pointer-events-none relative" />
             <div class="pointer-events-none relative min-w-0">
-              <p class="w-fit" style={`view-transition-name: ${names.company}`}>{role.company}</p>
-              <p class="text-[13px] text-neutral-600 dark:text-neutral-400">{role.title}</p>
+              <p class="w-fit text-sm" style={`view-transition-name: ${names.company}`}>{role.company}</p>
+              <p class="text-[13px] text-fg-secondary">{role.title}</p>
             </div>
-            <p class="pointer-events-none relative flex items-center gap-1 self-start text-[13px] whitespace-nowrap text-neutral-500 dark:text-neutral-400">
+            <p class="pointer-events-none relative flex items-center gap-1 self-start text-[13px] whitespace-nowrap text-fg-muted">
               <span style={`view-transition-name: ${names.dates}`}>{dates}</span>
               <span class="max-[459px]:hidden">· {role.location}</span>
               <Icon name="chevronDown" class="size-3.5 transition-transform duration-(--duration-flip) group-has-aria-expanded/role:rotate-180 xp:hidden no-js:hidden" />
             </p>
           </div>
           <div id={`${key}-details`} class="reveal mt-3 hidden pl-[42px] opened:block xp:block">
-            <p class="text-[13px] text-neutral-600 dark:text-neutral-400">{role.context}</p>
-            <ul class="mt-2 flex list-disc flex-col gap-1.5 pl-4 text-[13px] text-neutral-600 marker:text-neutral-300 dark:text-neutral-400 dark:marker:text-neutral-700">
+            <p class="text-[13px] text-fg-secondary">{role.context}</p>
+            <ul class="mt-2 flex list-disc flex-col gap-1.5 pl-4 text-[13px] text-fg-secondary marker:text-faint">
               {role.highlights.map((highlight) => <li>{highlight}</li>)}
             </ul>
           </div>

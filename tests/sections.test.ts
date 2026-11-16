@@ -3,6 +3,7 @@ import Header from "../src/components/Header.astro";
 import Projects from "../src/components/Projects.astro";
 import Experience from "../src/components/Experience.astro";
 import Skills from "../src/components/Skills.astro";
+import Education from "../src/components/Education.astro";
 import Activity from "../src/components/Activity.astro";
 import { buildContributionGrid } from "../src/github/activity";
 import { day } from "./fixtures";
@@ -29,6 +30,25 @@ describe("projects", () => {
     expect(starred.textContent).toContain("GitHub stars: 1,076");
     expect(quiet.textContent).not.toContain("GitHub stars");
     expect(quiet.getAttribute("href")).toBe("https://example.com/quiet");
+  });
+
+  it("lists the most starred projects first and keeps the given order otherwise", async () => {
+    const more = [...projects, { name: "also quiet", icon: "dog", description: "none either", repo: "me/also-quiet", href: "https://example.com/also" }];
+    const page = await render(Projects, { projects: [more[1], more[0], more[2]], stars: new Map([["me/starred", 5]]) });
+    const names = [...page.querySelectorAll("a")].map((link) => link.querySelector("span span")?.textContent);
+    expect(names).toEqual(["starred", "quiet", "also quiet"]);
+  });
+});
+
+describe("education", () => {
+  it("shows each qualification with its institution and years", async () => {
+    const page = await render(Education, {
+      qualifications: [{ qualification: "BSc Computer Science", institution: "Uni", icon: "school", start: "2013", end: "2017" }],
+    });
+    expect(page.querySelector("h2")?.textContent).toBe("Education");
+    expect(page.body.textContent).toContain("BSc Computer Science");
+    expect(page.body.textContent).toContain("Uni");
+    expect(page.body.textContent).toContain("2013 – 2017");
   });
 });
 
@@ -67,7 +87,6 @@ describe("skills", () => {
   it("holds back tools beyond the first few until expanded", async () => {
     const page = await render(Skills, {
       groups: [{ name: "Languages", shownBeforeExpanding: 1, tools: [{ name: "TypeScript", icon: "typescript" }, { name: "Python", icon: "python" }] }],
-      education: { qualification: "BSc", institution: "Uni", dates: "2013 – 2017" },
     });
     const [shown, held] = [...page.querySelectorAll("li")];
     expect(shown.textContent).toContain("TypeScript");

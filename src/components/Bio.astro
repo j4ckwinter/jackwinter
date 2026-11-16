@@ -7,7 +7,7 @@ const { paragraphs, email } = Astro.props;
   {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
   <p class="mt-3">
     <a
-      class="inline-flex h-8 items-center rounded-lg bg-neutral-950 px-3 text-sm font-medium text-white transition-transform hover:bg-neutral-800 active:scale-[0.97] dark:bg-neutral-50 dark:text-neutral-950 dark:hover:bg-neutral-200"
+      class="inline-flex h-8 items-center rounded-lg bg-fg px-3 text-sm font-medium text-surface transition-transform hover:bg-fg/85 active:scale-[0.97]"
       href={`mailto:${email}`}
     >
       say hello

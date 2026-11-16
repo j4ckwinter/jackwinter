@@ -10,18 +10,18 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    name: "pancake stack",
-    icon: "stack",
-    description: "skills that help ai coding agents write code worth keeping",
-    repo: "j4ckwinter/pancake-stack",
-    href: "https://github.com/j4ckwinter/pancake-stack",
-  },
-  {
     name: "brain-cache",
     icon: "brain",
     description: "local code index that finds relevant functions for coding agents over MCP",
     repo: "j4ckwinter/brain-cache",
     href: "https://www.npmjs.com/package/brain-cache",
+  },
+  {
+    name: "pancake stack",
+    icon: "stack",
+    description: "skills that help ai coding agents write code worth keeping",
+    repo: "j4ckwinter/pancake-stack",
+    href: "https://github.com/j4ckwinter/pancake-stack",
   },
   {
     name: "pancake ui",

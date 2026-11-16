@@ -24,17 +24,18 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Roles, their icons and highlights | `src/content/experience.ts` |
 | Which projects appear, their icons and links | `src/content/projects.ts` |
 | Skill groups, their tools, and how many show before "See more" | `src/content/skills.ts` |
+| Qualifications | `src/content/education.ts` |
 | Which icons exist and where each comes from (Tabler or Simple Icons) | `src/icons.ts` |
 | Talking to the GitHub API and translating its contribution levels | `src/github/client.ts` |
 | Laying out the contribution grid and its month labels | `src/github/activity.ts` |
 | What happens when GitHub data is missing or fails | `src/github/load.ts` |
 | How counts, dates and contribution tooltips are written | `src/format.ts` |
 | How "See more" and per-role toggles open, close and animate | `src/scripts/disclosure.ts`, `src/components/SeeMore.astro` |
-| Motion timing, reveal fades, the view-transition easing and the no-JS variants | `src/styles/global.css` |
+| Colour palette for light and dark, motion timing, reveal fades, the view-transition easing and the no-JS variants | `src/styles/global.css` |
 | Page shell, column width and font | `src/layouts/Page.astro`, `src/styles/global.css` |
 | How text becomes ids and view-transition names | `src/slug.ts` |
 | The 570px breakpoint where Experience switches to a timeline | `src/styles/global.css` (`--breakpoint-xp`) |
-| How each section looks, including when star counts show | `src/components/*.astro` |
+| How each section looks, including when star counts show and that the most starred projects come first | `src/components/*.astro` |
 | Which sections appear and in what order | `src/pages/index.astro` |
 
 ## Standards
