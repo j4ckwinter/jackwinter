@@ -15,8 +15,6 @@ describe("header", () => {
   const props = {
     name: "Jack",
     title: "Engineer",
-    location: "London",
-    timeZone: "Europe/London",
     links: [
       { label: "GitHub", href: "https://github.com/me", icon: "github" },
       { label: "Email", href: "mailto:me@example.com", icon: "mail" },
@@ -24,10 +22,9 @@ describe("header", () => {
     ],
   };
 
-  it("says where Jack is and leaves a slot for the local time", async () => {
+  it("shows the title under the name", async () => {
     const page = await render(Header, props);
-    expect(page.body.textContent).toContain("Engineer · London");
-    expect(page.querySelector("[data-local-time]")?.getAttribute("data-time-zone")).toBe("Europe/London");
+    expect(page.querySelector("h1 + p")?.textContent?.trim()).toBe("Engineer");
   });
 
   it("spells out the contact links for print, leaving out on-site files", async () => {

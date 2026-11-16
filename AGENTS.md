@@ -35,7 +35,6 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Which commit counts as a project's latest (no merges, chores only as a fallback) | `src/github/client.ts` |
 | Copying the email from "say hello" | `src/scripts/copy-email.ts` |
 | Instant tooltips on contribution tiles | `src/scripts/tile-tooltips.ts` |
-| Jack's local time in the header | `src/scripts/local-time.ts`, with the zone in `src/content/profile.ts` |
 | Where each project's version comes from (npm or GitHub releases) | `release` in `src/content/projects.ts`, fetched by `src/github/npm.ts` and `src/github/client.ts` |
 | Opening the experience list at a role from the timeline | `data-reveal` in `src/scripts/disclosure.ts` |
 | Rebuilding the site every morning | `.github/workflows/rebuild.yml` |

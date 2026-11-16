@@ -9,9 +9,7 @@ const githubLogin = "j4ckwinter";
 
 export const profile = {
   name: "Jack Winter",
-  title: "Senior software engineer",
-  location: "London",
-  timeZone: "Europe/London",
+  title: "Senior Software Engineer",
   description:
     "Jack Winter, senior software engineer in London. Real-time products with React and TypeScript, and tools for AI coding agents.",
   bio: (yearsOfExperience: number): Inline[][] => [
