@@ -65,12 +65,6 @@ describe("loadGitHubData", () => {
     expect(data.commits.map((latest) => latest.subject)).toEqual(["fix: keep embeddings"]);
   });
 
-  it("leaves projects marked out of activity out of the commit list", async () => {
-    const data = await loadGitHubData({ projects: [{ repo: "me/a" }, { repo: "me/notes", inActivity: false }], login: "me", token: "t", fetcher: gitHub({}) });
-    expect(data.commits.map((latest) => latest.repo)).toEqual(["me/a"]);
-    expect(data.stars.has("me/notes")).toBe(true);
-  });
-
   it("falls back to the newest chore when there is nothing else", async () => {
     const fetcher = gitHub({ commits: [commit("Merge pull request #1", 2), commit("chore: tidy"), commit("chore(release): 1.0.0")] });
     const data = await loadGitHubData({ projects: [{ repo: "me/a" }], login: "me", token: "t", fetcher });

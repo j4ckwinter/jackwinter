@@ -34,7 +34,6 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Page metadata: title, canonical, share tags, theme colour, font preload | `src/layouts/Page.astro` |
 | Fetching GitHub data once per build for the page and the card | `src/github/build-data.ts` |
 | Which commit counts as a project's latest (no merges; chore, docs and CI commits only as a fallback) | `src/github/client.ts` |
-| Which projects appear in Activity | `inActivity` in `src/content/projects.ts` |
 | Starting the grid at the latest weeks and hiding clipped month labels | `src/scripts/contribution-scroll.ts` |
 | Copying the email from "say hello" | `src/scripts/copy-email.ts` |
 | Instant tooltips on contribution tiles | `src/scripts/tile-tooltips.ts` |

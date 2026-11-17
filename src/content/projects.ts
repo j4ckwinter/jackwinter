@@ -5,7 +5,6 @@ export type Release = { from: "npm"; package: string } | { from: "github" };
 export type Project = {
   name: string;
   release?: Release;
-  inActivity?: false;
   icon: IconName;
   description: string;
   repo: string;
@@ -38,27 +37,11 @@ export const projects: Project[] = [
     href: "https://www.npmjs.com/package/@jack.winter/pancake-ui",
   },
   {
-    name: "the-beef",
-    icon: "meat",
-    description: "home repo for my agents: how my projects fit together, and how i like to work",
-    repo: "j4ckwinter/the-beef",
-    inActivity: false,
-    href: "https://github.com/j4ckwinter/the-beef",
-  },
-  {
     name: "elvis",
     icon: "dog",
     description: "a small black sprocker who lives on your mac and reacts to claude",
     repo: "j4ckwinter/elvis",
     release: { from: "github" },
     href: "https://github.com/j4ckwinter/elvis",
-  },
-  {
-    name: "jackwinter",
-    icon: "browser",
-    description: "this site: built with astro, with a markdown copy for agents",
-    repo: "j4ckwinter/jackwinter",
-    inActivity: false,
-    href: "https://github.com/j4ckwinter/jackwinter",
   },
 ];
