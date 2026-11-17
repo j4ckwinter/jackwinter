@@ -8,6 +8,7 @@ import type { CaseStudy } from "../../content/case-studies/types";
 import { page } from "../../content/page";
 import { displayHost, formatDateRange } from "../../format";
 import { roleNames } from "../../role-names";
+import { helloHref } from "../../contact";
 import { caseStudySchema } from "../../agents/structured-data";
 import { caseStudyCardAlt, caseStudyCardPath } from "../../social/card";
 
@@ -50,7 +51,7 @@ const link = "underline decoration-line underline-offset-3 hover:decoration-fg-m
     <p class="font-medium">let's talk frontend.</p>
     <p class="text-fg-secondary">architecture, real-time interfaces and performance.</p>
     <p class="flex gap-3">
-      <a class="inline-flex h-8 items-center rounded-lg bg-fg px-3 text-sm font-medium text-surface transition-transform hover:bg-fg/85 active:scale-[0.97]" href={`mailto:${profile.email}`}>say hello</a>
+      <a class="inline-flex h-8 items-center rounded-lg bg-fg px-3 text-sm font-medium text-surface transition-transform hover:bg-fg/85 active:scale-[0.97]" href={helloHref(profile.email, Astro.site!)}>say hello</a>
       <a class="inline-flex h-8 items-center px-1 text-sm text-fg-secondary hover:text-fg" href="/">back to the start</a>
     </p>
   </footer>

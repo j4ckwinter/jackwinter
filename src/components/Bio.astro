@@ -1,8 +1,8 @@
 ---
 import type { Inline } from "../content/profile";
 
-type Props = { paragraphs: Inline[][]; email: string; cv: string };
-const { paragraphs, email, cv } = Astro.props;
+type Props = { paragraphs: Inline[][]; email: string; hello: string; cv: string };
+const { paragraphs, email, hello, cv } = Astro.props;
 ---
 
 <div class="flex flex-col gap-3 leading-relaxed">
@@ -22,7 +22,7 @@ const { paragraphs, email, cv } = Astro.props;
   <p class="mt-3 flex items-center gap-3 print:hidden">
     <a
       class="inline-flex h-8 items-center rounded-lg bg-fg px-3 text-sm font-medium text-surface transition-transform hover:bg-fg/85 active:scale-[0.97]"
-      href={`mailto:${email}`}
+      href={hello}
       data-copy-email={email}
     >
       say hello
