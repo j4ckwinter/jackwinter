@@ -13,7 +13,7 @@ function render() {
   return { graph, tiles: [...graph.querySelectorAll("[data-day]")], tooltip: graph.querySelector<HTMLElement>("[data-tooltip]")! };
 }
 
-const hover = (element: Element) => element.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
+const hover = (element: Element, pointerType = "mouse") => element.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType }));
 
 describe("tile tooltips", () => {
   it("describes the day under the pointer straight away", () => {
@@ -28,7 +28,19 @@ describe("tile tooltips", () => {
   it("hides when the pointer leaves the graph", () => {
     const { graph, tiles, tooltip } = render();
     hover(tiles[0]);
-    graph.dispatchEvent(new PointerEvent("pointerleave"));
+    graph.dispatchEvent(new PointerEvent("pointerleave", { pointerType: "mouse" }));
+    expect(tooltip.hasAttribute("data-shown")).toBe(false);
+  });
+
+  it("keeps a tapped day's tooltip after the finger lifts, until a tap elsewhere", () => {
+    const { graph, tiles, tooltip } = render();
+    hover(tiles[0], "touch");
+    graph.dispatchEvent(new PointerEvent("pointerleave", { pointerType: "touch" }));
+    expect(tooltip.textContent).toBe("3 contributions on 1 November 2026");
+    expect(tooltip.hasAttribute("data-shown")).toBe(true);
+    tiles[1].dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "touch" }));
+    expect(tooltip.hasAttribute("data-shown")).toBe(true);
+    document.body.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "touch" }));
     expect(tooltip.hasAttribute("data-shown")).toBe(false);
   });
 });

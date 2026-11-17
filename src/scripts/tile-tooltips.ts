@@ -21,6 +21,7 @@ export function enhanceTileTooltips(graph: HTMLElement): void {
     tooltip.style.top = `${box.top - area.top - GAP_ABOVE_TILE}px`;
     tooltip.dataset.shown = "";
   });
-  graph.addEventListener("pointerleave", hide);
+  graph.addEventListener("pointerleave", (event) => event.pointerType !== "touch" && hide());
+  graph.ownerDocument.addEventListener("pointerdown", (event) => event.target instanceof Node && !graph.contains(event.target) && hide());
   graph.querySelector("[data-scroll-end]")?.addEventListener("scroll", hide);
 }
