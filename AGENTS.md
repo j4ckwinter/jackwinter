@@ -72,7 +72,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 
 ## Standards
 
-- Keep the page fast and plain: static output, with client JavaScript only for the expand and collapse behaviour in `src/scripts/disclosure.ts` and for starting the activity strip at the latest week.
+- Keep the page fast and plain: static output, with client JavaScript only as small scripts in `src/scripts` that add to a page which already works without them. Each script has a row in the owners table. Add one only when it earns its place, not for decoration.
 - Every colour is a `light-dark()` pair in `global.css`, so `color-scheme` picks the theme: the system by default, `data-theme` when a visitor chooses, and always light in print.
 - `theme-color` in `Page.astro` repeats `--palette-surface` from `global.css` as hex, because the meta tag can't read CSS variables. Change both together.
 - Everything must be readable without JavaScript, and print as a CV. `Page.astro` adds a `js` class to the root; the `opened`, `in-opened` and `no-js` variants in `global.css` show collapsed content and hide toggles when that class is missing, and always in print. Mark anything that makes no sense on paper with `print:hidden`.

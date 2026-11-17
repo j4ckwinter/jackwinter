@@ -2,7 +2,7 @@
 
 my portfolio, minus the town. one page: who i am, what i've built, where i've worked, and how to reach me.
 
-it will replace [winter town](https://github.com/j4ckwinter/winterbot) as the place people land when they look me up. winter town isn't going anywhere, it just won't be the front door.
+it's where people land when they look me up now. it replaced [winter town](https://github.com/j4ckwinter/winterbot), which is archived, and winter town's old address and links point here.
 
 there's a little bar chart of my github activity too. built with Astro and Tailwind, and it's all static html.
 
