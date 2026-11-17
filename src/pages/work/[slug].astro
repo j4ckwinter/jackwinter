@@ -24,6 +24,7 @@ const role = page.experience.find((entry) => entry.company === study.company);
 const names = role && roleNames(role);
 const address = `${displayHost(Astro.site!)}${caseStudyPath(study)}`;
 const structuredData = JSON.stringify(caseStudySchema(study, profile, Astro.site!));
+const today = new Date().toISOString().slice(0, 10);
 const link = "underline decoration-line underline-offset-3 hover:decoration-fg-muted";
 ---
 
@@ -39,7 +40,7 @@ const link = "underline decoration-line underline-offset-3 hover:decoration-fg-m
   <nav aria-label="Back" class="text-[13px] text-fg-muted print:hidden">
     <a class={`inline-block py-1 hover:text-fg ${link}`} href={names ? `/#${names.row}` : "/#experience"} data-astro-prefetch>← {profile.name}</a>
   </nav>
-  <CaseStudyBody study={study}>
+  <CaseStudyBody study={study} today={today}>
     <p slot="eyebrow" class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] text-fg-muted">
       {role && names && <IconTile icon={role.icon} transitionName={names.mark} class="mr-1 print:hidden" />}
       <span class="text-fg" style={names && `view-transition-name: ${names.company}`}>{study.company}</span>

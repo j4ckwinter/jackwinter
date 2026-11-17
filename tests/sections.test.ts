@@ -282,7 +282,7 @@ describe("activity", () => {
 
 describe("case study", () => {
   it("shows the summary, every metric and every section", async () => {
-    const page = await render(CaseStudyBody, { study: kto }, { eyebrow: "<p>KTO Group</p>" });
+    const page = await render(CaseStudyBody, { study: kto, today: "2026-11-17" }, { eyebrow: "<p>KTO Group</p>" });
     expect(page.querySelector("header p")?.textContent).toBe("KTO Group");
     expect(page.querySelector("h1")?.textContent).toBe(kto.title);
     expect([...page.querySelectorAll("dd.text-xl a")].map((value) => value.firstChild?.textContent)).toEqual(kto.metrics.map((metric) => metric.value));
@@ -290,14 +290,14 @@ describe("case study", () => {
   });
 
   it("links to every section from the top of the page", async () => {
-    const page = await render(CaseStudyBody, { study: kto });
+    const page = await render(CaseStudyBody, { study: kto, today: "2026-11-17" });
     const links = [...page.querySelectorAll('nav a')];
     expect(links.map((link) => link.textContent)).toEqual(["Results", ...kto.sections.map((section) => section.label)]);
     for (const link of links) expect(page.getElementById(link.getAttribute("href")!.slice(1))?.tagName).toBe("H2");
   });
 
   it("links each metric to the section that explains it", async () => {
-    const page = await render(CaseStudyBody, { study: kto });
+    const page = await render(CaseStudyBody, { study: kto, today: "2026-11-17" });
     const targets = [...page.querySelectorAll("dd.text-xl a")].map((link) => page.getElementById(link.getAttribute("href")!.slice(1))?.textContent?.replace("#", "").trim());
     expect(targets).toEqual(["Getting the first view on screen", "Getting the first view on screen", "Getting the first view on screen", "Getting the first view on screen", "Avoiding repeated setup on return visits"]);
     expect(page.querySelector("dd.text-xl a")?.textContent).toBe("40%, explained under Loading");
@@ -305,11 +305,23 @@ describe("case study", () => {
 
   it("refuses a metric that points at a section the study doesn't have", async () => {
     const study = { ...kto, metrics: [{ value: "1×", label: "nothing", explainedIn: "Missing" }] };
-    await expect(render(CaseStudyBody, { study })).rejects.toThrow('no case study section is labelled "Missing"');
+    await expect(render(CaseStudyBody, { study, today: "2026-11-17" })).rejects.toThrow('no case study section is labelled "Missing"');
+  });
+
+  it("ends with when it was published and last updated", async () => {
+    const page = await render(CaseStudyBody, { study: { ...kto, published: "2026-11-05", updated: "2026-11-17" }, today: "2026-11-17" });
+    const dates = [...page.querySelectorAll("p")].at(-1);
+    expect(dates?.textContent?.replace(/\s+/g, " ").trim()).toBe("published 5 Nov · updated 17 Nov");
+    expect([...(dates?.querySelectorAll("time") ?? [])].map((time) => time.getAttribute("datetime"))).toEqual(["2026-11-05", "2026-11-17"]);
+  });
+
+  it("leaves out the update when there hasn't been one", async () => {
+    const page = await render(CaseStudyBody, { study: { ...kto, published: "2026-11-05", updated: "2026-11-05" }, today: "2026-11-17" });
+    expect([...page.querySelectorAll("p")].at(-1)?.textContent?.replace(/\s+/g, " ").trim()).toBe("published 5 Nov");
   });
 
   it("draws each flow as ordered steps", async () => {
-    const page = await render(CaseStudyBody, { study: kto });
+    const page = await render(CaseStudyBody, { study: kto, today: "2026-11-17" });
     const flows = [...page.querySelectorAll("figure")];
     expect(flows.map((flow) => flow.querySelector("figcaption")?.textContent)).toEqual(["Loading sequence", "From live data to the interface"]);
     expect([...flows[0].querySelectorAll("li strong")].map((step) => step.textContent)).toEqual(["Initial snapshot", "First view", "Live updates"]);

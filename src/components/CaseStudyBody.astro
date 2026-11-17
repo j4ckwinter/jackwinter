@@ -2,10 +2,11 @@
 import Section from "./Section.astro";
 import CaseFlow from "./CaseFlow.astro";
 import type { CaseStudy } from "../content/case-studies/types";
+import { formatShortDate } from "../format";
 import { explanationHref, sectionHref } from "../content/case-studies/anchors";
 
-type Props = { study: CaseStudy };
-const { study } = Astro.props;
+type Props = { study: CaseStudy; today: string };
+const { study, today } = Astro.props;
 const contents = [{ label: "Results", heading: "Results" }, ...study.sections].map((section) => ({ label: section.label, href: sectionHref(section.heading) }));
 ---
 
@@ -72,6 +73,11 @@ const contents = [{ label: "Results", heading: "Results" }, ...study.sections].m
     </Section>
   ))
 }
+
+<p class="text-[13px] text-fg-muted">
+  published <time datetime={study.published}>{formatShortDate(study.published, today)}</time>
+  {study.updated !== study.published && <> · updated <time datetime={study.updated}>{formatShortDate(study.updated, today)}</time></>}
+</p>
 
 <script>
   import { enhanceCurrentSection } from "../scripts/current-section";
