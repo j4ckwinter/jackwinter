@@ -18,10 +18,13 @@ const mostStarredFirst = [...projects].sort((a, b) => starsFor(b) - starsFor(a))
       const version = versions.get(project.repo);
       return (
         <li>
-          <a href={project.href} class="-mx-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1 rounded-xl px-3 py-2 transition-colors hover:bg-raised xp:grid-cols-[auto_minmax(0,1fr)_auto]">
+          <a href={project.href} class="group/project -mx-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1 rounded-xl px-3 py-2 transition-colors hover:bg-raised xp:grid-cols-[auto_minmax(0,1fr)_auto]">
             <IconTile icon={project.icon} class="max-xp:row-span-2 max-xp:self-start" />
             <span class="flex min-w-0 flex-col">
-              <span class="text-sm">{project.name}</span>
+              <span class="flex items-center gap-1 text-sm">
+                {project.name}
+                <Icon name="arrowUpRight" class="size-3.5 -translate-x-1 text-fg-muted opacity-0 transition duration-200 group-hover/project:translate-x-0 group-hover/project:opacity-100 group-focus-visible/project:translate-x-0 group-focus-visible/project:opacity-100 motion-reduce:transition-none print:hidden" />
+              </span>
               <span class="text-[13px] text-fg-secondary">{project.description}</span>
             </span>
             {(version || starCount > 0) && (

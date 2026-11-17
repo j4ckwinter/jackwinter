@@ -81,6 +81,15 @@ describe("projects", () => {
     { name: "quiet", icon: "brain", description: "has none", repo: "me/quiet", href: "https://example.com/quiet" },
   ];
 
+  it("marks each project as a link that leaves the site, revealed on hover", async () => {
+    const page = await render(Projects, { projects, stars: new Map(), versions: new Map() });
+    for (const row of page.querySelectorAll("li a")) {
+      const arrow = row.querySelector(".min-w-0 svg");
+      expect(arrow?.getAttribute("aria-hidden")).toBe("true");
+      expect(arrow?.className).toContain("group-hover/project:opacity-100");
+    }
+  });
+
   it("shows star counts only for projects that have some", async () => {
     const page = await render(Projects, { projects, stars: new Map([["me/starred", 1076], ["me/quiet", 0]]), versions: new Map() });
     const [starred, quiet] = [...page.querySelectorAll("li a")];
@@ -92,7 +101,7 @@ describe("projects", () => {
   it("lists the most starred projects first and keeps the given order otherwise", async () => {
     const more = [...projects, { name: "also quiet", icon: "dog", description: "none either", repo: "me/also-quiet", href: "https://example.com/also" }];
     const page = await render(Projects, { projects: [more[1], more[0], more[2]], stars: new Map([["me/starred", 5]]), versions: new Map() });
-    const names = [...page.querySelectorAll("li a")].map((link) => link.querySelector("span span")?.textContent);
+    const names = [...page.querySelectorAll("li a")].map((link) => link.querySelector("span span")?.textContent?.trim());
     expect(names).toEqual(["starred", "quiet", "also quiet"]);
   });
 
