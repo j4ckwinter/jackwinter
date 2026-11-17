@@ -8,6 +8,7 @@ import Projects from "../components/Projects.astro";
 import Skills from "../components/Skills.astro";
 import Education from "../components/Education.astro";
 import Footer from "../components/Footer.astro";
+import { lastSourceChange } from "../site-updated";
 import { page } from "../content/page";
 import { githubDataForBuild } from "../github/build-data";
 import { personSchema } from "../agents/structured-data";
@@ -17,6 +18,7 @@ const { profile, experience, education, skills, projects } = page;
 
 const github = await githubDataForBuild();
 const today = new Date().toISOString().slice(0, 10);
+const updated = lastSourceChange() ?? today;
 const structuredData = JSON.stringify(personSchema(page, Astro.site!));
 ---
 
@@ -29,5 +31,5 @@ const structuredData = JSON.stringify(personSchema(page, Astro.site!));
   <Activity contributions={github.activity} commits={github.commits} projects={projects} profileUrl={profile.githubUrl} today={today} />
   <Skills groups={skills} />
   <Education qualifications={education} />
-  <Footer builtOn={today} />
+  <Footer updated={updated} today={today} />
 </Page>

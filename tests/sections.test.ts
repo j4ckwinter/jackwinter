@@ -59,9 +59,10 @@ describe("bio", () => {
 });
 
 describe("footer", () => {
-  it("says when the page was last built", async () => {
-    const page = await render(Footer, { builtOn: "2026-11-16" });
-    expect(page.querySelector("time")?.textContent).toBe("16 Nov");
+  it("says when the site last changed", async () => {
+    const page = await render(Footer, { updated: "2026-11-12", today: "2026-11-17" });
+    expect(page.querySelector("time")?.textContent).toBe("12 Nov");
+    expect(page.querySelector("time")?.getAttribute("datetime")).toBe("2026-11-12");
   });
 });
 
