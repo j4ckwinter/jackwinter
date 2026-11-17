@@ -55,6 +55,8 @@ const onVercel = process.env.VERCEL === "1";
       import { enhanceCopy } from "../scripts/copy";
       import { enhanceRelativeTimes } from "../scripts/relative-time";
       import { enhanceThemeToggle, followSystemTheme } from "../scripts/theme";
+      import { greetDevelopers } from "../scripts/console-note";
+      import { sourceRepo } from "../content/profile";
 
       enhanceDisclosures(document, () => matchMedia("(prefers-reduced-motion: reduce)").matches);
       openToTarget(document, decodeURIComponent(location.hash.slice(1)));
@@ -63,6 +65,7 @@ const onVercel = process.env.VERCEL === "1";
       const prefersDark = matchMedia("(prefers-color-scheme: dark)");
       enhanceThemeToggle(document, globalThis.localStorage, () => matchMedia("(prefers-reduced-motion: reduce)").matches);
       followSystemTheme(document, prefersDark);
+      greetDevelopers(console.info, sourceRepo);
     </script>
   </body>
 </html>
