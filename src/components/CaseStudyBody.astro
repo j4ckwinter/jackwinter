@@ -1,0 +1,61 @@
+---
+import Section from "./Section.astro";
+import CaseFlow from "./CaseFlow.astro";
+import type { CaseStudy } from "../content/case-studies/types";
+
+type Props = { study: CaseStudy; eyebrow: string };
+const { study, eyebrow } = Astro.props;
+---
+
+<header class="flex flex-col gap-3">
+  <p class="text-[13px] text-fg-muted">{eyebrow}</p>
+  <h1 class="text-xl font-medium">{study.title}</h1>
+  <p class="leading-relaxed text-fg-secondary">{study.summary}</p>
+  <dl class="mt-2 grid grid-cols-[clamp(5.5rem,18vw,7rem)_minmax(0,1fr)] gap-x-4 gap-y-2 text-sm">
+    {study.overview.map((item) => (
+      <>
+        <dt class="text-[13px] leading-6 text-fg-muted">{item.term}</dt>
+        <dd class="leading-6">{item.text}</dd>
+      </>
+    ))}
+  </dl>
+</header>
+
+<Section title="Results">
+  <p class="-mt-2 text-[13px] text-fg-muted">{study.qualification}</p>
+  <dl class="grid grid-cols-2 gap-2 sm:grid-cols-5">
+    {study.metrics.map((metric) => (
+      <div class="flex flex-col-reverse gap-1 rounded-xl border border-line p-3">
+        <dt class="text-[12px] leading-snug text-fg-secondary">{metric.label}</dt>
+        <dd class="text-xl font-medium tabular-nums">{metric.value}</dd>
+      </div>
+    ))}
+  </dl>
+</Section>
+
+{
+  study.sections.map((section) => (
+    <Section title={section.heading}>
+      <div class="flex flex-col gap-4 leading-relaxed text-fg-secondary">
+        {section.blocks.map((block) => {
+          switch (block.kind) {
+            case "paragraph":
+              return <p>{block.text}</p>;
+            case "subheading":
+              return <h3 class="mt-2 text-fg">{block.text}</h3>;
+            case "list":
+              return (
+                <ul class="flex flex-wrap gap-2">
+                  {block.items.map((item) => (
+                    <li class="rounded-full border border-line px-3 py-1 text-[13px]">{item}</li>
+                  ))}
+                </ul>
+              );
+            case "flow":
+              return <CaseFlow title={block.title} steps={block.steps} caption={block.caption} />;
+          }
+        })}
+      </div>
+    </Section>
+  ))
+}

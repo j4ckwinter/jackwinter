@@ -25,6 +25,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Which projects appear, their icons and links | `src/content/projects.ts` |
 | Skill groups, their tools, and how many show before "See more" | `src/content/skills.ts` |
 | Qualifications | `src/content/education.ts` |
+| Case studies and which role each belongs to | `src/content/case-studies/`, rendered by `src/pages/work/[slug].astro` and `src/components/CaseStudyBody.astro` |
 | Which content makes up the page, for both the HTML and the markdown | `src/content/page.ts` |
 | The site's address | `astro.config.mjs` (`site`) |
 | What agents read: `/index.md` and `/llms.txt` | `src/agents/markdown.ts`, served by `src/pages/index.md.ts` and `src/pages/llms.txt.ts` |

@@ -56,7 +56,7 @@ export const projects: Project[] = [
   {
     name: "jackwinter",
     icon: "browser",
-    description: "this site: one page, built with astro, with a markdown copy for agents",
+    description: "this site: built with astro, with a markdown copy for agents",
     repo: "j4ckwinter/jackwinter",
     inActivity: false,
     href: "https://github.com/j4ckwinter/jackwinter",

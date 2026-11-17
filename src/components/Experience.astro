@@ -8,6 +8,7 @@ import { formatDateRange, formatTenure } from "../format";
 import { monthsSpanned } from "../tenure";
 import { toSlug } from "../slug";
 import { disclosureButton } from "../scripts/disclosure";
+import { caseStudyFor, caseStudyPath } from "../content/case-studies";
 
 type Props = { roles: Role[]; today: string };
 const { roles, today } = Astro.props;
@@ -20,6 +21,7 @@ const entries = roles.map((role) => {
     current: role.end === undefined,
     dates: formatDateRange(role),
     tenure: formatTenure(monthsSpanned(role, today)),
+    caseStudy: caseStudyFor(role.company),
     names: { row: `${key}-row`, mark: `${key}-mark`, company: `${key}-company`, dates: `${key}-dates` },
   };
 });
@@ -56,7 +58,7 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
       </ol>
     </div>
     <ol class="flex flex-col gap-5.5 xp:hidden xp:in-opened:flex xp:no-js:flex">
-      {entries.map(({ role, key, dates, tenure, names }) => (
+      {entries.map(({ role, key, dates, tenure, caseStudy, names }) => (
         <li id={names.row} tabindex="-1" class="-mx-3 min-w-0 rounded-xl px-3 outline-none transition-colors duration-700 data-highlight:bg-raised data-highlight:duration-150" style={`view-transition-name: ${names.row}`}>
           <div class="group/role relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2.5">
             <button
@@ -86,6 +88,11 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
             <ul class="mt-2 flex list-disc flex-col gap-1.5 pl-4 text-[13px] text-fg-secondary marker:text-faint">
               {role.highlights.map((highlight) => <li>{highlight}</li>)}
             </ul>
+            {caseStudy && (
+              <a href={caseStudyPath(caseStudy)} class="mt-3 inline-flex items-center gap-1 py-1 text-[13px] text-fg underline decoration-line underline-offset-3 hover:decoration-fg-muted">
+                read the case study <span aria-hidden="true">→</span>
+              </a>
+            )}
           </div>
         </li>
       ))}

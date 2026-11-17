@@ -1,7 +1,6 @@
 {
   "redirects": [
     { "source": "/portfolio", "destination": "/", "permanent": true },
-    { "source": "/work/:path*", "destination": "/#experience", "permanent": true },
     { "source": "/places/:path*", "destination": "/index.md", "permanent": true }
   ]
 }

@@ -1,0 +1,33 @@
+---
+import Page from "../../layouts/Page.astro";
+import CaseStudyBody from "../../components/CaseStudyBody.astro";
+import { caseStudies } from "../../content/case-studies";
+import type { CaseStudy } from "../../content/case-studies/types";
+import { page } from "../../content/page";
+import { formatDateRange } from "../../format";
+
+export function getStaticPaths() {
+  return caseStudies.map((study) => ({ params: { slug: study.slug }, props: { study } }));
+}
+
+type Props = { study: CaseStudy };
+const { study } = Astro.props;
+const role = page.experience.find((entry) => entry.company === study.company);
+const eyebrow = role ? `${role.company} · ${formatDateRange(role)}` : study.company;
+const link = "underline decoration-line underline-offset-3 hover:decoration-fg-muted";
+---
+
+<Page title={`${study.title} · ${page.profile.name}`} description={study.summary} name={page.profile.name}>
+  <nav aria-label="Back" class="text-[13px] text-fg-muted print:hidden">
+    <a class={`inline-block py-1 hover:text-fg ${link}`} href="/#experience">← {page.profile.name}</a>
+  </nav>
+  <CaseStudyBody study={study} eyebrow={eyebrow} />
+  <footer class="flex flex-col gap-3 border-t border-line pt-8 print:hidden">
+    <p class="font-medium">let's talk frontend.</p>
+    <p class="text-fg-secondary">architecture, real-time interfaces and performance.</p>
+    <p class="flex gap-3">
+      <a class="inline-flex h-8 items-center rounded-lg bg-fg px-3 text-sm font-medium text-surface transition-transform hover:bg-fg/85 active:scale-[0.97]" href={`mailto:${page.profile.email}`}>say hello</a>
+      <a class="inline-flex h-8 items-center px-1 text-sm text-fg-secondary hover:text-fg" href="/">back to the start</a>
+    </p>
+  </footer>
+</Page>

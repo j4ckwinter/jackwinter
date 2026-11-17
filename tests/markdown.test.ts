@@ -31,6 +31,11 @@ describe("pageMarkdown", () => {
     for (const heading of ["# Jack", "## Experience", "## Education", "## Skills", "## Projects"]) expect(markdown).toContain(`${heading}\n`);
   });
 
+  it("links a role to its case study", () => {
+    const withStudy = pageMarkdown({ ...content, experience: [{ ...content.experience[0], company: "KTO Group" }] }, site, "2026-11-16");
+    expect(withStudy).toContain("Case study: [Rebuilding KTO’s sportsbook frontend](https://example.com/work/kto)");
+  });
+
   it("keeps links written into the bio", () => {
     expect(markdown).toContain("hey, i'm [jack](https://example.com/jack), 2+ years in.");
   });
@@ -51,7 +56,8 @@ describe("pageMarkdown", () => {
 });
 
 describe("llmsText", () => {
-  it("points agents at the markdown page", () => {
+  it("points agents at the markdown page and the case studies", () => {
     expect(llmsText(content, site)).toContain("(https://example.com/index.md)");
+    expect(llmsText(content, site)).toContain("(https://example.com/work/kto): case study");
   });
 });

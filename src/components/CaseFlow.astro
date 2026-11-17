@@ -1,0 +1,23 @@
+---
+type Props = { title: string; steps: { title: string; detail: string }[]; caption: string };
+const { title, steps, caption } = Astro.props;
+---
+
+<figure class="my-2 flex flex-col gap-3 rounded-xl border border-line bg-raised p-4">
+  <figcaption class="text-[13px] font-medium">{title}</figcaption>
+  <ol class="grid gap-2 sm:grid-cols-3 sm:gap-6">
+    {steps.map((step, index) => (
+      <li class="relative rounded-lg border border-line bg-surface p-3">
+        {index > 0 && (
+          <span aria-hidden="true" class="absolute -top-[18px] left-4 text-fg-muted sm:top-3 sm:-left-[19px]">
+            <span class="sm:hidden">↓</span>
+            <span class="hidden sm:inline">→</span>
+          </span>
+        )}
+        <strong class="block text-[13px] font-medium">{step.title}</strong>
+        <span class="mt-1 block text-[12px] text-fg-secondary">{step.detail}</span>
+      </li>
+    ))}
+  </ol>
+  <p class="text-[12px] text-fg-muted">{caption}</p>
+</figure>

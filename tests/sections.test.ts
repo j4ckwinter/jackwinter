@@ -6,6 +6,8 @@ import Skills from "../src/components/Skills.astro";
 import Education from "../src/components/Education.astro";
 import Bio from "../src/components/Bio.astro";
 import Footer from "../src/components/Footer.astro";
+import CaseStudyBody from "../src/components/CaseStudyBody.astro";
+import { kto } from "../src/content/case-studies/kto";
 import Activity from "../src/components/Activity.astro";
 import { buildContributionGrid } from "../src/github/activity";
 import { day } from "./fixtures";
@@ -143,6 +145,13 @@ describe("experience", () => {
     expect(page.body.textContent).toContain("2 yrs 11 mos");
   });
 
+  it("links a role to its case study when there is one", async () => {
+    const page = await render(Experience, { roles: [{ ...role, company: "KTO Group" }], today: "2026-11-16" });
+    expect(page.querySelector('a[href="/work/kto"]')?.textContent).toContain("read the case study");
+    const without = await render(Experience, { roles: [role], today: "2026-11-16" });
+    expect(without.querySelector('a[href^="/work/"]')).toBeNull();
+  });
+
   it("lets each timeline entry open the list at that role", async () => {
     const page = await render(Experience, { roles: [role], today: "2026-11-16" });
     const stop = page.querySelector('button[aria-label="Open the details for Acme Inc"]');
@@ -214,5 +223,21 @@ describe("activity", () => {
   it("leaves the section out when GitHub gave nothing", async () => {
     const page = await render(Activity, { ...base, contributions: undefined });
     expect(page.querySelector("section")).toBeNull();
+  });
+});
+
+describe("case study", () => {
+  it("shows the summary, every metric and every section", async () => {
+    const page = await render(CaseStudyBody, { study: kto, eyebrow: "KTO Group · Jun 2025 – now" });
+    expect(page.querySelector("h1")?.textContent).toBe(kto.title);
+    expect([...page.querySelectorAll("dd.text-xl")].map((value) => value.textContent)).toEqual(kto.metrics.map((metric) => metric.value));
+    expect([...page.querySelectorAll("h2")].map((heading) => heading.textContent?.replace("#", "").trim())).toEqual(["Results", ...kto.sections.map((section) => section.heading)]);
+  });
+
+  it("draws each flow as ordered steps", async () => {
+    const page = await render(CaseStudyBody, { study: kto, eyebrow: "" });
+    const flows = [...page.querySelectorAll("figure")];
+    expect(flows.map((flow) => flow.querySelector("figcaption")?.textContent)).toEqual(["Loading sequence", "From live data to the interface"]);
+    expect([...flows[0].querySelectorAll("li strong")].map((step) => step.textContent)).toEqual(["Initial snapshot", "First view", "Live updates"]);
   });
 });
