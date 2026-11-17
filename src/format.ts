@@ -41,3 +41,5 @@ export function formatTenure(months: number): string {
 export function formatDateRange({ start, end }: { start: string; end?: string }): string {
   return `${start} – ${end ?? "now"}`;
 }
+
+export const displayHost = (site: URL) => site.host.replace(/^www\./, "");

@@ -4,7 +4,7 @@ import SeeMore from "./SeeMore.astro";
 import IconTile from "./IconTile.astro";
 import Icon from "./Icon.astro";
 import type { Role } from "../content/experience";
-import { formatDateRange, formatTenure } from "../format";
+import { displayHost, formatDateRange, formatTenure } from "../format";
 import { monthsSpanned } from "../tenure";
 import { roleNames } from "../role-names";
 import { disclosureButton } from "../scripts/disclosure";
@@ -13,7 +13,7 @@ import { caseStudyFor, caseStudyPath } from "../content/case-studies";
 type Props = { roles: Role[]; today: string };
 const { roles, today } = Astro.props;
 
-const site = Astro.site?.host.replace(/^www\./, "");
+const site = Astro.site && displayHost(Astro.site);
 const entries = roles.map((role) => {
   const names = roleNames(role);
   return {

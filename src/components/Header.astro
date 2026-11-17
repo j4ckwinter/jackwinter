@@ -1,11 +1,12 @@
 ---
 import Icon from "./Icon.astro";
 import type { Link } from "../content/profile";
+import { displayHost } from "../format";
 
 type Props = { name: string; title: string; links: Link[] };
 const { name, title, links } = Astro.props;
 const printable = links.filter((link) => !link.href.startsWith("/")).map((link) => link.href.replace(/^(mailto:|https?:\/\/)/, ""));
-const site = Astro.site?.host.replace(/^www\./, "");
+const site = Astro.site && displayHost(Astro.site);
 const iconButton = "inline-flex size-7 items-center justify-center rounded-md text-fg-secondary transition-transform hover:bg-hover hover:text-fg active:scale-[0.97]";
 ---
 
