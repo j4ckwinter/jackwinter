@@ -45,6 +45,7 @@ const onVercel = process.env.VERCEL === "1";
     <script is:inline set:html={themeBootScript} />
   </head>
   <body class="bg-surface font-sans text-fg antialiased">
+    <slot name="chrome" />
     <main class="enter mx-auto flex min-h-svh w-full max-w-[700px] flex-col gap-10 px-5 pt-8 pb-24 sm:px-8 md:pt-14">
       <slot />
     </main>

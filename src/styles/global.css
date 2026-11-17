@@ -121,6 +121,40 @@
   navigation: auto;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
+
+.reading-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    display: block;
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    height: 2px;
+    background-color: var(--palette-fg);
+    transform-origin: left;
+    animation: reading-progress linear both;
+  }
+
+  /* Kept apart so the minifier cannot fold the timeline into the animation shorthand, which browsers then reject. */
+  .reading-progress.reading-progress {
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes reading-progress {
+  from {
+    scale: 0 1;
+  }
+}
+
 .enter > * {
   animation: enter 600ms var(--ease-settle) both;
 }
@@ -219,6 +253,10 @@
 
   .enter > * {
     animation: none;
+  }
+
+  .reading-progress {
+    display: none;
   }
 
   main {

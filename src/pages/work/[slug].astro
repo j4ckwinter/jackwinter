@@ -34,6 +34,7 @@ const link = "underline decoration-line underline-offset-3 hover:decoration-fg-m
   card={{ path: caseStudyCardPath(study.slug), alt: caseStudyCardAlt(study) }}
 >
   <script slot="head" type="application/ld+json" is:inline set:html={structuredData} />
+  <div slot="chrome" aria-hidden="true" class="reading-progress"></div>
   <nav aria-label="Back" class="text-[13px] text-fg-muted print:hidden">
     <a class={`inline-block py-1 hover:text-fg ${link}`} href={names ? `/#${names.row}` : "/#experience"} data-astro-prefetch>← {profile.name}</a>
   </nav>
