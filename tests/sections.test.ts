@@ -285,7 +285,7 @@ describe("case study", () => {
     const page = await render(CaseStudyBody, { study: kto }, { eyebrow: "<p>KTO Group</p>" });
     expect(page.querySelector("header p")?.textContent).toBe("KTO Group");
     expect(page.querySelector("h1")?.textContent).toBe(kto.title);
-    expect([...page.querySelectorAll("dd.text-xl")].map((value) => value.textContent)).toEqual(kto.metrics.map((metric) => metric.value));
+    expect([...page.querySelectorAll("dd.text-xl a")].map((value) => value.firstChild?.textContent)).toEqual(kto.metrics.map((metric) => metric.value));
     expect([...page.querySelectorAll("h2")].map((heading) => heading.textContent?.replace("#", "").trim())).toEqual(["Results", ...kto.sections.map((section) => section.heading)]);
   });
 
@@ -294,6 +294,18 @@ describe("case study", () => {
     const links = [...page.querySelectorAll('nav a')];
     expect(links.map((link) => link.textContent)).toEqual(["Results", ...kto.sections.map((section) => section.label)]);
     for (const link of links) expect(page.getElementById(link.getAttribute("href")!.slice(1))?.tagName).toBe("H2");
+  });
+
+  it("links each metric to the section that explains it", async () => {
+    const page = await render(CaseStudyBody, { study: kto });
+    const targets = [...page.querySelectorAll("dd.text-xl a")].map((link) => page.getElementById(link.getAttribute("href")!.slice(1))?.textContent?.replace("#", "").trim());
+    expect(targets).toEqual(["Getting the first view on screen", "Getting the first view on screen", "Getting the first view on screen", "Getting the first view on screen", "Avoiding repeated setup on return visits"]);
+    expect(page.querySelector("dd.text-xl a")?.textContent).toBe("40%, explained under Loading");
+  });
+
+  it("refuses a metric that points at a section the study doesn't have", async () => {
+    const study = { ...kto, metrics: [{ value: "1×", label: "nothing", explainedIn: "Missing" }] };
+    await expect(render(CaseStudyBody, { study })).rejects.toThrow('no case study section is labelled "Missing"');
   });
 
   it("draws each flow as ordered steps", async () => {

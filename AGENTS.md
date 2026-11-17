@@ -32,6 +32,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | What search engines read: structured data (Person, and Article for case studies), `robots.txt`, `sitemap.xml` with last-updated dates | `src/agents/structured-data.ts`, `src/agents/sitemap.ts`, `src/pages/robots.txt.ts`, `src/pages/sitemap.xml.ts` |
 | The share cards shown when a link is posted (the home card and one per case study) | `src/social/card.ts`, drawn by `src/social/render.ts`, served by `src/pages/og.png.ts` and `src/pages/og/[slug].png.ts` |
 | A case study's reading time | `src/content/case-studies/reading-time.ts` |
+| Which section explains each case study metric (`explainedIn`, a section label) and the links to sections | `src/content/case-studies/anchors.ts` |
 | Role ids and view-transition names shared by Experience and the case study pages | `src/role-names.ts` |
 | Which links load early on hover | `data-astro-prefetch` on the link, with `prefetch` in `astro.config.mjs` |
 | Gliding between pages and skipping the entrance animation after one | `@view-transition` and `.arrived` in `src/styles/global.css`, set by the `pagereveal` script in `src/layouts/Page.astro` |

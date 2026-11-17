@@ -13,6 +13,6 @@ export type CaseStudy = {
   updated: string;
   overview: { term: string; text: string }[];
   qualification: string;
-  metrics: { value: string; label: string }[];
+  metrics: { value: string; label: string; explainedIn: string }[];
   sections: { heading: string; label: string; blocks: Block[] }[];
 };
