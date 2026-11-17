@@ -7,6 +7,7 @@ const content: PageContent = {
   profile: {
     name: "Jack",
     title: "Engineer",
+    cv: "/cv.pdf",
     description: "Builds things.",
     bio: (years) => [["hey, i'm ", { text: "jack", href: "https://example.com/jack" }, `, ${years}+ years in.`]],
     email: "me@example.com",

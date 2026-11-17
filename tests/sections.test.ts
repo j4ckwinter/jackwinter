@@ -43,9 +43,16 @@ describe("header", () => {
 
 describe("bio", () => {
   it("links the words written as links and offers to copy the email", async () => {
-    const page = await render(Bio, { paragraphs: [["i build ", { text: "tools", href: "https://example.com/tools" }, "."]], email: "me@example.com" });
+    const page = await render(Bio, { paragraphs: [["i build ", { text: "tools", href: "https://example.com/tools" }, "."]], email: "me@example.com", cv: "/cv.pdf" });
     expect(page.querySelector('a[href="https://example.com/tools"]')?.textContent?.trim()).toBe("tools");
     expect(page.querySelector('a[href="mailto:me@example.com"]')?.getAttribute("data-copy-email")).toBe("me@example.com");
+  });
+
+  it("offers the CV as a download", async () => {
+    const page = await render(Bio, { paragraphs: [], email: "me@example.com", cv: "/cv.pdf" });
+    const cv = page.querySelector('a[href="/cv.pdf"]');
+    expect(cv?.hasAttribute("download")).toBe(true);
+    expect(cv?.textContent?.trim()).toBe("download cv");
   });
 });
 
