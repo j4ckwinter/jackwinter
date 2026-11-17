@@ -1,12 +1,20 @@
 ---
 import Page from "../layouts/Page.astro";
 import { page } from "../content/page";
+import { caseStudies, caseStudyPath } from "../content/case-studies";
+
+const link = "underline decoration-line underline-offset-3 hover:decoration-fg-muted";
 ---
 
 <Page title={`Not found · ${page.profile.name}`} description={page.profile.description} name={page.profile.name}>
   <section class="flex flex-col gap-3">
     <h1 class="font-medium">nothing here</h1>
     <p class="text-fg-secondary">this page doesn't exist, or it moved when the old portfolio did.</p>
-    <p><a class="underline decoration-line underline-offset-3 hover:decoration-fg-muted" href="/">back to the start</a></p>
+    {caseStudies.map((study) => (
+      <p class="text-fg-secondary">
+        looking for the {study.company} case study? it's <a class={link} href={caseStudyPath(study)} data-astro-prefetch>here now</a>.
+      </p>
+    ))}
+    <p><a class={link} href="/">back to the start</a></p>
   </section>
 </Page>

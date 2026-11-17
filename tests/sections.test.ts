@@ -41,7 +41,7 @@ describe("header", () => {
   it("spells out the contact links for print, leaving out on-site files", async () => {
     const page = await render(Header, props);
     const printed = [...page.querySelectorAll("p")].map((line) => line.textContent ?? "").find((text) => text.includes("github.com"));
-    expect(printed).toBe("github.com/me · me@example.com");
+    expect(printed).toBe("github.com/me · me@example.com · example.com");
   });
 
   it("shows each link as a labelled icon", async () => {
