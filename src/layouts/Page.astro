@@ -51,13 +51,13 @@ const onVercel = process.env.VERCEL === "1";
     </main>
     <script>
       import { enhanceDisclosures, openToTarget } from "../scripts/disclosure";
-      import { enhanceCopyEmail } from "../scripts/copy-email";
+      import { enhanceCopy } from "../scripts/copy";
       import { enhanceRelativeTimes } from "../scripts/relative-time";
       import { enhanceThemeToggle, followSystemTheme } from "../scripts/theme";
 
       enhanceDisclosures(document, () => matchMedia("(prefers-reduced-motion: reduce)").matches);
       openToTarget(document, decodeURIComponent(location.hash.slice(1)));
-      enhanceCopyEmail(document, navigator.clipboard);
+      enhanceCopy(document, navigator.clipboard);
       enhanceRelativeTimes(document, () => new Date());
       const prefersDark = matchMedia("(prefers-color-scheme: dark)");
       enhanceThemeToggle(document, globalThis.localStorage, () => matchMedia("(prefers-reduced-motion: reduce)").matches);

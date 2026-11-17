@@ -39,7 +39,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Fetching GitHub data once per build for the page and the card | `src/github/build-data.ts` |
 | Which commit counts as a project's latest (no merges; chore, docs and CI commits only as a fallback) | `src/github/client.ts` |
 | Starting the grid at the latest weeks and hiding clipped month labels | `src/scripts/contribution-scroll.ts` |
-| Copying the email from "say hello" | `src/scripts/copy-email.ts` |
+| Copying the email or a section link, and confirming beside what was clicked | `src/scripts/copy.ts` (`data-copy`, `data-copy-message`) |
 | Instant tooltips on contribution tiles | `src/scripts/tile-tooltips.ts` |
 | Where each project's version comes from (npm or GitHub releases) | `release` in `src/content/projects.ts`, fetched by `src/github/npm.ts` and `src/github/client.ts` |
 | Opening the experience list at a role from the timeline, or from a link such as `/#role-…-row` | `data-reveal` and `openToTarget` in `src/scripts/disclosure.ts` |

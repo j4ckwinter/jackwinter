@@ -25,7 +25,8 @@ const iconButton = "inline-flex size-7 items-center justify-center rounded-md te
         <li>
           <a
             href={isEmail(link) ? hello : link.href}
-            data-copy-email={isEmail(link) ? email : undefined}
+            data-copy={isEmail(link) ? email : undefined}
+            data-copy-message={isEmail(link) ? "email copied" : undefined}
             aria-label={link.label}
             title={link.label}
             class={iconButton}

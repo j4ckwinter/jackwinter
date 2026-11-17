@@ -23,7 +23,8 @@ const { paragraphs, email, hello, cv } = Astro.props;
     <a
       class="inline-flex h-8 items-center rounded-lg bg-fg px-3 text-sm font-medium text-surface transition-transform hover:bg-fg/85 active:scale-[0.97]"
       href={hello}
-      data-copy-email={email}
+      data-copy={email}
+      data-copy-message="email copied"
     >
       say hello
     </a>

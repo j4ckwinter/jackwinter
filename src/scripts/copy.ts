@@ -10,16 +10,16 @@ function nearestStatus(link: Element): HTMLElement | null {
   return null;
 }
 
-export function enhanceCopyEmail(root: ParentNode & EventTarget, clipboard: Clipboard | undefined): void {
+export function enhanceCopy(root: ParentNode & EventTarget, clipboard: Clipboard | undefined): void {
   if (!clipboard) return;
   let hide: ReturnType<typeof setTimeout> | undefined;
   root.addEventListener("click", (event) => {
-    const link = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-copy-email]") : null;
+    const link = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-copy]") : null;
     if (!link) return;
     const status = nearestStatus(link);
-    clipboard.writeText(link.dataset.copyEmail ?? "").then(() => {
+    clipboard.writeText(link.dataset.copy ?? "").then(() => {
       if (!status) return;
-      status.textContent = "email copied";
+      status.textContent = link.dataset.copyMessage ?? "copied";
       status.dataset.shown = "";
       clearTimeout(hide);
       hide = setTimeout(() => delete status.dataset.shown, CONFIRMATION_MS);

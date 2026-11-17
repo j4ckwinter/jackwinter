@@ -31,8 +31,8 @@ describe("header", () => {
     const page = await render(Header, props);
     const email = page.querySelector('a[aria-label="Email"]');
     expect(email?.getAttribute("href")).toBe("mailto:me@example.com?subject=hi");
-    expect(email?.getAttribute("data-copy-email")).toBe("me@example.com");
-    expect(page.querySelector('a[aria-label="GitHub"]')?.hasAttribute("data-copy-email")).toBe(false);
+    expect(email?.getAttribute("data-copy")).toBe("me@example.com");
+    expect(page.querySelector('a[aria-label="GitHub"]')?.hasAttribute("data-copy")).toBe(false);
     expect(page.querySelector("nav [data-copy-status]")).not.toBeNull();
   });
 
@@ -67,7 +67,7 @@ describe("bio", () => {
   it("links the words written as links and offers to copy the email", async () => {
     const page = await render(Bio, { paragraphs: [["i build ", { text: "tools", href: "https://example.com/tools" }, "."]], email: "me@example.com", hello: "mailto:me@example.com?subject=hi", cv: { href: "/cv.pdf", size: "91 KB" } });
     expect(page.querySelector('a[href="https://example.com/tools"]')?.textContent?.trim()).toBe("tools");
-    expect(page.querySelector('a[href="mailto:me@example.com?subject=hi"]')?.getAttribute("data-copy-email")).toBe("me@example.com");
+    expect(page.querySelector('a[href="mailto:me@example.com?subject=hi"]')?.getAttribute("data-copy")).toBe("me@example.com");
   });
 
   it("offers the CV as a download and says how big it is", async () => {
