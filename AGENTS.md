@@ -53,6 +53,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | How the site's address is written for people (no `www.`) | `displayHost` in `src/format.ts` |
 | Light and dark: the saved choice, the toggle and its circular reveal | `src/scripts/theme.ts`, colours in `src/styles/global.css` |
 | Vercel Web Analytics, loaded only on Vercel builds | `src/layouts/Page.astro` |
+| The QR code to the site on the printed home page | `src/print/qr.ts`, placed by `src/components/Header.astro` |
 | Which icons exist and where each comes from (Tabler or Simple Icons) | `src/icons.ts` |
 | Talking to the GitHub API and translating its contribution levels | `src/github/client.ts` |
 | Laying out the contribution grid and its month labels | `src/github/activity.ts` |

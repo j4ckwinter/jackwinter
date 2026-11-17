@@ -3,8 +3,8 @@ import Icon from "./Icon.astro";
 import type { Link } from "../content/profile";
 import { displayHost } from "../format";
 
-type Props = { name: string; title: string; links: Link[] };
-const { name, title, links } = Astro.props;
+type Props = { name: string; title: string; links: Link[]; qr?: string };
+const { name, title, links, qr } = Astro.props;
 const printable = links.filter((link) => !link.href.startsWith("/")).map((link) => link.href.replace(/^(mailto:|https?:\/\/)/, ""));
 const site = Astro.site && displayHost(Astro.site);
 const iconButton = "inline-flex size-7 items-center justify-center rounded-md text-fg-secondary transition-transform hover:bg-hover hover:text-fg active:scale-[0.97]";
@@ -40,4 +40,5 @@ const iconButton = "inline-flex size-7 items-center justify-center rounded-md te
       </li>
     </ul>
   </nav>
+  {qr && <div role="img" aria-label={`QR code for ${site}`} class="hidden size-16 shrink-0 print:block" set:html={qr} />}
 </header>

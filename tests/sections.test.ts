@@ -6,6 +6,7 @@ import Skills from "../src/components/Skills.astro";
 import Education from "../src/components/Education.astro";
 import Bio from "../src/components/Bio.astro";
 import Footer from "../src/components/Footer.astro";
+import { qrSvg } from "../src/print/qr";
 import CaseStudyBody from "../src/components/CaseStudyBody.astro";
 import { kto } from "../src/content/case-studies/kto";
 import Activity from "../src/components/Activity.astro";
@@ -23,6 +24,14 @@ describe("header", () => {
       { label: "CV", href: "/cv.pdf", icon: "cv" },
     ],
   };
+
+  it("adds a QR code to the site for print only", async () => {
+    const page = await render(Header, { ...props, qr: await qrSvg("https://example.com/") });
+    const code = page.querySelector('[role="img"][aria-label^="QR code"]');
+    expect(code?.classList.contains("hidden")).toBe(true);
+    expect(code?.classList.contains("print:block")).toBe(true);
+    expect(code?.querySelector("svg")).not.toBeNull();
+  });
 
   it("shows the title under the name", async () => {
     const page = await render(Header, props);
