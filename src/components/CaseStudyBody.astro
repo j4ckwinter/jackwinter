@@ -23,11 +23,11 @@ const contents = [{ label: "Results", heading: "Results" }, ...study.sections].m
   </dl>
 </header>
 
-<nav aria-labelledby="contents" class="flex flex-col gap-2 print:hidden">
+<nav aria-labelledby="contents" data-current-section class="flex flex-col gap-2 print:hidden">
   <p id="contents" class="text-[13px] text-fg-muted">On this page</p>
   <ul class="flex flex-wrap gap-2">
     {contents.map((item) => (
-      <li><a href={item.href} class="inline-flex rounded-full border border-line px-3 py-1 text-[13px] text-fg-secondary transition-colors hover:bg-hover hover:text-fg">{item.label}</a></li>
+      <li><a href={item.href} class="inline-flex rounded-full border border-line px-3 py-1 text-[13px] text-fg-secondary transition-colors hover:bg-hover hover:text-fg aria-[current=location]:bg-hover aria-[current=location]:text-fg">{item.label}</a></li>
     ))}
   </ul>
 </nav>
@@ -72,3 +72,9 @@ const contents = [{ label: "Results", heading: "Results" }, ...study.sections].m
     </Section>
   ))
 }
+
+<script>
+  import { enhanceCurrentSection } from "../scripts/current-section";
+
+  for (const nav of document.querySelectorAll("[data-current-section]")) enhanceCurrentSection(nav, window);
+</script>
