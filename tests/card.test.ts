@@ -10,6 +10,15 @@ const texts = (node: unknown): string[] => {
   return [];
 };
 
+const background = (card: { props: { style?: Record<string, unknown> } }) => card.props.style?.backgroundColor;
+
+describe("share cards", () => {
+  it("are dark, matching the site's dark theme", () => {
+    expect(background(socialCard({ name: "Jack", title: "Engineer", host: "example.com" }))).toBe("#0a0a0a");
+    expect(background(caseStudyCard({ company: "KTO Group", title: "A title", metrics: [], address: "example.com/work/kto" }))).toBe("#0a0a0a");
+  });
+});
+
 describe("socialCard", () => {
   it("shows the name, title and site", () => {
     expect(texts(socialCard({ name: "Jack", title: "Engineer", host: "example.com" }))).toEqual(["Jack", "Engineer", "example.com"]);
