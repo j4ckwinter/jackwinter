@@ -25,6 +25,18 @@ describe("copy email", () => {
     expect(status.hasAttribute("data-shown")).toBe(false);
   });
 
+  it("confirms beside the link that was clicked", async () => {
+    const root = document.createElement("div");
+    document.body.replaceChildren(root);
+    root.innerHTML = `
+      <p><a data-copy-email="me@example.com"></a><span id="far" data-copy-status></span></p>
+      <p><a id="clicked" data-copy-email="me@example.com"></a><span id="near" data-copy-status></span></p>`;
+    enhanceCopyEmail(root, { writeText: () => Promise.resolve() });
+    root.querySelector<HTMLElement>("#clicked")!.click();
+    await vi.waitFor(() => expect(root.querySelector("#near")!.hasAttribute("data-shown")).toBe(true));
+    expect(root.querySelector("#far")!.hasAttribute("data-shown")).toBe(false);
+  });
+
   it("leaves the mail link to work alone when there is no clipboard", () => {
     const { root, link, status } = render();
     enhanceCopyEmail(root, undefined);

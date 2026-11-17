@@ -23,7 +23,18 @@ describe("header", () => {
       { label: "Email", href: "mailto:me@example.com", icon: "mail" },
       { label: "CV", href: "/cv.pdf", icon: "cv" },
     ],
+    email: "me@example.com",
+    hello: "mailto:me@example.com?subject=hi",
   };
+
+  it("opens the email icon with a subject and copies the address, like say hello", async () => {
+    const page = await render(Header, props);
+    const email = page.querySelector('a[aria-label="Email"]');
+    expect(email?.getAttribute("href")).toBe("mailto:me@example.com?subject=hi");
+    expect(email?.getAttribute("data-copy-email")).toBe("me@example.com");
+    expect(page.querySelector('a[aria-label="GitHub"]')?.hasAttribute("data-copy-email")).toBe(false);
+    expect(page.querySelector("nav [data-copy-status]")).not.toBeNull();
+  });
 
   it("adds a QR code to the site for print only", async () => {
     const page = await render(Header, { ...props, qr: await qrSvg("https://example.com/") });

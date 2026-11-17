@@ -3,10 +3,11 @@ import Icon from "./Icon.astro";
 import type { Link } from "../content/profile";
 import { displayHost } from "../format";
 
-type Props = { name: string; title: string; links: Link[]; qr?: string };
-const { name, title, links, qr } = Astro.props;
+type Props = { name: string; title: string; links: Link[]; email: string; hello: string; qr?: string };
+const { name, title, links, email, hello, qr } = Astro.props;
 const printable = links.filter((link) => !link.href.startsWith("/")).map((link) => link.href.replace(/^(mailto:|https?:\/\/)/, ""));
 const site = Astro.site && displayHost(Astro.site);
+const isEmail = (link: Link) => link.href === `mailto:${email}`;
 const iconButton = "inline-flex size-7 items-center justify-center rounded-md text-fg-secondary transition-transform hover:bg-hover hover:text-fg active:scale-[0.97]";
 ---
 
@@ -18,12 +19,13 @@ const iconButton = "inline-flex size-7 items-center justify-center rounded-md te
     </p>
     <p class="mt-1 hidden text-[13px] text-fg-secondary print:block">{[...printable, site].filter(Boolean).join(" · ")}</p>
   </div>
-  <nav aria-label="Links" class="print:hidden">
+  <nav aria-label="Links" class="relative print:hidden">
     <ul class="flex gap-px">
       {links.map((link) => (
         <li>
           <a
-            href={link.href}
+            href={isEmail(link) ? hello : link.href}
+            data-copy-email={isEmail(link) ? email : undefined}
             aria-label={link.label}
             title={link.label}
             class={iconButton}
@@ -39,6 +41,7 @@ const iconButton = "inline-flex size-7 items-center justify-center rounded-md te
         </button>
       </li>
     </ul>
+    <span data-copy-status aria-live="polite" class="absolute top-full right-1 mt-1 text-[12px] whitespace-nowrap text-fg-muted opacity-0 transition-opacity duration-300 data-shown:opacity-100"></span>
   </nav>
   {qr && <div role="img" aria-label={`QR code for ${site}`} class="hidden size-16 shrink-0 print:block" set:html={qr} />}
 </header>

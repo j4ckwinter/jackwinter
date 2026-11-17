@@ -29,7 +29,7 @@ const structuredData = JSON.stringify(personSchema(page, Astro.site!));
 
 <Page title={`${profile.name} · ${profile.title}`} description={profile.description} name={profile.name}>
   <script slot="head" type="application/ld+json" is:inline set:html={structuredData} />
-  <Header name={profile.name} title={profile.title} links={profile.links} qr={await qrSvg(Astro.site!.href)} />
+  <Header name={profile.name} title={profile.title} links={profile.links} email={profile.email} hello={helloHref(profile.email, Astro.site!)} qr={await qrSvg(Astro.site!.href)} />
   <Bio paragraphs={profile.bio(wholeYearsAcross(experience, today))} email={profile.email} hello={helloHref(profile.email, Astro.site!)} cv={{ href: profile.cv, size: formatFileSize(statSync(join(process.cwd(), "public", profile.cv)).size) }} />
   <Experience roles={experience} today={today} />
   <Projects projects={projects} stars={github.stars} versions={github.versions} />
