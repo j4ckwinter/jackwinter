@@ -95,6 +95,12 @@
     text-wrap: pretty;
   }
 
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
   ::selection {
     background-color: color-mix(in oklch, var(--palette-fg) 16%, transparent);
     color: var(--palette-fg);
