@@ -6,23 +6,23 @@ import Icon from "./Icon.astro";
 import type { Role } from "../content/experience";
 import { formatDateRange, formatTenure } from "../format";
 import { monthsSpanned } from "../tenure";
-import { toSlug } from "../slug";
+import { roleNames } from "../role-names";
 import { disclosureButton } from "../scripts/disclosure";
 import { caseStudyFor, caseStudyPath } from "../content/case-studies";
 
 type Props = { roles: Role[]; today: string };
 const { roles, today } = Astro.props;
 
+const site = Astro.site?.host.replace(/^www\./, "");
 const entries = roles.map((role) => {
-  const key = `role-${toSlug(`${role.company} ${role.start}`)}`;
+  const names = roleNames(role);
   return {
     role,
-    key,
+    names,
     current: role.end === undefined,
     dates: formatDateRange(role),
     tenure: formatTenure(monthsSpanned(role, today)),
     caseStudy: caseStudyFor(role.company),
-    names: { row: `${key}-row`, mark: `${key}-mark`, company: `${key}-company`, dates: `${key}-dates` },
   };
 });
 const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`;
@@ -58,12 +58,12 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
       </ol>
     </div>
     <ol class="flex flex-col gap-5.5 xp:hidden xp:in-opened:flex xp:no-js:flex">
-      {entries.map(({ role, key, dates, tenure, caseStudy, names }) => (
-        <li id={names.row} tabindex="-1" class="-mx-3 min-w-0 rounded-xl px-3 outline-none transition-colors duration-700 data-highlight:bg-raised data-highlight:duration-150" style={`view-transition-name: ${names.row}`}>
+      {entries.map(({ role, dates, tenure, caseStudy, names }) => (
+        <li id={names.row} tabindex="-1" class="-mx-3 min-w-0 scroll-mt-8 rounded-xl px-3 outline-none transition-colors duration-700 data-highlight:bg-raised data-highlight:duration-150" style={`view-transition-name: ${names.row}`}>
           <div class="group/role relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2.5">
             <button
               type="button"
-              {...disclosureButton(`${key}-details`)}
+              {...disclosureButton(names.details)}
               aria-label={`Details for ${role.company}`}
               class="absolute -inset-x-3 -inset-y-2 rounded-xl hover:bg-raised xp:hidden no-js:hidden"
             ></button>
@@ -83,15 +83,18 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
             </div>
             <Icon name="chevronDown" class="pointer-events-none relative size-3.5 self-start text-fg-muted transition-transform duration-(--duration-flip) group-has-aria-expanded/role:rotate-180 xp:hidden no-js:hidden" />
           </div>
-          <div id={`${key}-details`} class="reveal mt-3 hidden pl-[42px] opened:block xp:block">
+          <div id={names.details} class="reveal mt-3 hidden pl-[42px] opened:block xp:block">
             <p class="text-[13px] text-fg-secondary">{role.context}</p>
             <ul class="mt-2 flex list-disc flex-col gap-1.5 pl-4 text-[13px] text-fg-secondary marker:text-faint">
               {role.highlights.map((highlight) => <li>{highlight}</li>)}
             </ul>
             {caseStudy && (
-              <a href={caseStudyPath(caseStudy)} class="mt-3 inline-flex items-center gap-1 py-1 text-[13px] text-fg underline decoration-line underline-offset-3 hover:decoration-fg-muted">
-                read the case study <span aria-hidden="true">→</span>
-              </a>
+              <p class="mt-3 text-[13px]">
+                <a href={caseStudyPath(caseStudy)} data-astro-prefetch class="inline-flex items-center gap-1 py-1 text-fg underline decoration-line underline-offset-3 hover:decoration-fg-muted print:no-underline">
+                  read the case study <span aria-hidden="true" class="print:hidden">→</span>
+                </a>
+                <span class="hidden text-fg-muted print:inline">at {site}{caseStudyPath(caseStudy)}</span>
+              </p>
             )}
           </div>
         </li>

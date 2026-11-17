@@ -117,8 +117,16 @@
   }
 }
 
+@view-transition {
+  navigation: auto;
+}
+
 .enter > * {
   animation: enter 600ms var(--ease-settle) both;
+}
+
+.arrived .enter > * {
+  animation: none;
 }
 
 .enter > :nth-child(1) {
@@ -218,11 +226,14 @@
     gap: 1.5rem;
   }
 
-  li {
+  li,
+  figure,
+  dl {
     break-inside: avoid;
   }
 
-  h2 {
+  h2,
+  h3 {
     break-after: avoid;
   }
 }

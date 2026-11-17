@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { enhanceDisclosures } from "../src/scripts/disclosure";
+import { enhanceDisclosures, openToTarget } from "../src/scripts/disclosure";
 
 function render() {
   const root = document.createElement("div");
@@ -73,5 +73,43 @@ describe("disclosures", () => {
     expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest", behavior: "auto" });
     expect(document.activeElement).toBe(role);
     expect(role.hasAttribute("data-highlight")).toBe(true);
+  });
+});
+
+describe("opening to a linked item", () => {
+  function renderNested() {
+    document.body.innerHTML = `
+      <button data-disclosure aria-controls="list" aria-expanded="false">See more</button>
+      <h2 id="heading">Experience</h2>
+      <ol id="list">
+        <li id="row" tabindex="-1">
+          <button data-disclosure aria-controls="details" aria-expanded="false"></button>
+          <div id="details"></div>
+        </li>
+      </ol>`;
+    Element.prototype.scrollIntoView = vi.fn();
+  }
+
+  it("opens the list holding the item and the item's own details, then scrolls to it", () => {
+    renderNested();
+    openToTarget(document, "row");
+    expect(document.getElementById("list")!.hasAttribute("data-open")).toBe(true);
+    expect(document.getElementById("details")!.hasAttribute("data-open")).toBe(true);
+    expect(document.activeElement?.id).toBe("row");
+    expect(document.getElementById("row")!.scrollIntoView).toHaveBeenCalled();
+  });
+
+  it("leaves ordinary anchors to the browser", () => {
+    renderNested();
+    openToTarget(document, "heading");
+    expect(document.getElementById("list")!.hasAttribute("data-open")).toBe(false);
+    expect(document.activeElement?.id).not.toBe("heading");
+  });
+
+  it("does nothing for a missing or empty target", () => {
+    renderNested();
+    openToTarget(document, "");
+    openToTarget(document, "nowhere");
+    expect(document.querySelectorAll("[data-open]")).toHaveLength(0);
   });
 });

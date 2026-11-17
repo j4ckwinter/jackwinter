@@ -4,6 +4,8 @@ export const kto: CaseStudy = {
   slug: "kto",
   company: "KTO Group",
   title: "Rebuilding KTO’s sportsbook frontend",
+  published: "2026-11-05",
+  updated: "2026-11-17",
   summary:
     "From a third-party hosted sportsbook to a custom React and TypeScript platform, with ownership of frontend architecture and core customer journeys.",
   overview: [
@@ -22,6 +24,7 @@ export const kto: CaseStudy = {
   sections: [
     {
       heading: "The work",
+      label: "The work",
       blocks: [
         { kind: "paragraph", text: "KTO operates a sportsbook and online casino in the Brazilian market. I led the frontend transformation from a third-party hosted product to a custom platform, within a business serving 1.4M active users and 5B bets placed." },
         { kind: "paragraph", text: "I owned the frontend architecture and core customer journeys. The performance work covered rendering, bundles, service loading and real-time data processing." },
@@ -29,6 +32,7 @@ export const kto: CaseStudy = {
     },
     {
       heading: "Getting the first view on screen",
+      label: "Loading",
       blocks: [
         { kind: "paragraph", text: "I changed the loading sequence to fetch and render the initial events, main markets and odds before setting up live updates and progressively subscribing the markets. This reduced the work that had to finish before the first view could appear." },
         {
@@ -46,6 +50,7 @@ export const kto: CaseStudy = {
     },
     {
       heading: "Avoiding repeated setup on return visits",
+      label: "Return visits",
       blocks: [
         { kind: "paragraph", text: "Returning to the sportsbook could repeat expensive Kambi client initialisation. Keeping the initialised client alive for reuse avoided that bootstrap work and made the tested return journey around 11 times faster. This result applies to leaving the sportsbook and coming back, rather than a first visit." },
         { kind: "paragraph", text: "Reuse retains state and memory, so session validity, the client’s container, subscriptions and listeners all matter to a usable return." },
@@ -53,6 +58,7 @@ export const kto: CaseStudy = {
     },
     {
       heading: "Making consumers pay for one icon",
+      label: "Bundle size",
       blocks: [
         { kind: "paragraph", text: "Importing one icon from our shared package’s root entry retained roughly 65 KB gzip. Inspecting the built output showed that generated icon components were flattened into the root module; marking the package side-effect-free had not achieved the expected isolation." },
         { kind: "paragraph", text: "I changed the package API to generate isolated per-icon entry points. A representative single-icon import then retained roughly 0.3–0.4 KB gzip. I added a bundle budget and structural tests to protect that behaviour. This was a separate package measurement, not the overall sportsbook’s transferred-data result." },
@@ -60,6 +66,7 @@ export const kto: CaseStudy = {
     },
     {
       heading: "Separating responsibilities",
+      label: "Architecture",
       blocks: [
         { kind: "paragraph", text: "I designed a modular sportsbook architecture across a pnpm/Turborepo monorepo spanning 27 packages and 22 modules, separating reusable UI, domain logic, data providers and third-party integrations." },
         { kind: "list", items: ["Reusable UI", "Domain logic", "Data providers", "Third-party integrations"] },
@@ -80,6 +87,7 @@ export const kto: CaseStudy = {
     },
     {
       heading: "How I measured the work",
+      label: "Measurement",
       blocks: [
         { kind: "paragraph", text: "I used Lighthouse, network profiling and browser performance marks around bootstrap stages, including route loading, session availability, hydration and client initialisation. Testing included slow-4G conditions." },
         { kind: "paragraph", text: "The paint, blocking-time and transferred-data figures are combined results across the wider loading work. They do not isolate any single optimisation. Return navigation and the icon-package comparison are separate measurements." },

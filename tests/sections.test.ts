@@ -147,7 +147,9 @@ describe("experience", () => {
 
   it("links a role to its case study when there is one", async () => {
     const page = await render(Experience, { roles: [{ ...role, company: "KTO Group" }], today: "2026-11-16" });
-    expect(page.querySelector('a[href="/work/kto"]')?.textContent).toContain("read the case study");
+    const link = page.querySelector('a[href="/work/kto"]');
+    expect(link?.textContent).toContain("read the case study");
+    expect(link?.hasAttribute("data-astro-prefetch")).toBe(true);
     const without = await render(Experience, { roles: [role], today: "2026-11-16" });
     expect(without.querySelector('a[href^="/work/"]')).toBeNull();
   });
@@ -228,14 +230,22 @@ describe("activity", () => {
 
 describe("case study", () => {
   it("shows the summary, every metric and every section", async () => {
-    const page = await render(CaseStudyBody, { study: kto, eyebrow: "KTO Group · Jun 2025 – now" });
+    const page = await render(CaseStudyBody, { study: kto }, { eyebrow: "<p>KTO Group</p>" });
+    expect(page.querySelector("header p")?.textContent).toBe("KTO Group");
     expect(page.querySelector("h1")?.textContent).toBe(kto.title);
     expect([...page.querySelectorAll("dd.text-xl")].map((value) => value.textContent)).toEqual(kto.metrics.map((metric) => metric.value));
     expect([...page.querySelectorAll("h2")].map((heading) => heading.textContent?.replace("#", "").trim())).toEqual(["Results", ...kto.sections.map((section) => section.heading)]);
   });
 
+  it("links to every section from the top of the page", async () => {
+    const page = await render(CaseStudyBody, { study: kto });
+    const links = [...page.querySelectorAll('nav a')];
+    expect(links.map((link) => link.textContent)).toEqual(["Results", ...kto.sections.map((section) => section.label)]);
+    for (const link of links) expect(page.getElementById(link.getAttribute("href")!.slice(1))?.tagName).toBe("H2");
+  });
+
   it("draws each flow as ordered steps", async () => {
-    const page = await render(CaseStudyBody, { study: kto, eyebrow: "" });
+    const page = await render(CaseStudyBody, { study: kto });
     const flows = [...page.querySelectorAll("figure")];
     expect(flows.map((flow) => flow.querySelector("figcaption")?.textContent)).toEqual(["Loading sequence", "From live data to the interface"]);
     expect([...flows[0].querySelectorAll("li strong")].map((step) => step.textContent)).toEqual(["Initial snapshot", "First view", "Live updates"]);

@@ -29,8 +29,12 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Which content makes up the page, for both the HTML and the markdown | `src/content/page.ts` |
 | The site's address | `astro.config.mjs` (`site`) |
 | What agents read: `/index.md` and `/llms.txt` | `src/agents/markdown.ts`, served by `src/pages/index.md.ts` and `src/pages/llms.txt.ts` |
-| What search engines read: structured data, `robots.txt`, `sitemap.xml` | `src/agents/structured-data.ts`, `src/pages/robots.txt.ts`, `src/pages/sitemap.xml.ts` |
-| The share card shown when the link is posted | `src/social/card.ts`, rendered by `src/pages/og.png.ts` |
+| What search engines read: structured data (Person, and Article for case studies), `robots.txt`, `sitemap.xml` with last-updated dates | `src/agents/structured-data.ts`, `src/agents/sitemap.ts`, `src/pages/robots.txt.ts`, `src/pages/sitemap.xml.ts` |
+| The share cards shown when a link is posted (the home card and one per case study) | `src/social/card.ts`, drawn by `src/social/render.ts`, served by `src/pages/og.png.ts` and `src/pages/og/[slug].png.ts` |
+| A case study's reading time | `src/content/case-studies/reading-time.ts` |
+| Role ids and view-transition names shared by Experience and the case study pages | `src/role-names.ts` |
+| Which links load early on hover | `data-astro-prefetch` on the link, with `prefetch` in `astro.config.mjs` |
+| Gliding between pages and skipping the entrance animation after one | `@view-transition` and `.arrived` in `src/styles/global.css`, set by the `pagereveal` script in `src/layouts/Page.astro` |
 | Page metadata: title, canonical, share tags, theme colour, font preload | `src/layouts/Page.astro` |
 | Fetching GitHub data once per build for the page and the card | `src/github/build-data.ts` |
 | Which commit counts as a project's latest (no merges; chore, docs and CI commits only as a fallback) | `src/github/client.ts` |
@@ -38,7 +42,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Copying the email from "say hello" | `src/scripts/copy-email.ts` |
 | Instant tooltips on contribution tiles | `src/scripts/tile-tooltips.ts` |
 | Where each project's version comes from (npm or GitHub releases) | `release` in `src/content/projects.ts`, fetched by `src/github/npm.ts` and `src/github/client.ts` |
-| Opening the experience list at a role from the timeline | `data-reveal` in `src/scripts/disclosure.ts` |
+| Opening the experience list at a role from the timeline, or from a link such as `/#role-…-row` | `data-reveal` and `openToTarget` in `src/scripts/disclosure.ts` |
 | Rebuilding the site every morning | `.github/workflows/rebuild.yml` |
 | Checking every outbound link each Monday | `.github/workflows/links.yml` |
 | Redirects from Winter Town's old paths | `vercel.json` |

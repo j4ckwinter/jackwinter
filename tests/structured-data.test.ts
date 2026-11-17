@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { personSchema } from "../src/agents/structured-data";
+import { caseStudySchema, personSchema } from "../src/agents/structured-data";
+import { kto } from "../src/content/case-studies/kto";
 import { page } from "../src/content/page";
 
 describe("personSchema", () => {
@@ -15,5 +16,17 @@ describe("personSchema", () => {
 
   it("points at the share card on this site", () => {
     expect(schema.image).toBe("https://example.com/og.png");
+  });
+});
+
+describe("caseStudySchema", () => {
+  const schema = caseStudySchema(kto, { name: "Jack" }, new URL("https://example.com"));
+
+  it("describes the case study as an article by Jack", () => {
+    expect(schema).toMatchObject({ "@type": "Article", headline: kto.title, author: { "@type": "Person", name: "Jack", url: "https://example.com/" } });
+  });
+
+  it("dates the article and points at its own page and share card", () => {
+    expect(schema).toMatchObject({ datePublished: "2026-11-05", dateModified: kto.updated, url: "https://example.com/work/kto", image: "https://example.com/og/kto.png" });
   });
 });

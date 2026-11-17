@@ -5,10 +5,11 @@ import { PAGE_MARKDOWN_PATH } from "../agents/markdown";
 import { CARD_HEIGHT, CARD_PATH, CARD_WIDTH } from "../social/card";
 import { themeBootScript } from "../scripts/theme";
 
-type Props = { title: string; description: string; name: string };
-const { title, description, name } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const card = new URL(CARD_PATH, Astro.site).href;
+type Props = { title: string; description: string; name: string; type?: "profile" | "article"; card?: { path: string; alt: string } };
+const { title, description, name, type = "profile" } = Astro.props;
+const shareCard = Astro.props.card ?? { path: CARD_PATH, alt: `${name}'s name and title above a year of GitHub contributions` };
+const canonical = new URL(Astro.url.pathname.replace(/(.)\/$/, "$1"), Astro.site).href;
+const card = new URL(shareCard.path, Astro.site).href;
 const SURFACE = { light: "#ffffff", dark: "#0a0a0a" };
 const onVercel = process.env.VERCEL === "1";
 ---
@@ -26,7 +27,7 @@ const onVercel = process.env.VERCEL === "1";
     <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="text/markdown" href={PAGE_MARKDOWN_PATH} />
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content={type} />
     <meta property="og:site_name" content={name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -34,11 +35,12 @@ const onVercel = process.env.VERCEL === "1";
     <meta property="og:image" content={card} />
     <meta property="og:image:width" content={String(CARD_WIDTH)} />
     <meta property="og:image:height" content={String(CARD_HEIGHT)} />
-    <meta property="og:image:alt" content={`${name}'s name and title above a year of GitHub contributions`} />
+    <meta property="og:image:alt" content={shareCard.alt} />
     <meta name="twitter:card" content="summary_large_image" />
     {onVercel && <script is:inline defer src="/_vercel/insights/script.js"></script>}
     <slot name="head" />
     <script is:inline>document.documentElement.classList.add("js");</script>
+    <script is:inline>addEventListener("pagereveal", (event) => event.viewTransition && document.documentElement.classList.add("arrived"));</script>
     <script is:inline set:html={themeBootScript} />
   </head>
   <body class="bg-surface font-sans text-fg antialiased">
@@ -46,12 +48,13 @@ const onVercel = process.env.VERCEL === "1";
       <slot />
     </main>
     <script>
-      import { enhanceDisclosures } from "../scripts/disclosure";
+      import { enhanceDisclosures, openToTarget } from "../scripts/disclosure";
       import { enhanceCopyEmail } from "../scripts/copy-email";
       import { enhanceRelativeTimes } from "../scripts/relative-time";
       import { enhanceThemeToggle, followSystemTheme } from "../scripts/theme";
 
       enhanceDisclosures(document, () => matchMedia("(prefers-reduced-motion: reduce)").matches);
+      openToTarget(document, decodeURIComponent(location.hash.slice(1)));
       enhanceCopyEmail(document, navigator.clipboard);
       enhanceRelativeTimes(document, () => new Date());
       const prefersDark = matchMedia("(prefers-color-scheme: dark)");

@@ -9,8 +9,10 @@ export type CaseStudy = {
   company: string;
   title: string;
   summary: string;
+  published: string;
+  updated: string;
   overview: { term: string; text: string }[];
   qualification: string;
   metrics: { value: string; label: string }[];
-  sections: { heading: string; blocks: Block[] }[];
+  sections: { heading: string; label: string; blocks: Block[] }[];
 };

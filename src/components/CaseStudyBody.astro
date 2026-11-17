@@ -2,13 +2,15 @@
 import Section from "./Section.astro";
 import CaseFlow from "./CaseFlow.astro";
 import type { CaseStudy } from "../content/case-studies/types";
+import { toSlug } from "../slug";
 
-type Props = { study: CaseStudy; eyebrow: string };
-const { study, eyebrow } = Astro.props;
+type Props = { study: CaseStudy };
+const { study } = Astro.props;
+const contents = [{ label: "Results", heading: "Results" }, ...study.sections].map((section) => ({ label: section.label, href: `#${toSlug(section.heading)}` }));
 ---
 
 <header class="flex flex-col gap-3">
-  <p class="text-[13px] text-fg-muted">{eyebrow}</p>
+  <slot name="eyebrow" />
   <h1 class="text-xl font-medium">{study.title}</h1>
   <p class="leading-relaxed text-fg-secondary">{study.summary}</p>
   <dl class="mt-2 grid grid-cols-[clamp(5.5rem,18vw,7rem)_minmax(0,1fr)] gap-x-4 gap-y-2 text-sm">
@@ -20,6 +22,15 @@ const { study, eyebrow } = Astro.props;
     ))}
   </dl>
 </header>
+
+<nav aria-labelledby="contents" class="flex flex-col gap-2 print:hidden">
+  <p id="contents" class="text-[13px] text-fg-muted">On this page</p>
+  <ul class="flex flex-wrap gap-2">
+    {contents.map((item) => (
+      <li><a href={item.href} class="inline-flex rounded-full border border-line px-3 py-1 text-[13px] text-fg-secondary transition-colors hover:bg-hover hover:text-fg">{item.label}</a></li>
+    ))}
+  </ul>
+</nav>
 
 <Section title="Results">
   <p class="-mt-2 text-[13px] text-fg-muted">{study.qualification}</p>
