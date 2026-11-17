@@ -37,6 +37,23 @@ describe("copy", () => {
     expect(root.querySelector("#far")!.hasAttribute("data-shown")).toBe(false);
   });
 
+  it("hides each confirmation on its own clock", async () => {
+    vi.useFakeTimers();
+    const root = document.createElement("div");
+    document.body.replaceChildren(root);
+    root.innerHTML = `
+      <p><a id="email" data-copy="me@example.com"></a><span id="first" data-copy-status></span></p>
+      <p><a id="section" data-copy="https://example.com/#projects" data-copy-message="link copied"></a><span id="second" data-copy-status></span></p>`;
+    enhanceCopy(root, { writeText: () => Promise.resolve() });
+    root.querySelector<HTMLElement>("#email")!.click();
+    await vi.advanceTimersByTimeAsync(1500);
+    root.querySelector<HTMLElement>("#section")!.click();
+    await vi.advanceTimersByTimeAsync(600);
+    expect(root.querySelector("#first")!.hasAttribute("data-shown")).toBe(false);
+    expect(root.querySelector("#second")!.textContent).toBe("link copied");
+    expect(root.querySelector("#second")!.hasAttribute("data-shown")).toBe(true);
+  });
+
   it("leaves the mail link to work alone when there is no clipboard", () => {
     const { root, link, status } = render();
     enhanceCopy(root, undefined);

@@ -12,7 +12,7 @@ function nearestStatus(link: Element): HTMLElement | null {
 
 export function enhanceCopy(root: ParentNode & EventTarget, clipboard: Clipboard | undefined): void {
   if (!clipboard) return;
-  let hide: ReturnType<typeof setTimeout> | undefined;
+  const hideTimers = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>();
   root.addEventListener("click", (event) => {
     const link = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-copy]") : null;
     if (!link) return;
@@ -21,8 +21,8 @@ export function enhanceCopy(root: ParentNode & EventTarget, clipboard: Clipboard
       if (!status) return;
       status.textContent = link.dataset.copyMessage ?? "copied";
       status.dataset.shown = "";
-      clearTimeout(hide);
-      hide = setTimeout(() => delete status.dataset.shown, CONFIRMATION_MS);
+      clearTimeout(hideTimers.get(status));
+      hideTimers.set(status, setTimeout(() => delete status.dataset.shown, CONFIRMATION_MS));
     });
   });
 }

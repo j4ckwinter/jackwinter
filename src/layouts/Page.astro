@@ -4,11 +4,12 @@ import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal
 import { PAGE_MARKDOWN_PATH } from "../agents/markdown";
 import { CARD_HEIGHT, CARD_PATH, CARD_WIDTH } from "../social/card";
 import { themeBootScript } from "../scripts/theme";
+import { canonicalUrl } from "../format";
 
 type Props = { title: string; description: string; name: string; type?: "profile" | "article"; card?: { path: string; alt: string } };
 const { title, description, name, type = "profile" } = Astro.props;
 const shareCard = Astro.props.card ?? { path: CARD_PATH, alt: `${name}'s name and title above a year of GitHub contributions` };
-const canonical = new URL(Astro.url.pathname.replace(/(.)\/$/, "$1"), Astro.site).href;
+const canonical = canonicalUrl(Astro.url.pathname, Astro.site!).href;
 const card = new URL(shareCard.path, Astro.site).href;
 const SURFACE = { light: "#ffffff", dark: "#0a0a0a" };
 const onVercel = process.env.VERCEL === "1";

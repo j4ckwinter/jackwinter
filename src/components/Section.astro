@@ -1,18 +1,23 @@
 ---
 import { toSlug } from "../slug";
+import { canonicalUrl } from "../format";
 
 type Props = { title: string; class?: string };
 const { title, class: className } = Astro.props;
 const id = toSlug(title);
+const link = Astro.site && `${canonicalUrl(Astro.url.pathname, Astro.site).href}#${id}`;
 ---
 
 <section aria-labelledby={id} class:list={["flex flex-col gap-5", className]} style={`view-transition-name: section-${id}`}>
   <div class="flex items-center justify-between">
-    <h2 id={id} class="scroll-mt-8">
-      <a href={`#${id}`} class="group/anchor inline-flex items-baseline gap-1.5">
-        {title}<span aria-hidden="true" class="text-fg-muted opacity-0 transition-opacity group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100">#</span>
-      </a>
-    </h2>
+    <div class="flex items-baseline gap-2">
+      <h2 id={id} class="scroll-mt-8">
+        <a href={`#${id}`} data-copy={link} data-copy-message="link copied" class="group/anchor inline-flex items-baseline gap-1.5">
+          {title}<span aria-hidden="true" class="text-fg-muted opacity-0 transition-opacity group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100">#</span>
+        </a>
+      </h2>
+      <span data-copy-status aria-live="polite" class="text-[12px] text-fg-muted opacity-0 transition-opacity duration-300 data-shown:opacity-100"></span>
+    </div>
     <slot name="action" />
   </div>
   <slot />

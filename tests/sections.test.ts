@@ -132,6 +132,14 @@ describe("projects", () => {
 });
 
 describe("section headings", () => {
+  it("copy their full link when clicked, and say so beside the heading", async () => {
+    const page = await render(Education, { qualifications: [] });
+    const anchor = page.querySelector("h2 a");
+    expect(anchor?.getAttribute("data-copy")).toBe("https://example.com/#education");
+    expect(anchor?.getAttribute("data-copy-message")).toBe("link copied");
+    expect(page.querySelector("h2")?.parentElement?.querySelector("[data-copy-status]")).not.toBeNull();
+  });
+
   it("link to themselves so a section can be shared", async () => {
     const page = await render(Education, { qualifications: [] });
     expect(page.querySelector("h2")?.id).toBe("education");

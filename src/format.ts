@@ -48,3 +48,5 @@ export function formatFileSize(bytes: number): string {
   const kilobytes = bytes / 1000;
   return kilobytes < 1000 ? `${Math.max(1, Math.round(kilobytes))} KB` : `${(kilobytes / 1000).toFixed(1)} MB`;
 }
+
+export const canonicalUrl = (pathname: string, site: URL) => new URL(pathname.replace(/(.)\/$/, "$1"), site);
