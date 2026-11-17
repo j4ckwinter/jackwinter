@@ -1,4 +1,6 @@
 ---
+import { statSync } from "node:fs";
+import { join } from "node:path";
 import Page from "../layouts/Page.astro";
 import Header from "../components/Header.astro";
 import Bio from "../components/Bio.astro";
@@ -10,6 +12,7 @@ import Education from "../components/Education.astro";
 import Footer from "../components/Footer.astro";
 import { lastSourceChange } from "../site-updated";
 import { helloHref } from "../contact";
+import { formatFileSize } from "../format";
 import { page } from "../content/page";
 import { githubDataForBuild } from "../github/build-data";
 import { personSchema } from "../agents/structured-data";
@@ -26,7 +29,7 @@ const structuredData = JSON.stringify(personSchema(page, Astro.site!));
 <Page title={`${profile.name} · ${profile.title}`} description={profile.description} name={profile.name}>
   <script slot="head" type="application/ld+json" is:inline set:html={structuredData} />
   <Header name={profile.name} title={profile.title} links={profile.links} />
-  <Bio paragraphs={profile.bio(wholeYearsAcross(experience, today))} email={profile.email} hello={helloHref(profile.email, Astro.site!)} cv={profile.cv} />
+  <Bio paragraphs={profile.bio(wholeYearsAcross(experience, today))} email={profile.email} hello={helloHref(profile.email, Astro.site!)} cv={{ href: profile.cv, size: formatFileSize(statSync(join(process.cwd(), "public", profile.cv)).size) }} />
   <Experience roles={experience} today={today} />
   <Projects projects={projects} stars={github.stars} versions={github.versions} />
   <Activity contributions={github.activity} commits={github.commits} projects={projects} profileUrl={profile.githubUrl} today={today} />

@@ -1,7 +1,7 @@
 ---
 import type { Inline } from "../content/profile";
 
-type Props = { paragraphs: Inline[][]; email: string; hello: string; cv: string };
+type Props = { paragraphs: Inline[][]; email: string; hello: string; cv: { href: string; size: string } };
 const { paragraphs, email, hello, cv } = Astro.props;
 ---
 
@@ -29,10 +29,10 @@ const { paragraphs, email, hello, cv } = Astro.props;
     </a>
     <a
       class="inline-flex h-8 items-center rounded-lg border border-line px-3 text-sm font-medium transition-transform hover:bg-hover active:scale-[0.97]"
-      href={cv}
+      href={cv.href}
       download
     >
-      download cv
+      download cv<span class="ml-1.5 font-normal text-fg-muted">pdf · {cv.size}</span>
     </a>
     <span data-copy-status aria-live="polite" class="text-[13px] text-fg-muted opacity-0 transition-opacity duration-300 data-shown:opacity-100"></span>
   </p>

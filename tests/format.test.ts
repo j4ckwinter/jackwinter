@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { describeContributionDay, formatShortDate, formatDateRange } from "../src/format";
+import { describeContributionDay, formatShortDate, formatDateRange, formatFileSize } from "../src/format";
 import { day } from "./fixtures";
 
 describe("describeContributionDay", () => {
@@ -33,5 +33,13 @@ describe("formatDateRange", () => {
 
   it("shows both ends of a closed range", () => {
     expect(formatDateRange({ start: "Jun 2023", end: "Jun 2025" })).toBe("Jun 2023 – Jun 2025");
+  });
+});
+
+describe("formatFileSize", () => {
+  it("writes small files in whole kilobytes and large ones in megabytes", () => {
+    expect(formatFileSize(90_978)).toBe("91 KB");
+    expect(formatFileSize(120)).toBe("1 KB");
+    expect(formatFileSize(2_450_000)).toBe("2.5 MB");
   });
 });

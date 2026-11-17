@@ -43,3 +43,8 @@ export function formatDateRange({ start, end }: { start: string; end?: string })
 }
 
 export const displayHost = (site: URL) => site.host.replace(/^www\./, "");
+
+export function formatFileSize(bytes: number): string {
+  const kilobytes = bytes / 1000;
+  return kilobytes < 1000 ? `${Math.max(1, Math.round(kilobytes))} KB` : `${(kilobytes / 1000).toFixed(1)} MB`;
+}
