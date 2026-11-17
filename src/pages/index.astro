@@ -15,6 +15,7 @@ import { helloHref } from "../contact";
 import { formatFileSize } from "../format";
 import { qrSvg } from "../print/qr";
 import { page } from "../content/page";
+import { sourceRepo } from "../content/profile";
 import { githubDataForBuild } from "../github/build-data";
 import { personSchema } from "../agents/structured-data";
 import { wholeYearsAcross } from "../tenure";
@@ -23,7 +24,8 @@ const { profile, experience, education, skills, projects } = page;
 
 const github = await githubDataForBuild();
 const today = new Date().toISOString().slice(0, 10);
-const updated = lastSourceChange() ?? today;
+const lastChange = lastSourceChange();
+const updated = lastChange?.date ?? today;
 const structuredData = JSON.stringify(personSchema(page, Astro.site!));
 ---
 
@@ -36,5 +38,5 @@ const structuredData = JSON.stringify(personSchema(page, Astro.site!));
   <Activity contributions={github.activity} commits={github.commits} projects={projects} profileUrl={profile.githubUrl} today={today} />
   <Skills groups={skills} />
   <Education qualifications={education} />
-  <Footer updated={updated} today={today} />
+  <Footer updated={updated} today={today} change={lastChange && `${sourceRepo}/commit/${lastChange.commit}`} />
 </Page>

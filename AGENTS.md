@@ -49,7 +49,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | How long each role lasted and the bio's years of experience | `src/tenure.ts`, written by `formatTenure` in `src/format.ts` |
 | The streak and busiest day under the grid | `contributionHighlights` in `src/github/activity.ts` |
 | Commit dates as "2 days ago" | `src/scripts/relative-time.ts` |
-| The "updated" date in the footer and the home page's sitemap date: the last commit touching `src` or `public` | `src/site-updated.ts` |
+| The "updated" date in the footer, its link to that commit, and the home page's sitemap date: the last commit touching `src` or `public` | `src/site-updated.ts`, with the repository in `sourceRepo` in `src/content/profile.ts` |
 | How the site's address is written for people (no `www.`) | `displayHost` in `src/format.ts` |
 | Light and dark: the saved choice, the toggle and its circular reveal | `src/scripts/theme.ts`, colours in `src/styles/global.css` |
 | Vercel Web Analytics, loaded only on Vercel builds | `src/layouts/Page.astro` |

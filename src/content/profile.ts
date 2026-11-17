@@ -7,6 +7,7 @@ export type Link = { label: string; href: string; icon: IconName };
 const email = "jackwinter.10@outlook.com";
 const githubLogin = "j4ckwinter";
 const cv = "/Jack-Winter-CV.pdf";
+export const sourceRepo = `https://github.com/${githubLogin}/jackwinter`;
 
 export const profile = {
   name: "Jack Winter",

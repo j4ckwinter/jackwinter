@@ -5,10 +5,12 @@ export const SITE_SOURCES = ["src", "public"];
 type Git = (args: string[]) => string;
 const git: Git = (args) => execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
 
-export function lastSourceChange(run: Git = git): string | undefined {
+export type SourceChange = { date: string; commit: string };
+
+export function lastSourceChange(run: Git = git): SourceChange | undefined {
   try {
-    const date = run(["log", "-1", "--format=%cs", "--", ...SITE_SOURCES]).trim();
-    return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined;
+    const [date, commit] = run(["log", "-1", "--format=%cs %H", "--", ...SITE_SOURCES]).trim().split(" ");
+    return /^\d{4}-\d{2}-\d{2}$/.test(date ?? "") && /^[0-9a-f]{40}$/.test(commit ?? "") ? { date, commit } : undefined;
   } catch {
     return undefined;
   }

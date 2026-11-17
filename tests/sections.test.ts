@@ -84,6 +84,13 @@ describe("footer", () => {
     expect(page.querySelector("time")?.textContent).toBe("12 Nov");
     expect(page.querySelector("time")?.getAttribute("datetime")).toBe("2026-11-12");
   });
+
+  it("links the date to the change behind it when it is known", async () => {
+    const linked = await render(Footer, { updated: "2026-11-12", today: "2026-11-17", change: "https://github.com/me/site/commit/abc" });
+    expect(linked.querySelector("time")?.closest("a")?.getAttribute("href")).toBe("https://github.com/me/site/commit/abc");
+    const plain = await render(Footer, { updated: "2026-11-12", today: "2026-11-17" });
+    expect(plain.querySelector("time")?.closest("a")).toBeNull();
+  });
 });
 
 describe("projects", () => {
