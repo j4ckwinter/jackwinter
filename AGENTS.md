@@ -61,7 +61,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | What happens when GitHub data is missing or fails | `src/github/load.ts` |
 | How counts, dates and contribution tooltips are written | `src/format.ts` |
 | How "See more" and per-role toggles open, close and animate | `src/scripts/disclosure.ts`, `src/components/SeeMore.astro` |
-| Colour palette for light and dark, motion timing, reveal fades, the view-transition easing and the no-JS variants | `src/styles/global.css` |
+| Colour palette for light, dark and high contrast (`prefers-contrast: more`), motion timing, reveal fades, the view-transition easing and the no-JS variants | `src/styles/global.css` |
 | Page shell, column width and font | `src/layouts/Page.astro`, `src/styles/global.css` |
 | How text becomes ids and view-transition names | `src/slug.ts` |
 | The 570px breakpoint where Experience switches to a timeline | `src/styles/global.css` (`--breakpoint-xp`) |
