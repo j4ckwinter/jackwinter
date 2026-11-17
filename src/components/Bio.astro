@@ -32,7 +32,7 @@ const { paragraphs, email, hello, cv } = Astro.props;
       href={cv.href}
       download
     >
-      download cv<span class="ml-1.5 font-normal text-fg-muted">pdf · {cv.size}</span>
+      download cv<span class="ml-2.5 border-l border-line pl-2.5 translate-y-px text-[12px] font-normal text-fg-muted tabular-nums">PDF · {cv.size}</span>
     </a>
     <span data-copy-status aria-live="polite" class="text-[13px] text-fg-muted opacity-0 transition-opacity duration-300 data-shown:opacity-100"></span>
   </p>

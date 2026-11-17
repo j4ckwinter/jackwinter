@@ -63,7 +63,7 @@ describe("bio", () => {
     const page = await render(Bio, { paragraphs: [], email: "me@example.com", hello: "mailto:me@example.com", cv: { href: "/cv.pdf", size: "91 KB" } });
     const cv = page.querySelector('a[href="/cv.pdf"]');
     expect(cv?.hasAttribute("download")).toBe(true);
-    expect(cv?.textContent?.trim()).toBe("download cvpdf · 91 KB");
+    expect(cv?.textContent?.trim()).toBe("download cvPDF · 91 KB");
   });
 });
 
