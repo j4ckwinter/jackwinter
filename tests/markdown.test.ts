@@ -27,8 +27,8 @@ const content: PageContent = {
 describe("pageMarkdown", () => {
   const markdown = pageMarkdown(content, site, "2026-11-16");
 
-  it("carries every section of the page", () => {
-    for (const heading of ["# Jack", "## Experience", "## Education", "## Skills", "## Projects"]) expect(markdown).toContain(`${heading}\n`);
+  it("carries every section in the order the page shows them", () => {
+    expect(markdown.match(/^#{1,2} .+$/gm)).toEqual(["# Jack", "## Experience", "## Projects", "## Skills", "## Education"]);
   });
 
   it("links a role to its case study", () => {

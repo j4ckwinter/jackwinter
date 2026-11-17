@@ -42,12 +42,12 @@ export function pageMarkdown({ profile, experience, education, skills, projects 
     list(profile.links.map((link) => `[${link.label}](${absolute(link.href, site)})`)),
     "## Experience",
     ...experience.map((role) => roleMarkdown(role, today, site)),
-    "## Education",
-    list(education.map((item) => `**${item.qualification}**, ${item.institution}, ${formatDateRange(item)}`)),
-    "## Skills",
-    list(skills.map((group) => `**${group.name}:** ${group.tools.map((tool) => tool.name).join(", ")}`)),
     "## Projects",
     list(projects.map((project) => `[${project.name}](${project.href}): ${project.description}`)),
+    "## Skills",
+    list(skills.map((group) => `**${group.name}:** ${group.tools.map((tool) => tool.name).join(", ")}`)),
+    "## Education",
+    list(education.map((item) => `**${item.qualification}**, ${item.institution}, ${formatDateRange(item)}`)),
   ])}\n`;
 }
 
@@ -58,7 +58,7 @@ export function llmsText({ profile }: Pick<PageContent, "profile">, site: URL): 
     "The home page is also available as markdown, generated from the data that builds the HTML.",
     "## Pages",
     list([
-      `[${profile.name}, as markdown](${absolute(PAGE_MARKDOWN_PATH, site)}): bio, experience, education, skills and projects`,
+      `[${profile.name}, as markdown](${absolute(PAGE_MARKDOWN_PATH, site)}): bio, experience, projects, skills and education`,
       `[${profile.name}](${absolute("/", site)}): the HTML page`,
       ...caseStudies.map((study) => `[${study.title}](${absolute(caseStudyPath(study), site)}): case study`),
     ]),
