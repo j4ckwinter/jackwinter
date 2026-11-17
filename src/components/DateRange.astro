@@ -1,0 +1,9 @@
+---
+import { ONGOING, RANGE_SEPARATOR } from "../format";
+import { machineDate } from "../tenure";
+
+type Props = { start: string; end?: string };
+const { start, end } = Astro.props;
+---
+
+<time datetime={machineDate(start)}>{start}</time>{RANGE_SEPARATOR}{end ? <time datetime={machineDate(end)}>{end}</time> : ONGOING}

@@ -156,6 +156,7 @@ describe("education", () => {
     expect(page.body.textContent).toContain("BSc Computer Science");
     expect(page.body.textContent).toContain("Uni");
     expect(page.body.textContent).toContain("2013 – 2017");
+    expect([...page.querySelectorAll("time")].map((time) => time.getAttribute("datetime"))).toEqual(["2013", "2017"]);
   });
 });
 
@@ -188,6 +189,12 @@ describe("experience", () => {
     const page = await render(Experience, { roles: [role], today: "2026-11-16" });
     expect(page.body.textContent).toContain("Jan 2024 – now");
     expect(page.body.textContent).toContain("2 yrs 11 mos");
+  });
+
+  it("marks role dates so machines can read them", async () => {
+    const page = await render(Experience, { roles: [{ ...role, start: "Jun 2023", end: "Jun 2025" }], today: "2026-11-16" });
+    const times = [...page.querySelectorAll("time")].map((time) => [time.getAttribute("datetime"), time.textContent]);
+    expect(new Set(times.map(String))).toEqual(new Set([String(["2023-06", "Jun 2023"]), String(["2025-06", "Jun 2025"])]));
   });
 
   it("links a role to its case study when there is one", async () => {

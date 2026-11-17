@@ -14,6 +14,12 @@ function monthOf(isoDate: string): number {
   return year * 12 + month - 1;
 }
 
+export function machineDate(label: string): string {
+  if (/^\d{4}$/.test(label)) return label;
+  const month = monthNumber(label);
+  return `${Math.floor(month / 12)}-${String((month % 12) + 1).padStart(2, "0")}`;
+}
+
 export function monthsSpanned({ start, end }: Span, today: string): number {
   return (end ? monthNumber(end) : monthOf(today)) - monthNumber(start) + 1;
 }

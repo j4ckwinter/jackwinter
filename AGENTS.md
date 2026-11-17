@@ -46,7 +46,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Rebuilding the site every morning | `.github/workflows/rebuild.yml` |
 | Checking every outbound link each Monday | `.github/workflows/links.yml` |
 | Redirects from Winter Town's old paths | `vercel.json` |
-| How long each role lasted and the bio's years of experience | `src/tenure.ts`, written by `formatTenure` in `src/format.ts` |
+| How long each role lasted, the bio's years of experience, and reading date labels like "Jun 2025" or "2013" (`machineDate` for `<time>`) | `src/tenure.ts`, written by `formatTenure` and `formatDateRange` in `src/format.ts`, marked up by `src/components/DateRange.astro` |
 | The streak and busiest day under the grid | `contributionHighlights` in `src/github/activity.ts` |
 | Commit dates as "2 days ago" | `src/scripts/relative-time.ts` |
 | The "updated" date in the footer, its link to that commit, and the home page's sitemap date: the last commit touching `src` or `public` | `src/site-updated.ts`, with the repository in `sourceRepo` in `src/content/profile.ts` |

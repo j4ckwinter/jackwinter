@@ -2,11 +2,12 @@
 import Page from "../../layouts/Page.astro";
 import CaseStudyBody from "../../components/CaseStudyBody.astro";
 import IconTile from "../../components/IconTile.astro";
+import DateRange from "../../components/DateRange.astro";
 import { caseStudies, caseStudyPath } from "../../content/case-studies";
 import { readingMinutes } from "../../content/case-studies/reading-time";
 import type { CaseStudy } from "../../content/case-studies/types";
 import { page } from "../../content/page";
-import { displayHost, formatDateRange } from "../../format";
+import { displayHost } from "../../format";
 import { roleNames } from "../../role-names";
 import { helloHref } from "../../contact";
 import { caseStudySchema } from "../../agents/structured-data";
@@ -42,7 +43,7 @@ const link = "underline decoration-line underline-offset-3 hover:decoration-fg-m
     <p slot="eyebrow" class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] text-fg-muted">
       {role && names && <IconTile icon={role.icon} transitionName={names.mark} class="mr-1 print:hidden" />}
       <span class="text-fg" style={names && `view-transition-name: ${names.company}`}>{study.company}</span>
-      {role && names && <><span aria-hidden="true">·</span><span style={`view-transition-name: ${names.dates}`}>{formatDateRange(role)}</span></>}
+      {role && names && <><span aria-hidden="true">·</span><span style={`view-transition-name: ${names.dates}`}><DateRange start={role.start} end={role.end} /></span></>}
       <span aria-hidden="true">·</span>
       <span>{readingMinutes(study)} min read</span>
       <span class="hidden w-full print:block">{profile.name} · {address}</span>

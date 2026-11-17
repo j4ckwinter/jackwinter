@@ -3,8 +3,9 @@ import Section from "./Section.astro";
 import SeeMore from "./SeeMore.astro";
 import IconTile from "./IconTile.astro";
 import Icon from "./Icon.astro";
+import DateRange from "./DateRange.astro";
 import type { Role } from "../content/experience";
-import { displayHost, formatDateRange, formatTenure } from "../format";
+import { displayHost, formatTenure } from "../format";
 import { monthsSpanned } from "../tenure";
 import { roleNames } from "../role-names";
 import { disclosureButton } from "../scripts/disclosure";
@@ -20,7 +21,6 @@ const entries = roles.map((role) => {
     role,
     names,
     current: role.end === undefined,
-    dates: formatDateRange(role),
     tenure: formatTenure(monthsSpanned(role, today)),
     caseStudy: caseStudyFor(role.company),
   };
@@ -34,7 +34,7 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
     <div class="relative hidden pb-2 xp:block xp:in-opened:hidden xp:no-js:hidden">
       <span aria-hidden="true" class="absolute top-1 right-2 left-3 h-px bg-line"></span>
       <ol class="grid gap-2" style={columns}>
-        {entries.map(({ role, current, dates, names }) => (
+        {entries.map(({ role, current, names }) => (
           <li class="group/stop relative min-w-0 pt-6 pr-2">
             <button
               type="button"
@@ -52,13 +52,13 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
               <IconTile icon={role.icon} transitionName={names.mark} />
               <span class="line-clamp-2 text-sm leading-snug underline-offset-3 decoration-line group-hover/stop:underline" style={`view-transition-name: ${names.company}`}>{role.company}</span>
             </div>
-            <p class="mt-2 w-fit text-[13px] text-fg-muted" style={`view-transition-name: ${names.dates}`}>{dates}</p>
+            <p class="mt-2 w-fit text-[13px] text-fg-muted" style={`view-transition-name: ${names.dates}`}><DateRange start={role.start} end={role.end} /></p>
           </li>
         ))}
       </ol>
     </div>
     <ol class="flex flex-col gap-5.5 xp:hidden xp:in-opened:flex xp:no-js:flex">
-      {entries.map(({ role, dates, tenure, caseStudy, names }) => (
+      {entries.map(({ role, tenure, caseStudy, names }) => (
         <li id={names.row} tabindex="-1" class="-mx-3 min-w-0 scroll-mt-8 rounded-xl px-3 outline-none transition-colors duration-700 data-highlight:bg-raised data-highlight:duration-150" style={`view-transition-name: ${names.row}`}>
           <div class="group/role relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2.5">
             <button
@@ -72,12 +72,12 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
               <p class="w-fit text-sm" style={`view-transition-name: ${names.company}`}>{role.company}</p>
               <p class="text-[13px] text-fg-secondary">{role.title}</p>
               <p class="mt-0.5 text-[12px] text-fg-muted tabular-nums xp:hidden">
-                <span style={`view-transition-name: ${names.dates}`}>{dates}</span> · {tenure}
+                <span style={`view-transition-name: ${names.dates}`}><DateRange start={role.start} end={role.end} /></span> · {tenure}
               </p>
             </div>
             <div class="pointer-events-none relative hidden flex-col items-end self-start text-[13px] whitespace-nowrap text-fg-muted xp:flex">
               <p>
-                <span style={`view-transition-name: ${names.dates}`}>{dates}</span> · {role.location}
+                <span style={`view-transition-name: ${names.dates}`}><DateRange start={role.start} end={role.end} /></span> · {role.location}
               </p>
               <p class="text-[12px] tabular-nums">{tenure}</p>
             </div>

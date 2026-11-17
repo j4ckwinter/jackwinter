@@ -2,7 +2,7 @@
 import Section from "./Section.astro";
 import IconTile from "./IconTile.astro";
 import type { Qualification } from "../content/education";
-import { formatDateRange } from "../format";
+import DateRange from "./DateRange.astro";
 
 type Props = { qualifications: Qualification[] };
 const { qualifications } = Astro.props;
@@ -17,7 +17,7 @@ const { qualifications } = Astro.props;
           <p class="text-sm">{item.qualification}</p>
           <p class="text-[13px] text-fg-secondary">{item.institution}</p>
         </div>
-        <p class="self-start text-[13px] whitespace-nowrap text-fg-muted">{formatDateRange(item)}</p>
+        <p class="self-start text-[13px] whitespace-nowrap text-fg-muted"><DateRange start={item.start} end={item.end} /></p>
       </li>
     ))}
   </ul>

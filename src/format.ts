@@ -38,8 +38,11 @@ export function formatTenure(months: number): string {
   return parts.filter(Boolean).join(" ");
 }
 
+export const RANGE_SEPARATOR = " – ";
+export const ONGOING = "now";
+
 export function formatDateRange({ start, end }: { start: string; end?: string }): string {
-  return `${start} – ${end ?? "now"}`;
+  return `${start}${RANGE_SEPARATOR}${end ?? ONGOING}`;
 }
 
 export const displayHost = (site: URL) => site.host.replace(/^www\./, "");

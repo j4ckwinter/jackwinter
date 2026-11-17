@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { monthsSpanned, wholeYearsAcross } from "../src/tenure";
+import { machineDate, monthsSpanned, wholeYearsAcross } from "../src/tenure";
 import { formatTenure } from "../src/format";
 
 describe("monthsSpanned", () => {
@@ -26,5 +26,15 @@ describe("wholeYearsAcross", () => {
 describe("formatTenure", () => {
   it("writes years and months the short way", () => {
     expect([1, 11, 12, 18, 25, 24].map(formatTenure)).toEqual(["1 mo", "11 mos", "1 yr", "1 yr 6 mos", "2 yrs 1 mo", "2 yrs"]);
+  });
+});
+
+describe("machineDate", () => {
+  it("writes a month label or a year the way a time element expects", () => {
+    expect(["Jan 2024", "Dec 2019", "2013"].map(machineDate)).toEqual(["2024-01", "2019-12", "2013"]);
+  });
+
+  it("refuses a label it can't read", () => {
+    expect(() => machineDate("June 2025")).toThrow('expected a month like "Jun 2025"');
   });
 });
