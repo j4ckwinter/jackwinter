@@ -20,11 +20,10 @@ export const experience: Role[] = [
     start: "Jun 2025",
     context: "Sportsbook and online casino operator serving the Brazilian market.",
     highlights: [
-      "Led the move from a third-party hosted sportsbook to a custom React and TypeScript platform, owning architecture and core customer journeys for 1.4M active users.",
+      "Led the move from a third-party sportsbook to a custom React and TypeScript platform for 1.4M active users, architected as a 27-package Turborepo monorepo.",
       "Delivered 40% faster FCP, 25% faster LCP and 11× faster return navigation in performance testing.",
-      "Built sportsbook content features with Next.js, Payload CMS and PostgreSQL, owning navigation data models, API behaviour and tested localisation migrations.",
-      "Designed a modular pnpm and Turborepo monorepo spanning 27 packages and 22 modules.",
-      "Built a real-time sports data pipeline with Web Workers, Socket.IO and Zustand, moving odds processing off the main thread.",
+      "Moved real-time odds processing off the main thread with Web Workers, Socket.IO and Zustand.",
+      "Built sportsbook content features with Next.js, Payload CMS and PostgreSQL, owning the data models, APIs and localisation migrations.",
     ],
   },
   {
