@@ -91,6 +91,12 @@ describe("footer", () => {
     const plain = await render(Footer, { updated: "2026-11-12", today: "2026-11-17" });
     expect(plain.querySelector("time")?.closest("a")).toBeNull();
   });
+
+  it("keeps the comma on the same line as the markdown link", async () => {
+    const page = await render(Footer, { updated: "2026-11-12", today: "2026-11-17" });
+    const markdown = [...page.querySelectorAll("a")].find((a) => a.textContent === "plain markdown");
+    expect(markdown?.closest(".whitespace-nowrap")?.textContent).toBe("plain markdown,");
+  });
 });
 
 describe("projects", () => {
