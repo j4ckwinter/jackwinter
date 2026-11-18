@@ -185,6 +185,13 @@ describe("experience", () => {
     expect(details?.textContent).toContain("Shipped it.");
   });
 
+  it("runs a line from each role's logo down beside its details", async () => {
+    const page = await render(Experience, { roles: [role], today: "2026-11-16" });
+    const button = page.querySelector('button[aria-label="Details for Acme Inc"]');
+    const details = page.getElementById(button?.getAttribute("aria-controls") ?? "");
+    expect(details?.querySelector('[data-thread][aria-hidden="true"]')).not.toBeNull();
+  });
+
   it("keeps roles at the same company apart", async () => {
     const page = await render(Experience, { roles: [role, { ...role, start: "Jan 2022", end: "Jan 2024", highlights: ["Joined."] }], today: "2026-11-16" });
     const targets = [...page.querySelectorAll('button[aria-label="Details for Acme Inc"]')].map((button) => button.getAttribute("aria-controls"));

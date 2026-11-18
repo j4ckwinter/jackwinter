@@ -83,7 +83,8 @@ const columns = `grid-template-columns: repeat(${roles.length}, minmax(0, 1fr))`
             </div>
             <Icon name="chevronDown" class="pointer-events-none relative size-3.5 self-start text-fg-muted transition-transform duration-(--duration-flip) group-has-aria-expanded/role:rotate-180 xp:hidden no-js:hidden" />
           </div>
-          <div id={names.details} class="reveal mt-3 hidden pl-[42px] opened:block xp:block">
+          <div id={names.details} class="reveal relative mt-3 hidden pl-[42px] opened:block xp:block">
+            <span data-thread aria-hidden="true" class="absolute top-0 bottom-1 left-[15.5px] w-px bg-line xp:hidden print:hidden"></span>
             <p class="text-[13px] text-fg-secondary">{role.context}</p>
             <ul class="mt-2 flex list-disc flex-col gap-1.5 pl-4 text-[13px] text-fg-secondary marker:text-faint">
               {role.highlights.map((highlight) => <li>{highlight}</li>)}
