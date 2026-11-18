@@ -1,19 +1,19 @@
 ---
 import { disclosureButton } from "../scripts/disclosure";
 
-type Props = { controls: string; subject: string; class?: string };
-const { controls, subject, class: className } = Astro.props;
+type Props = { controls: string; subject: string; hiddenCount?: number; returnTo?: string; class?: string };
+const { controls, subject, hiddenCount, returnTo, class: className } = Astro.props;
 ---
 
 <button
   type="button"
-  {...disclosureButton(controls)}
+  {...disclosureButton(controls, undefined, returnTo)}
   class:list={[
     "group/see no-js:hidden -mr-2.5 inline-flex h-7 items-center gap-1 rounded-md pr-1.5 pl-2.5 text-[0.8rem] font-medium text-fg-secondary transition-transform hover:bg-hover hover:text-fg active:scale-[0.97] aria-expanded:bg-hover aria-expanded:text-fg",
     className,
   ]}
 >
-  <span class="group-aria-expanded/see:hidden">See more</span>
+  <span class="group-aria-expanded/see:hidden">See {hiddenCount ? <span class="xp:hidden">{hiddenCount} </span> : null}more</span>
   <span class="hidden group-aria-expanded/see:inline">See less</span>
   <span class="sr-only">{subject}</span>
   <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

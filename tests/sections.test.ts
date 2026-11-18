@@ -241,6 +241,26 @@ describe("skills", () => {
     expect(held.classList.contains("hidden")).toBe(true);
     expect(page.querySelector('button[aria-controls="skills-content"]')).not.toBeNull();
   });
+
+  const groups = [
+    { name: "Languages", shownBeforeExpanding: 1, tools: [{ name: "TypeScript", icon: "typescript" }, { name: "Python", icon: "python" }, { name: "Swift", icon: "swift" }] },
+    { name: "Testing", shownBeforeExpanding: 1, tools: [{ name: "Vitest", icon: "vitest" }, { name: "Jest", icon: "jest" }] },
+  ];
+
+  it("says how many tools see more will show", async () => {
+    const page = await render(Skills, { groups });
+    const button = page.querySelector('button[aria-controls="skills-content"]');
+    expect(button?.textContent).toContain("See 3 more");
+    expect(button?.querySelector(".xp\\:hidden")?.textContent).toBe("3 ");
+  });
+
+  it("offers see less at the end of the open list, returning to the heading", async () => {
+    const page = await render(Skills, { groups });
+    const closer = page.querySelector('#skills-content button[aria-controls="skills-content"]');
+    expect(closer?.textContent).toContain("See less");
+    expect(closer?.getAttribute("data-return")).toBe("skills");
+    expect(page.getElementById("skills")?.tagName).toBe("H2");
+  });
 });
 
 describe("activity", () => {

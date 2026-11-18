@@ -110,3 +110,5 @@ export const skills: SkillGroup[] = [
     ],
   },
 ];
+
+export const hiddenToolCount = (groups: SkillGroup[]) => groups.reduce((sum, group) => sum + Math.max(0, group.tools.length - group.shownBeforeExpanding), 0);

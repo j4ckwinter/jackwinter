@@ -4,11 +4,12 @@ type ViewTransitionDocument = Document & { startViewTransition?: (update: () => 
 const MARKER = "data-disclosure";
 const HIGHLIGHT_MS = 1600;
 
-type DisclosureButton = { "data-disclosure": ""; "aria-controls": string; "aria-expanded": "false"; "data-reveal"?: string };
+type DisclosureButton = { "data-disclosure": ""; "aria-controls": string; "aria-expanded": "false"; "data-reveal"?: string; "data-return"?: string };
 
-export function disclosureButton(controls: string, reveal?: string): DisclosureButton {
+export function disclosureButton(controls: string, reveal?: string, returnTo?: string): DisclosureButton {
   const button: DisclosureButton = { [MARKER]: "", "aria-controls": controls, "aria-expanded": "false" };
   if (reveal) button["data-reveal"] = reveal;
+  if (returnTo) button["data-return"] = returnTo;
   return button;
 }
 
@@ -18,9 +19,8 @@ function highlight(target: HTMLElement): void {
   setTimeout(() => delete target.dataset.highlight, HIGHLIGHT_MS);
 }
 
-function revealAfterwards(target: HTMLElement, reducedMotion: boolean): void {
+function bringIntoView(target: HTMLElement, reducedMotion: boolean): void {
   target.scrollIntoView({ block: "nearest", behavior: reducedMotion ? "auto" : "smooth" });
-  highlight(target);
 }
 
 function setOpen(doc: Document, panelId: string, expanded: boolean): void {
@@ -46,15 +46,23 @@ function toggleDisclosure(button: Element, doc: ViewTransitionDocument, reducedM
   const panelId = button.getAttribute("aria-controls") ?? "";
   const expanded = button.getAttribute("aria-expanded") !== "true";
   const reveal = doc.getElementById(button.getAttribute("data-reveal") ?? "");
+  const returnTo = expanded ? null : doc.getElementById(button.getAttribute("data-return") ?? "");
 
   const update = () => setOpen(doc, panelId, expanded);
+  const afterwards = () => {
+    if (reveal) {
+      bringIntoView(reveal, reducedMotion);
+      highlight(reveal);
+    }
+    if (returnTo) bringIntoView(returnTo, reducedMotion);
+  };
 
   if (doc.startViewTransition && !reducedMotion) {
     const transition = doc.startViewTransition(update);
-    if (reveal) transition.finished.then(() => revealAfterwards(reveal, reducedMotion));
+    if (reveal || returnTo) transition.finished.then(afterwards);
   } else {
     update();
-    if (reveal) revealAfterwards(reveal, reducedMotion);
+    afterwards();
   }
 }
 

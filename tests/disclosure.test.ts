@@ -76,6 +76,36 @@ describe("disclosures", () => {
   });
 });
 
+describe("closing from below", () => {
+  function renderWithReturn() {
+    const root = document.createElement("div");
+    document.body.replaceChildren(root);
+    root.innerHTML = `
+      <h2 id="heading">Skills</h2>
+      <div id="panel"><button data-disclosure aria-controls="panel" aria-expanded="true" data-return="heading">See less</button></div>`;
+    root.querySelector("#panel")!.setAttribute("data-open", "");
+    const heading = root.querySelector<HTMLElement>("#heading")!;
+    heading.scrollIntoView = vi.fn();
+    return { root, heading, button: root.querySelector("button")! };
+  }
+
+  it("brings the heading back into view when it closes the panel", () => {
+    const { root, heading, button } = renderWithReturn();
+    enhanceDisclosures(root, () => true);
+    button.click();
+    expect(button.getAttribute("aria-expanded")).toBe("false");
+    expect(heading.scrollIntoView).toHaveBeenCalledWith({ block: "nearest", behavior: "auto" });
+  });
+
+  it("stays put when it opens the panel", () => {
+    const { root, heading, button } = renderWithReturn();
+    button.setAttribute("aria-expanded", "false");
+    enhanceDisclosures(root, () => true);
+    button.click();
+    expect(heading.scrollIntoView).not.toHaveBeenCalled();
+  });
+});
+
 describe("opening to a linked item", () => {
   function renderNested() {
     document.body.innerHTML = `

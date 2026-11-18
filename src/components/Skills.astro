@@ -2,15 +2,16 @@
 import Section from "./Section.astro";
 import SeeMore from "./SeeMore.astro";
 import Icon from "./Icon.astro";
-import type { SkillGroup } from "../content/skills";
+import { hiddenToolCount, type SkillGroup } from "../content/skills";
 import { toSlug } from "../slug";
 
 type Props = { groups: SkillGroup[] };
 const { groups } = Astro.props;
+const heading = toSlug("Skills");
 ---
 
 <Section title="Skills">
-  <SeeMore slot="action" controls="skills-content" subject="skills" />
+  <SeeMore slot="action" controls="skills-content" subject="skills" hiddenCount={hiddenToolCount(groups)} />
   <div id="skills-content" class="flex flex-col gap-4">
     {groups.map((group) => (
       <div class="grid grid-cols-[clamp(6.4rem,20vw,8rem)_minmax(0,1fr)] gap-2" style={`view-transition-name: skills-${toSlug(group.name)}`}>
@@ -27,5 +28,8 @@ const { groups } = Astro.props;
         </ul>
       </div>
     ))}
+    <div class="reveal hidden justify-end in-opened:flex no-js:hidden print:hidden">
+      <SeeMore controls="skills-content" subject="skills" returnTo={heading} />
+    </div>
   </div>
 </Section>
