@@ -7,7 +7,7 @@ import chevronDown from "@tabler/icons/outline/chevron-down.svg?raw";
 import arrowUpRight from "@tabler/icons/outline/arrow-up-right.svg?raw";
 import stack from "@tabler/icons/outline/stack-2.svg?raw";
 import brain from "@tabler/icons/outline/brain.svg?raw";
-import components from "@tabler/icons/outline/components.svg?raw";
+import flask from "@tabler/icons/outline/flask.svg?raw";
 import dog from "@tabler/icons/outline/dog.svg?raw";
 import sun from "@tabler/icons/outline/sun.svg?raw";
 import moon from "@tabler/icons/outline/moon.svg?raw";
@@ -103,7 +103,7 @@ export const icons = {
   arrowUpRight: tabler(arrowUpRight),
   stack: tabler(stack),
   brain: tabler(brain),
-  components: tabler(components),
+  flask: tabler(flask),
   dog: tabler(dog),
   sun: tabler(sun),
   moon: tabler(moon),

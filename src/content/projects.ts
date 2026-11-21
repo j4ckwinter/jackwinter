@@ -29,12 +29,11 @@ export const projects: Project[] = [
     href: "https://github.com/j4ckwinter/pancake-stack",
   },
   {
-    name: "pancake ui",
-    icon: "components",
-    description: "my React component library, on npm",
-    repo: "j4ckwinter/pancake-ui",
-    release: { from: "npm", package: "@jack.winter/pancake-ui" },
-    href: "https://www.npmjs.com/package/@jack.winter/pancake-ui",
+    name: "pancake stack evals",
+    icon: "flask",
+    description: "checks and trials that test whether pancake stack actually helps",
+    repo: "j4ckwinter/pancake-stack-evals",
+    href: "https://github.com/j4ckwinter/pancake-stack-evals",
   },
   {
     name: "elvis",
