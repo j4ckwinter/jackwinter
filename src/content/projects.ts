@@ -21,7 +21,7 @@ export const projects: Project[] = [
     href: "https://www.npmjs.com/package/brain-cache",
   },
   {
-    name: "pancake stack",
+    name: "pancake-stack",
     icon: "stack",
     description: "skills that help ai coding agents write code worth keeping",
     repo: "j4ckwinter/pancake-stack",
@@ -29,9 +29,9 @@ export const projects: Project[] = [
     href: "https://github.com/j4ckwinter/pancake-stack",
   },
   {
-    name: "pancake stack evals",
+    name: "pancake-stack-evals",
     icon: "flask",
-    description: "checks and trials that test whether pancake stack actually helps",
+    description: "checks and trials that test whether pancake-stack actually helps",
     repo: "j4ckwinter/pancake-stack-evals",
     href: "https://github.com/j4ckwinter/pancake-stack-evals",
   },
