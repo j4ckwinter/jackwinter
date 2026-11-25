@@ -9,6 +9,7 @@ import stack from "@tabler/icons/outline/stack-2.svg?raw";
 import brain from "@tabler/icons/outline/brain.svg?raw";
 import flask from "@tabler/icons/outline/flask.svg?raw";
 import dog from "@tabler/icons/outline/dog.svg?raw";
+import football from "@tabler/icons/outline/ball-football.svg?raw";
 import sun from "@tabler/icons/outline/sun.svg?raw";
 import moon from "@tabler/icons/outline/moon.svg?raw";
 import plugConnected from "@tabler/icons/outline/plug-connected.svg?raw";
@@ -105,6 +106,7 @@ export const icons = {
   brain: tabler(brain),
   flask: tabler(flask),
   dog: tabler(dog),
+  football: tabler(football),
   sun: tabler(sun),
   moon: tabler(moon),
   kto: logo("/logos/kto.png", "h-4 w-6"),

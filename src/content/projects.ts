@@ -43,4 +43,12 @@ export const projects: Project[] = [
     release: { from: "github" },
     href: "https://github.com/j4ckwinter/elvis",
   },
+  {
+    name: "mezzala",
+    icon: "football",
+    description: "an mcp server that reads my football manager save and does the scouting for me",
+    repo: "j4ckwinter/mezzala",
+    release: { from: "github" },
+    href: "https://github.com/j4ckwinter/mezzala",
+  },
 ];
