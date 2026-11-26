@@ -26,6 +26,7 @@ import school from "@tabler/icons/outline/school.svg?raw";
 import binaryTree from "@tabler/icons/outline/binary-tree.svg?raw";
 import accessible from "@tabler/icons/outline/accessible.svg?raw";
 import browserCheck from "@tabler/icons/outline/browser-check.svg?raw";
+import worldSearch from "@tabler/icons/outline/world-search.svg?raw";
 import brandApple from "@tabler/icons/outline/brand-apple.svg?raw";
 import brandReactNative from "@tabler/icons/outline/brand-react-native.svg?raw";
 import {
@@ -107,6 +108,7 @@ export const icons = {
   flask: tabler(flask),
   dog: tabler(dog),
   football: tabler(football),
+  worldSearch: tabler(worldSearch),
   sun: tabler(sun),
   moon: tabler(moon),
   kto: logo("/logos/kto.png", "h-4 w-6"),

@@ -51,4 +51,12 @@ export const projects: Project[] = [
     release: { from: "github" },
     href: "https://github.com/j4ckwinter/mezzala",
   },
+  {
+    name: "agentcanuse",
+    icon: "worldSearch",
+    description: "a nightly scoreboard of the browsers ai agents use, tested against 124 real sites",
+    repo: "j4ckwinter/agentcanuse",
+    release: { from: "npm", package: "agentcanuse" },
+    href: "https://agentcanuse.com",
+  },
 ];
