@@ -39,7 +39,7 @@ The build reads GitHub star counts without a token. The activity strip needs `GI
 | Gliding between pages and skipping the entrance animation after one | `@view-transition` and `.arrived` in `src/styles/global.css`, set by the `pagereveal` script in `src/layouts/Page.astro` |
 | Page metadata: title, canonical, share tags, theme colour, font preload | `src/layouts/Page.astro`, with page addresses (no trailing slash) from `canonicalUrl` in `src/format.ts` |
 | Fetching GitHub data once per build for the page and the card | `src/github/build-data.ts` |
-| Which commit counts as a project's latest (no merges; chore, docs and CI commits only as a fallback) | `src/github/client.ts` |
+| Which commit counts as a project's latest (no merges; chore, docs, CI and data commits only as a fallback) | `src/github/client.ts` |
 | Starting the grid at the latest weeks and hiding clipped month labels | `src/scripts/contribution-scroll.ts` |
 | Copying the email or a section link, and confirming beside what was clicked | `src/scripts/copy.ts` (`data-copy`, `data-copy-message`) |
 | Instant tooltips on contribution tiles, kept after a tap on touch screens | `src/scripts/tile-tooltips.ts` |

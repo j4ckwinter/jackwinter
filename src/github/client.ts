@@ -59,7 +59,7 @@ type GitHubCommit = {
 };
 
 const COMMITS_SCANNED = 30;
-const HOUSEKEEPING = /^(chore|docs|ci)(\([^)]*\))?!?:/;
+const HOUSEKEEPING = /^(chore|docs|ci|data)(\([^)]*\))?!?:/;
 
 export async function fetchLatestCommit(repo: string, token: string | undefined, fetcher: Fetch = fetch): Promise<Commit> {
   const response = await fetcher(`${API}/repos/${repo}/commits?per_page=${COMMITS_SCANNED}`, {

@@ -65,6 +65,12 @@ describe("loadGitHubData", () => {
     expect(data.commits.map((latest) => latest.subject)).toEqual(["fix: keep embeddings"]);
   });
 
+  it("passes over data commits a scheduled job records", async () => {
+    const fetcher = gitHub({ commits: [commit("data: record survey run"), commit("data(survey): record run"), commit("fix: start engines fresh")] });
+    const data = await loadGitHubData({ projects: [{ repo: "me/a" }], login: "me", token: "t", fetcher });
+    expect(data.commits.map((latest) => latest.subject)).toEqual(["fix: start engines fresh"]);
+  });
+
   it("falls back to the newest chore when there is nothing else", async () => {
     const fetcher = gitHub({ commits: [commit("Merge pull request #1", 2), commit("chore: tidy"), commit("chore(release): 1.0.0")] });
     const data = await loadGitHubData({ projects: [{ repo: "me/a" }], login: "me", token: "t", fetcher });
